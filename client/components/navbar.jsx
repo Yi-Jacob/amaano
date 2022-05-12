@@ -40,7 +40,7 @@ export default class Navbar1 extends React.Component {
           <div className="container-fluid align-content-center">
             <Navbar.Brand href="/" className=' nav-font nav-brand navlink'>
               <div className="white font-raleway">
-                <i className="fa-brands fa-btc" />itcoin Explorer
+                Amaano
               </div>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll"/>
@@ -63,7 +63,7 @@ export default class Navbar1 extends React.Component {
                 <FormControl
                   type="search"
                   placeholder="Search for Wallet Address"
-                  className="me-3 nav-input black-border"
+                  className="me-3 nav-input blue-border"
                   onChange={this.handleChange}
                   value={this.state.input}
                 />

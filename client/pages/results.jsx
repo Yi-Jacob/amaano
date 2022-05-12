@@ -34,10 +34,8 @@ export default class Results extends React.Component {
 
   componentDidMount() {
     this.unlisten = this.props.history.listen((location, action) => {
-      if (location.pathname == '/search-results') {
-        this.setState({ star: false, address: queryString.parse(location.search).address });
-        this.fetchData(queryString.parse(location.search).address);
-      }
+      this.setState({ star: false, address: queryString.parse(location.search).address });
+      this.fetchData(queryString.parse(location.search).address);
     });
     this.fetchData(this.state.address);
   }
@@ -61,9 +59,6 @@ export default class Results extends React.Component {
       .then(res => res.json())
       .then(data => {
         this.setState({ transactionData: data });
-      })
-      .catch(err => {
-        this.setState({ results: false })
       }),
     fetch('https://bitpay.com/api/rates')
       .then(res => res.json())
@@ -128,12 +123,11 @@ export default class Results extends React.Component {
     return (
       <>
         <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
-        <div className="black-background">
           {this.state.results ?
             (<div className="container-fluid" style={{ maxWidth: '1200px' }}>
               <div className="row pt-3 margin-right-10 margin-left-6">
                 <div className='col-sm-9 col-md-11'>
-                  <p className='address-header font-titillium-web font-underline orange'>
+                  <p className='address-header font-titillium-web font-underline amaano-blue'>
                     Search Address: {this.state.walletData.address}
                     <button className='bookmark-btn' onClick={this.handleClick}>
                       <i className={this.state.star ? 'fa-solid fa-star bookmark-btn' : 'fa-regular fa-star bookmark-btn'}></i>
@@ -142,12 +136,12 @@ export default class Results extends React.Component {
                 </div>
               </div>
               <div className="row my-2 margin-left-1 margin-right-1">
-                <Card className='mb-2 my-2 orange-border font-titillium-web px-4 py-4 grey-background'>
+                <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
                   <div className="row no-gutters">
                     <div className="col-md-3 col-sm-10 px-1 justify-content-center margin-left-14" style={{ minWidth: '275px' }}>
-                      <img className='orange-border' src={`https://www.bitcoinqrcodemaker.com/api/?style=bitcoin&address=${this.state.address}`} alt="bitcoin QR code generator" height="250" width="275" />
+                      <img className='blue-border' src={`https://www.bitcoinqrcodemaker.com/api/?style=bitcoin&address=${this.state.address}`} alt="bitcoin QR code generator" height="250" width="275" />
                     </div>
-                    <div className="col-md-8 col-sm-10 margin-left-1 px-0 mt-2 justify-content-start align-self-center orange">
+                    <div className="col-md-8 col-sm-10 margin-left-1 px-0 mt-2 justify-content-start align-self-center amaano-blue">
                       <Card.Title className='info-text'>Total Balance: {(this.state.walletData.chain_stats.funded_txo_sum - this.state.walletData.chain_stats.spent_txo_sum) / 100000000} BTC</Card.Title>
                       <Card.Title className='info-text'>$
                         {((this.state.walletData.chain_stats.funded_txo_sum - this.state.walletData.chain_stats.spent_txo_sum) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -158,16 +152,16 @@ export default class Results extends React.Component {
                 </Card>
               </div>
               <div className="row mt-3 mb-5 margin-left-1 margin-right-1 px-0 justify-content-center pb-5">
-                <Card className='orange-border padding-zero font-size-20 grey-background'>
-                  <Card.Header className='mx-0 font-titillium-web font-bold orange'>Transaction History</Card.Header>
-                  <ul className='px-4 py-2 orange'>
+                <Card className='blue-border padding-zero font-size-20 grey-background'>
+                <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue'>Transaction History</Card.Header>
+                <ul className='px-4 py-2 amaano-blue'>
                     {this.state.transactionData.slice(0, 5).map((transactionData, i) => {
                       return (
                         <li key={i}>
-                          <Card.Title>Transaction ID: {transactionData.txid}</Card.Title>
+                          <Card.Title className='amaano-secondary'>Transaction ID: {transactionData.txid}</Card.Title>
                           <ul>
                             <li>
-                              <Card.Title>Block Height: {transactionData.status.block_height}</Card.Title>
+                              <Card.Title className='amaano-secondary'>Block Height: {transactionData.status.block_height}</Card.Title>
                             </li>
                           </ul>
                         </li>
@@ -178,7 +172,6 @@ export default class Results extends React.Component {
               </div>
             </div>) :
             (<h1 className='orange ml-2 font-titillium-web px-5 py-5'>No Results Found, Please Try again.</h1>)}
-        </div>
       </>
     );
   }
