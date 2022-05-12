@@ -2,6 +2,7 @@ import React from 'react';
 import queryString from 'query-string';
 import Nav from '../components/navbar';
 import Card from 'react-bootstrap/Card';
+import moment from 'moment';
 
 export default class Results extends React.Component {
   constructor(props) {
@@ -10,22 +11,17 @@ export default class Results extends React.Component {
       results: true,
       address: queryString.parse(this.props.location.search).address,
       price: null,
-      input: null,
-      walletData: {
-        chain_stats: {
-          tx_count: 0,
-          funded_txo_sum: 0,
-          spent_txo_sum: 0
-        }
-      },
-      transactionData: [
-        {
-          txid: '',
-          status: {
-            block_height: 0
+      wallet: {
+        final_balance: null,
+        n_tx: null,
+        txs: [{
+          hash: null,
+          block_height: null,
+          result: null,
+          time: null
           }
-        }
-      ]
+        ]
+      }
     });
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -45,51 +41,23 @@ export default class Results extends React.Component {
   }
 
   fetchData(address) {
-    Promise.all([
-      fetch(`https://mempool.space/api/address/${address}`)
-        .then(res => res.json())
-        .then(data => {
-          this.setState({ walletData: data });
-        })
-        .catch(err => {
-          alert('No Results Found', err)
-          this.setState({ results: false })
-        }),
-    fetch(`https://mempool.space/api/address/${address}/txs`)
+    fetch(`https://blockchain.info/rawaddr/${address}`)
       .then(res => res.json())
       .then(data => {
-        this.setState({ transactionData: data });
-      }),
+        console.log(data)
+        this.setState({ wallet: data });
+      })
+      .catch(err => {
+        alert('No Results Found', err)
+        this.setState({ results: false })
+      });
     fetch('https://bitpay.com/api/rates')
       .then(res => res.json())
       .then(data => {
         this.setState({ price: (data[2].rate) });
       })
-
-    ])
-    // fetch(`https://mempool.space/api/address/${address}`)
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ walletData: data });
-    //   })
-    //   .catch(err => {
-    //     alert('No Results Found', err)
-    //     this.setState({results: false})
-    //   });
-    // fetch(`https://mempool.space/api/address/${address}/txs`)
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ transactionData: data });
-    //   })
-    //   .catch(err => {
-    //     this.setState({ results: false })
-    //   });
-    // fetch('https://bitpay.com/api/rates')
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ price: (data[2].rate) });
-    //   });
   }
+
 
   handleSubmit(event) {
     event.preventDefault();
@@ -128,7 +96,7 @@ export default class Results extends React.Component {
               <div className="row pt-3 margin-right-10 margin-left-6">
                 <div className='col-sm-9 col-md-11'>
                   <p className='address-header font-titillium-web font-underline amaano-blue'>
-                    Search Address: {this.state.walletData.address}
+                    Search Address: {this.state.address}
                     <button className='bookmark-btn' onClick={this.handleClick}>
                       <i className={this.state.star ? 'fa-solid fa-star bookmark-btn' : 'fa-regular fa-star bookmark-btn'}></i>
                     </button>
@@ -142,11 +110,11 @@ export default class Results extends React.Component {
                       <img className='blue-border' src={`https://www.bitcoinqrcodemaker.com/api/?style=bitcoin&address=${this.state.address}`} alt="bitcoin QR code generator" height="250" width="275" />
                     </div>
                     <div className="col-md-8 col-sm-10 margin-left-1 px-0 mt-2 justify-content-start align-self-center amaano-blue">
-                      <Card.Title className='info-text'>Total Balance: {(this.state.walletData.chain_stats.funded_txo_sum - this.state.walletData.chain_stats.spent_txo_sum) / 100000000} BTC</Card.Title>
+                      <Card.Title className='info-text'>Total Balance: {(this.state.wallet.final_balance) / 100000000} BTC</Card.Title>
                       <Card.Title className='info-text'>$
-                        {((this.state.walletData.chain_stats.funded_txo_sum - this.state.walletData.chain_stats.spent_txo_sum) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {((this.state.wallet.final_balance) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </Card.Title>
-                      <Card.Title className='info-text'>Total Number of Transactions: {this.state.walletData.chain_stats.tx_count}</Card.Title>
+                      <Card.Title className='info-text'>Total Number of Transactions: {this.state.wallet.n_tx}</Card.Title>
                     </div>
                   </div>
                 </Card>
@@ -155,14 +123,28 @@ export default class Results extends React.Component {
                 <Card className='blue-border padding-zero font-size-20 grey-background'>
                 <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue'>Transaction History</Card.Header>
                 <ul className='px-4 py-2 amaano-blue'>
-                    {this.state.transactionData.slice(0, 5).map((transactionData, i) => {
+                    {this.state.wallet.txs.map((tx, i) => {
                       return (
                         <li key={i}>
-                          <Card.Title className='amaano-secondary'>Transaction ID: {transactionData.txid}</Card.Title>
+                          <Card.Title className='amaano-secondary'>Transaction ID:
+                             {tx.hash}
+                          </Card.Title>
                           <ul>
                             <li>
-                              <Card.Title className='amaano-secondary'>Block Height: {transactionData.status.block_height}</Card.Title>
+                              Transaction Amount
+                              <span className={tx.result > 0 ? 'green' : 'red'}>
+                                {tx.result / 100000000}
+                              </span>
                             </li>
+                            <li>
+                              <Card.Title className='amaano-secondary'>Block Height: {tx.block_height}</Card.Title>
+                            </li>
+                            <li>
+                              <Card.Title className='amaano-secondary'>
+                                Time: {(moment.unix(tx.time).format('MMMM Do YYYY, h:mm:ss a').toString())}
+                                </Card.Title>
+                            </li>
+
                           </ul>
                         </li>
                       );

@@ -217,7 +217,7 @@ export default class Home extends React.Component {
                 <Table className='orange-border' responsive='sm'>
                   <tbody>
                     <tr>
-                      <td colSpan={4} className='orange-border font-bold'>Latest Transactions</td>
+                      <td colSpan={4} className='blue-border font-bold'>Latest Transactions</td>
                     </tr>
                     <tr className='font-bold'>
                       <td>Transaction Id</td>
