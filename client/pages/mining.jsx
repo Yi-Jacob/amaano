@@ -94,7 +94,7 @@ export default class Mining extends React.Component {
         </div>
         <div className="row mx-4 my-3">
           <div className="col-md-12">
-            <Card className='mb-2 my-1 px-4 py-4 orange-border font-titillium-web'>
+            <Card className='mb-2 my-1 px-4 py-4 blue-border font-titillium-web'>
               <Card.Title className='card-text amaano-secondary'>
                 Here are the last 10 blocks to have been mined.
               </Card.Title>
@@ -103,7 +103,7 @@ export default class Mining extends React.Component {
         </div>
         <div className="row mx-4 my-4 justify-content-center">
           <div className="col-md-12">
-            <Table className='orange-border '>
+            <Table className='blue-border '>
               <tbody>
                 <tr>
                   <td colSpan={4} className='font-bold'>Latest Blocks</td>

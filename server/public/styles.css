@@ -222,7 +222,10 @@ th:not(:first-child) {
   color: rgba(59, 55, 222, 1);
 }
 
-.card-header,
+.card-header {
+  border-bottom: 1px solid rgba(59, 55, 222, 1);
+}
+
 .card-footer {
   border: 1px solid rgba(59, 55, 222, 1);
 }

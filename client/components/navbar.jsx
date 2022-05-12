@@ -38,7 +38,7 @@ export default class Navbar1 extends React.Component {
       <>
         <Navbar className='navbar-custom d-flex' expand="md" sticky="top">
           <div className="container-fluid align-content-center">
-            <Navbar.Brand href="/" className=' nav-font nav-brand navlink'>
+            <Navbar.Brand href="/" className=' nav-font nav-brand navlink mb-1'>
               <div className="white font-raleway">
                 Amaano
               </div>
