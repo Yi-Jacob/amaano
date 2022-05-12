@@ -126,15 +126,20 @@ export default class Results extends React.Component {
                     {this.state.wallet.txs.map((tx, i) => {
                       return (
                         <li key={i}>
-                          <Card.Title className='amaano-secondary'>Transaction ID:
-                             {tx.hash}
-                          </Card.Title>
+                          <Card.Title className='amaano-secondary'>Transaction ID: {tx.hash}</Card.Title>
                           <ul>
                             <li>
-                              Transaction Amount
-                              <span className={tx.result > 0 ? 'green' : 'red'}>
-                                {tx.result / 100000000}
-                              </span>
+                              <Card.Title className='amaano-secondary'>Transaction Amount: <span className={tx.result > 0 ? 'green' : 'red'}>
+                                  {tx.result / 100000000}
+                                </span> BTC
+                              </Card.Title>
+                            </li>
+                            <li>
+                              <Card.Title className='amaano-secondary'>
+                                $ <span className={tx.result > 0 ? 'green' : 'red'}>
+                                   {((tx.result) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </span>
+                              </Card.Title>
                             </li>
                             <li>
                               <Card.Title className='amaano-secondary'>Block Height: {tx.block_height}</Card.Title>
