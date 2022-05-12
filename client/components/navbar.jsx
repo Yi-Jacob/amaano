@@ -52,9 +52,9 @@ export default class Navbar1 extends React.Component {
                 <NavLink to='/mining' className='nav-font white mx-2 navlink'>
                   Mining
                 </NavLink>
-                <NavLink to='/bookmarks' className='nav-font white mx-2 navlink'>
+                {/* <NavLink to='/bookmarks' className='nav-font white mx-2 navlink'>
                   Bookmarks
-                </NavLink>
+                </NavLink> */}
                 <a href='https://nakamotoinstitute.org/bitcoin/' className='white mx-2 navlink'>
                  <i className="fa-brands fa-bitcoin"></i> = ${(this.state.price)}
                 </a>

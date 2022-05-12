@@ -30,7 +30,7 @@ export default class Results extends React.Component {
 
   componentDidMount() {
     this.unlisten = this.props.history.listen((location, action) => {
-      this.setState({ star: false, address: queryString.parse(location.search).address });
+      this.setState({ address: queryString.parse(location.search).address });
       this.fetchData(queryString.parse(location.search).address);
     });
     this.fetchData(this.state.address);
@@ -77,14 +77,14 @@ export default class Results extends React.Component {
       data: this.state.walletData,
       bookmarkedAt: timeStamp
     };
-    fetch('/api/bookmarks', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
-    });
-    this.setState({ star: true });
+    // fetch('/api/bookmarks', {
+    //   method: 'post',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(postData)
+    // });
+    // this.setState({ star: true });
   }
 
   render() {
@@ -97,9 +97,9 @@ export default class Results extends React.Component {
                 <div className='col-sm-9 col-md-11'>
                   <p className='address-header font-titillium-web font-underline amaano-blue'>
                     Search Address: {this.state.address}
-                    <button className='bookmark-btn' onClick={this.handleClick}>
+                    {/* <button className='bookmark-btn' onClick={this.handleClick}>
                       <i className={this.state.star ? 'fa-solid fa-star bookmark-btn' : 'fa-regular fa-star bookmark-btn'}></i>
-                    </button>
+                    </button> */}
                   </p>
                 </div>
               </div>
