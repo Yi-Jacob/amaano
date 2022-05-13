@@ -107,7 +107,7 @@ export default class Home extends React.Component {
           <div className="container">
           <div className="row amaano-blue my-4">
               <div className="col-sm-12">
-                <h1 className='text-center font-raleway font-italic font-bold'> <i className="fa-brands fa-btc" />itcoin Explorer</h1>
+                <h1 className='text-center font-raleway font-italic font-bold'>Amaano</h1>
               </div>
             </div>
             <div className="row my-3">
@@ -204,7 +204,7 @@ export default class Home extends React.Component {
                     <tr>
                       <td colSpan={4}>
                       <Link to='/mining' className='amaano-secondary mx-2 viewmore font-bold'>
-                          View More
+                          Learn more about Mining
                         </Link>
                       </td>
                     </tr>
@@ -217,7 +217,7 @@ export default class Home extends React.Component {
                 <Table className='orange-border' responsive='sm'>
                   <tbody>
                     <tr>
-                      <td colSpan={4} className='orange-border font-bold'>Latest Transactions</td>
+                      <td colSpan={4} className='blue-border font-bold'>Latest Transactions</td>
                     </tr>
                     <tr className='font-bold'>
                       <td>Transaction Id</td>
@@ -239,7 +239,7 @@ export default class Home extends React.Component {
                     <tr>
                       <td colSpan={4}>
                       <Link to='/transactions' className='amaano-secondary mx-2 viewmore font-bold'>
-                          View More
+                        Learn more about Transactions
                         </Link>
                       </td>
                     </tr>
