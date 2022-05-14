@@ -26,12 +26,15 @@ export default class Bookmarks extends React.Component {
   }
 
   componentDidMount() {
+    this.unlisten = this.props.history.listen((location, action) => {
+      this.setState({ star: false, address: queryString.parse(location.search).address });
+      this.fetchData(queryString.parse(location.search).address);
+    });
     fetch('/api/bookmarks')
       .then(res => res.json())
       .then(data => {
         this.setState({ bookmarkData: data });
       });
-
   }
 
   handleSubmit(event) {
@@ -56,11 +59,11 @@ export default class Bookmarks extends React.Component {
     return (
       <>
         <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
-        <div className="black-background">
+
           <div className="container-fluid" style={{ maxWidth: '1200px' }}>
             <div className="row pt-3 margin-right-10 margin-left-1">
               <div className='col-sm-9 col-md-11'>
-                <p className='address-header font-titillium-web orange'>
+                <p className='address-header font-titillium-web amaano-blue'>
                   <i className="fa-brands fa-btc" />ookmarks
                 </p>
               </div>
@@ -70,20 +73,20 @@ export default class Bookmarks extends React.Component {
                 ? (
                     this.state.bookmarkData.map((bookmarkData, i) => {
                       return (
-                      <Card key={i} className='orange-border padding-zero font-size-20 grey-background mb-3 orange'>
-                        <Card.Header className='font-titillium-web font-bold address-header'>
+                      <Card key={i} className='blue-border padding-zero font-size-20 mb-3'>
+                        <Card.Header className='font-titillium-web font-bold address-header amaano-blue'>
                           Bookmarked Address: {bookmarkData.walletAddress}
-                          <button className='remove-btn pt-1' onClick={this.removeBookmark.bind(this, bookmarkData.bookmarkId)}><i className="fa-solid fa-circle-minus orange"></i></button>
+                          <button className='remove-btn pt-1' onClick={this.removeBookmark.bind(this, bookmarkData.bookmarkId)}><i className="fa-solid fa-circle-minus amaano-blue"></i></button>
                         </Card.Header>
                         <ul>
                           <li>
-                            <Card.Title className='bookmark-header'>Total Number of Transactions: {bookmarkData.data.chain_stats.tx_count}</Card.Title>
+                              <Card.Title className='bookmark-header amaano-secondary'>Total Number of Transactions: {bookmarkData.data.chain_stats.tx_count}</Card.Title>
                           </li>
                           <li>
-                            <Card.Title className='bookmark-header'>Total Balance: {(bookmarkData.data.chain_stats.funded_txo_sum - bookmarkData.data.chain_stats.spent_txo_sum) / 100000000} BTC</Card.Title>
+                              <Card.Title className='bookmark-header amaano-secondary'>Total Balance: {(bookmarkData.data.chain_stats.funded_txo_sum - bookmarkData.data.chain_stats.spent_txo_sum) / 100000000} BTC</Card.Title>
                           </li>
                         </ul>
-                        <Card.Footer>
+                          <Card.Footer className='amaano-secondary'>
                           Bookmarked At: {(moment(bookmarkData.bookmarkedAt).tz('Atlantic/Azores').format('MMMM Do YYYY, h:mm:ss a'))}
                         </Card.Footer>
                       </Card>
@@ -91,15 +94,15 @@ export default class Bookmarks extends React.Component {
                     })
                   )
                 : (
-                  <Card className='orange-border padding-zero font-size-20 grey-background mb-3'>
-                    <Card.Header className='font-titillium-web font-bold address-header orange'>
+                  <Card className='blue-border padding-zero font-size-20 mb-3'>
+                    <Card.Header className='font-titillium-web font-bold address-header amaano-secondary'>
                       No Bookmarks
                     </Card.Header>
                   </Card >
                   )}
             </div>
           </div>
-        </div>
+
 
       </>
     );

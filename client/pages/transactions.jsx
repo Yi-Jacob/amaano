@@ -65,13 +65,13 @@ export default class Transactions extends React.Component {
 
   render() {
     return (
-      <div className="black-background">
+        <>
         <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
         <div className="row mx-4 my-4">
-          <h1 className='orange ml-2 font-titillium-web'>Transactions</h1>
+          <h1 className='amaano-blue ml-2 font-titillium-web'>Transactions</h1>
           <div className="col-md-12">
-            <Card className='mb-2 my-1 px-4 py-4 orange-border font-titillium-web grey-background'>
-              <Card.Title className='card-text orange'>
+            <Card className='mb-2 my-1 px-4 py-4 blue-border font-titillium-web'>
+              <Card.Title className='card-text amaano-seconddary'>
                 Transaction fees are the difference between the amount of bitcoin sent and the amount received.
                 Conceptually, transaction fees are a reflection of the speed with which a user wants their transaction validated on the blockchain.
                 The faster a user wants a transaction settled, the higher the fee will be.
@@ -81,10 +81,10 @@ export default class Transactions extends React.Component {
         </div>
         <div className="row mx-4 my-3">
           <div className="col-md-12">
-            <Table className='orange-border'>
-              <tbody className='orange-border'>
+            <Table className='blue-border'>
+              <tbody className='blue-border'>
                 <tr >
-                  <td colSpan={2} className='orange-border font-bold'>Current Transaction Fees</td>
+                  <td colSpan={2} className='blue-border font-bold'>Current Transaction Fees</td>
                 </tr>
                 <tr>
                   <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
@@ -105,7 +105,7 @@ export default class Transactions extends React.Component {
         <div className="row mx-4 my-3">
           <div className="col-md-12">
             <Card className='mb-2 my-1 px-4 py-4 orange-border font-titillium-web grey-background'>
-              <Card.Title className='card-text orange'>
+              <Card.Title className='card-text amaano-secondary'>
                 Here are the last 10 transactions to occur.
               </Card.Title>
             </Card>
@@ -139,7 +139,7 @@ export default class Transactions extends React.Component {
             </Table>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 

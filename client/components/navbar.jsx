@@ -39,8 +39,8 @@ export default class Navbar1 extends React.Component {
         <Navbar className='navbar-custom d-flex' expand="md" sticky="top">
           <div className="container-fluid align-content-center">
             <Navbar.Brand href="/" className=' nav-font nav-brand navlink'>
-              <div className="white font-raleway">
-                <i className="fa-brands fa-btc" />itcoin Explorer
+              <div className="white font-raleway mb-1">
+                Amaano
               </div>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll"/>
@@ -52,9 +52,9 @@ export default class Navbar1 extends React.Component {
                 <NavLink to='/mining' className='nav-font white mx-2 navlink'>
                   Mining
                 </NavLink>
-                <NavLink to='/bookmarks' className='nav-font white mx-2 navlink'>
+                {/* <NavLink to='/bookmarks' className='nav-font white mx-2 navlink'>
                   Bookmarks
-                </NavLink>
+                </NavLink> */}
                 <a href='https://nakamotoinstitute.org/bitcoin/' className='white mx-2 navlink'>
                  <i className="fa-brands fa-bitcoin"></i> = ${(this.state.price)}
                 </a>
@@ -63,7 +63,7 @@ export default class Navbar1 extends React.Component {
                 <FormControl
                   type="search"
                   placeholder="Search for Wallet Address"
-                  className="me-3 nav-input black-border"
+                  className="me-3 nav-input blue-border"
                   onChange={this.handleChange}
                   value={this.state.input}
                 />

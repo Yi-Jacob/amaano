@@ -103,17 +103,16 @@ export default class Home extends React.Component {
   render() {
     return (
       <>
-      <div className="black-background">
           <Nav history={this.props.history} />
           <div className="container">
-            <div className="row orange my-4">
+          <div className="row amaano-blue my-4">
               <div className="col-sm-12">
-                <h1 className='text-center font-raleway font-italic font-bold'> <i className="fa-brands fa-btc" />itcoin Explorer</h1>
+                <h1 className='text-center font-raleway font-italic font-bold'>Amaano</h1>
               </div>
             </div>
             <div className="row my-3">
               <div className="col-sm-12">
-                <h2 className='text-center font-titillium-web font-bold orange'><span className='font-italic'>Explore</span> the Bitcoin Blockchain in <span className='font-italic '>Real-Time</span></h2>
+              <h2 className='text-center font-titillium-web font-bold amaano-blue'><span className='font-italic'>Explore</span> the Bitcoin Blockchain in <span className='font-italic '>Real-Time</span></h2>
               </div>
             </div>
             <div className="row justify-content-center mb-4" >
@@ -121,7 +120,7 @@ export default class Home extends React.Component {
                 <InputGroup className="mb-2" >
                   <FormControl
                     placeholder="Search for your Wallet Address    i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
-                    className='orange-border'
+                    className='blue-border'
                     onChange={this.handleChange}
                     value={this.state.input}
                     type='search'
@@ -134,10 +133,10 @@ export default class Home extends React.Component {
             </div>
             <div className="row mb-3 justify-content-center">
               <div className="col-md-6">
-                <Table className='orange-border'>
-                  <tbody className='orange-border'>
+                <Table className='blue-border'>
+                  <tbody className='blue-border'>
                     <tr >
-                      <td colSpan={2} className='orange-border font-bold'>Current Transaction Fees</td>
+                      <td colSpan={2} className='blue-border font-bold'>Current Transaction Fees</td>
                     </tr>
                     <tr>
                       <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
@@ -204,8 +203,8 @@ export default class Home extends React.Component {
                     )}
                     <tr>
                       <td colSpan={4}>
-                        <Link to='/mining' className='orange mx-2 navlink font-bold'>
-                          View More
+                      <Link to='/mining' className='amaano-secondary mx-2 viewmore font-bold'>
+                        Learn more about Mining
                         </Link>
                       </td>
                     </tr>
@@ -239,8 +238,8 @@ export default class Home extends React.Component {
                     )}
                     <tr>
                       <td colSpan={4}>
-                        <Link to='/transactions' className='orange mx-2 navlink font-bold'>
-                          View More
+                      <Link to='/transactions' className='amaano-secondary mx-2 viewmore font-bold'>
+                        Learn more about Transactions
                         </Link>
                       </td>
                     </tr>
@@ -249,7 +248,7 @@ export default class Home extends React.Component {
               </div>
             </div>
           </div>
-      </div>
+
 
       </>
     );
