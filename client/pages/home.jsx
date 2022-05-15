@@ -6,6 +6,8 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Nav from '../components/navbar';
 import moment from 'moment';
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 import { Link } from 'react-router-dom';
 
 export default class Home extends React.Component {
@@ -39,15 +41,9 @@ export default class Home extends React.Component {
         }
       ],
       usd: null,
-      kes: {
-        rate: null
-      },
-      ngn: {
-        rate: null
-      },
-      ugx: {
-        rate: null
-      }
+      kes: null,
+      ngn: null,
+      ugx: null
     });
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -97,7 +93,6 @@ export default class Home extends React.Component {
               ngn: data[110].rate,
               ugx: data[151].rate
             });
-            console.log(data[2].rate)
           })
       ]), 10000
     )
@@ -134,13 +129,23 @@ export default class Home extends React.Component {
                 </InputGroup>
               </Form>
 
-            <a>{this.state.usd}test</a>
-            {/* <a>{this.state.price[81].rate}</a>
-            <a>{this.state.price[110].rate}</a>
-            <a>{this.state.price[151].rate}</a> */}
-
             </div>
-
+          <div className="row mb-3 justify-content-center">
+            <Tabs defaultActiveKey="USD" id="uncontrolled-tab-example" className="mb-3">
+              <Tab eventKey="USD" title="US Dollar">
+                ${this.state.usd}
+              </Tab>
+              <Tab eventKey="KES" title="Kenyan Shilling">
+                {this.state.kes}
+              </Tab>
+              <Tab eventKey="NGN" title="Nigerian Naira">
+                {this.state.ngn}
+              </Tab>
+              <Tab eventKey="UGX" title="Ugandan Shilling">
+                {this.state.ugx}
+              </Tab>
+            </Tabs>
+          </div>
             <div className="row mb-3 justify-content-center">
               <div className="col-md-6">
                 <Table className='blue-border'>
