@@ -207,7 +207,7 @@ th:not(:first-child) {
 }
 
 .nav-brand {
-  font-size: 26px;
+  font-size: 32px;
 }
 
 .navlink:hover {
@@ -253,4 +253,13 @@ body {
 
 .card {
   background-color: white;
+}
+
+h1 {
+  font-size: 72px;
+}
+
+.grey-text {
+  color: rgb(114, 123, 154);
+  font-weight: 500;
 }

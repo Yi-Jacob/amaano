@@ -68,7 +68,7 @@ export default class Transactions extends React.Component {
         <>
         <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
         <div className="row mx-4 my-4 work-sans ">
-          <h1 className='amaano-blue ml-2 work-sans '>Transactions</h1>
+          <h2 className='amaano-blue ml-2 work-sans '>Transactions</h2>
           <div className="col-md-12">
             <Card className='mb-2 my-1 px-4 py-4 blue-border '>
               <Card.Title className='card-text amaano-seconddary'>

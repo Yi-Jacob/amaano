@@ -56,48 +56,32 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    Promise.all([
-      fetch('https://mempool.space/api/v1/difficulty-adjustment')
-        .then(res => res.json())
-        .then(data => {
-          this.setState({ difficulty: data });
-        }),
-    fetch('https://mempool.space/api/v1/fees/recommended')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ fees: data });
-      }),
-    fetch('https://mempool.space/api/blocks/')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ blocks: data });
-      }),
-    fetch('https://mempool.space/api/mempool/recent')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ transactions: data });
-      })
-    ])
-    // fetch('https://mempool.space/api/v1/difficulty-adjustment')
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ difficulty: data });
-    //   });
-    // fetch('https://mempool.space/api/v1/fees/recommended')
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ fees: data });
-    //   });
-    // fetch('https://mempool.space/api/blocks/')
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ blocks: data });
-    //   });
-    // fetch('https://mempool.space/api/mempool/recent')
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ transactions: data });
-    //   });
+    setTimeout(
+      Promise.all([
+        fetch('https://mempool.space/api/v1/difficulty-adjustment')
+          .then(res => res.json())
+          .then(data => {
+            this.setState({ difficulty: data });
+          }),
+        fetch('https://mempool.space/api/v1/fees/recommended')
+          .then(res => res.json())
+          .then(data => {
+            this.setState({ fees: data });
+          }),
+        fetch('https://mempool.space/api/blocks/')
+          .then(res => res.json())
+          .then(data => {
+            this.setState({ blocks: data });
+          }),
+        fetch('https://mempool.space/api/mempool/recent')
+          .then(res => res.json())
+          .then(data => {
+            this.setState({ transactions: data });
+          })
+      ]), 10000
+    )
+
+
   }
 
   render() {
@@ -189,13 +173,13 @@ export default class Home extends React.Component {
                       <td>Number of Transactions</td>
                       <td>TimeStamp</td>
                     </tr>
-                    {this.state.blocks.slice(0, 3).map((block, i) => {
+                    {this.state.blocks.slice(0, 5).map((block, i) => {
                       return (
                         <>
                           <tr key={i}>
-                            <td>{this.state.blocks[i].height}</td>
-                            <td>{this.state.blocks[i].tx_count}</td>
-                            <td>{(moment.unix(this.state.blocks[i].timestamp).format('MMMM Do YYYY, h:mm:ss a').toString())}</td>
+                            <td className='grey-text'>{this.state.blocks[i].height}</td>
+                            <td className='grey-text'>{this.state.blocks[i].tx_count}</td>
+                            <td className='grey-text'>{(moment.unix(this.state.blocks[i].timestamp).format('MMMM Do YYYY, h:mm:ss a').toString())}</td>
                           </tr>
                         </>
                       );
@@ -224,13 +208,13 @@ export default class Home extends React.Component {
                       <td>Value</td>
                       <td>Fees</td>
                     </tr>
-                    {this.state.transactions.slice(0, 3).map((transaction, i) => {
+                    {this.state.transactions.slice(0, 5).map((transaction, i) => {
                       return (
                         <>
                           <tr key={i}>
-                            <td>{this.state.transactions[i].txid}</td>
-                            <td>{(this.state.transactions[i].value) / 100000000} BTC</td>
-                            <td>{(this.state.transactions[i].fee) / 100} sat/vB</td>
+                            <td className='grey-text'>{this.state.transactions[i].txid}</td>
+                            <td className='grey-text'>{(this.state.transactions[i].value) / 100000000} BTC</td>
+                            <td className='grey-text'>{(this.state.transactions[i].fee) / 100} sat/vB</td>
                           </tr>
                         </>
                       );
