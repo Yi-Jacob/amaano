@@ -49,6 +49,7 @@ export default class Home extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+
   handleChange(event) {
     this.setState({ input: event.target.value });
   }
