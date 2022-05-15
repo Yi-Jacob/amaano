@@ -209,22 +209,24 @@ export default class Results extends React.Component {
   componentWillUnmount() {
     this.unlisten();
   }
-  fetchData(address) {
-    fetch(`https://blockchain.info/rawaddr/${address}`)
-      .then(response => response.ok ? response.json() : Promise.reject({ err: response.status }))
-      .then(data => {
-          this.setState({ wallet: data });
-        })
-      .catch(err => {
-        alert('No Results Found', err)
-        console.log(err)
-      });
-    fetch('https://bitpay.com/api/rates')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ price: (data[2].rate) });
-      })
-  }
+
+  // fetchData(address) {
+  //   fetch(`https://blockchain.info/rawaddr/${address}`)
+  //     .then(response => response.ok ? response.json() : Promise.reject({ err: response.status }))
+  //     .then(data => {
+  //         this.setState({ wallet: data });
+  //       })
+  //     .catch(err => {
+  //       alert('No Results Found', err)
+  //       console.log(err)
+  //     });
+  //   fetch('https://bitpay.com/api/rates')
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       this.setState({ price: (data[2].rate) });
+  //     })
+  // }
+
   handleSubmit(event) {
     event.preventDefault();
     this.props.history.push('/search-results?address=' + this.state.input);
