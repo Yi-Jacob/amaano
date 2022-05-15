@@ -36,11 +36,11 @@ export default class Navbar1 extends React.Component {
   render() {
     return (
       <>
-        <Navbar className='navbar-custom d-flex' expand="md" sticky="top">
+        <Navbar className='navbar-custom d-flex work-sans ' expand="md" sticky="top">
           <div className="container-fluid align-content-center">
             <Navbar.Brand href="/" className=' nav-font nav-brand navlink'>
-              <div className="white font-raleway mb-1">
-                Amaano
+              <div className="white mb-1">
+                amaano
               </div>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll"/>

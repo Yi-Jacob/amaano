@@ -67,10 +67,10 @@ export default class Transactions extends React.Component {
     return (
         <>
         <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
-        <div className="row mx-4 my-4">
-          <h1 className='amaano-blue ml-2 font-titillium-web'>Transactions</h1>
+        <div className="row mx-4 my-4 work-sans ">
+          <h1 className='amaano-blue ml-2 work-sans '>Transactions</h1>
           <div className="col-md-12">
-            <Card className='mb-2 my-1 px-4 py-4 blue-border font-titillium-web'>
+            <Card className='mb-2 my-1 px-4 py-4 blue-border '>
               <Card.Title className='card-text amaano-seconddary'>
                 Transaction fees are the difference between the amount of bitcoin sent and the amount received.
                 Conceptually, transaction fees are a reflection of the speed with which a user wants their transaction validated on the blockchain.
@@ -104,7 +104,7 @@ export default class Transactions extends React.Component {
         </div>
         <div className="row mx-4 my-3">
           <div className="col-md-12">
-            <Card className='mb-2 my-1 px-4 py-4 orange-border font-titillium-web grey-background'>
+            <Card className='mb-2 my-1 px-4 py-4 orange-border work-sans  grey-background'>
               <Card.Title className='card-text amaano-secondary'>
                 Here are the last 10 transactions to occur.
               </Card.Title>

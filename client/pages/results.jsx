@@ -2,6 +2,7 @@
 // import queryString from 'query-string';
 // import Nav from '../components/navbar';
 // import Card from 'react-bootstrap/Card';
+// import moment from 'moment';
 
 // export default class Results extends React.Component {
 //   constructor(props) {
@@ -22,8 +23,13 @@
 //         {
 //           txid: '',
 //           status: {
-//             block_height: null
-//           }
+//             block_height: null,
+//             block_time: null
+//           },
+//           vout: [{
+//             value: null,
+//             scriptpubkey_address: null
+//           }]
 //         }
 //       ]
 //     });
@@ -144,6 +150,12 @@
 //                             <li>
 //                               <Card.Title className='amaano-secondary'>Block Height: {transactionData.status.block_height}</Card.Title>
 //                             </li>
+//                             <li>
+//                               <Card.Title className='amaano-secondary'>Time: {(moment.unix(transactionData.status.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}</Card.Title>
+//                             </li>
+//                             <li>
+//                               <Card.Title className='amaano-secondary'>Block Height: {transactionData.vout.value}</Card.Title>
+//                             </li>
 //                           </ul>
 //                         </li>
 //                       );
@@ -198,17 +210,14 @@ export default class Results extends React.Component {
     this.unlisten();
   }
   fetchData(address) {
-    fetch(`https://blockchain.info/rawaddr/${address}`, { mode: 'no-cors' })
+    fetch(`https://blockchain.info/rawaddr/${address}`)
       .then(response => response.ok ? response.json() : Promise.reject({ err: response.status }))
       .then(data => {
-        console.log(data)
-        console.log(err)
-          this.setState({ wallet: data, results: true });
+          this.setState({ wallet: data });
         })
       .catch(err => {
         alert('No Results Found', err)
         console.log(err)
-        this.setState({ results: false })
       });
     fetch('https://bitpay.com/api/rates')
       .then(res => res.json())
@@ -246,16 +255,16 @@ export default class Results extends React.Component {
       <>
         <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
           {this.state.results ?
-            (<div className="container-fluid" style={{ maxWidth: '1200px' }}>
+          (<div className="container-fluid work-sans " style={{ maxWidth: '1200px' }}>
               <div className="row pt-3 margin-right-10 margin-left-6">
                 <div className='col-sm-9 col-md-11'>
-                  <p className='address-header font-titillium-web font-underline amaano-blue'>
+                  <p className='address-header  font-underline amaano-blue'>
                     Search Address: {this.state.address}
                   </p>
                 </div>
               </div>
               <div className="row my-2 margin-left-1 margin-right-1">
-                <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
+                <Card className='mb-2 my-2  px-4 py-4 grey-background blue-border'>
                   <div className="row no-gutters">
                     <div className="col-md-3 col-sm-10 px-1 justify-content-center margin-left-14" style={{ minWidth: '275px' }}>
                       <img className='blue-border' src={`https://www.bitcoinqrcodemaker.com/api/?style=bitcoin&address=${this.state.address}`} alt="bitcoin QR code generator" height="250" width="275" />
@@ -272,7 +281,7 @@ export default class Results extends React.Component {
               </div>
               <div className="row mt-3 mb-5 margin-left-1 margin-right-1 px-0 justify-content-center pb-5">
                 <Card className='blue-border padding-zero font-size-20 grey-background'>
-                <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue'>Transaction History</Card.Header>
+                <Card.Header className='mx-0  font-bold amaano-blue'>Transaction History</Card.Header>
                 <ul className='px-4 py-2 amaano-blue'>
                     {this.state.wallet.txs.map((tx, i) => {
                       return (
@@ -309,7 +318,7 @@ export default class Results extends React.Component {
                 </Card>
               </div>
             </div>) :
-            (<h1 className='amaano-blue ml-2 font-titillium-web px-5 py-5'>No Results Found, Please Try again.</h1>)}
+          (<h1 className='amaano-blue ml-2 work-sans  px-5 py-5'>No Results Found, Please Try again.</h1>)}
       </>
     );
   }
