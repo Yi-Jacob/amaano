@@ -267,3 +267,27 @@ h1 {
 .border-top {
   border-top: none;
 }
+
+li.nav-item {
+  color: rgba(5, 3, 64, 1);
+}
+
+.nav-tabs,
+.nav-item,
+.nav-link {
+  background-color: white;
+  color: rgba(5, 3, 64, 1);
+}
+
+.nav-tabs button.active {
+  color: rgba(59, 55, 222, 1) !important;
+}
+
+.tab-content {
+  background-color: white;
+  color: rgba(5, 3, 64, 1);
+}
+
+.active a {
+  color: rgba(59, 55, 222, 1);
+}

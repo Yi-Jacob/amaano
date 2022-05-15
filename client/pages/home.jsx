@@ -131,18 +131,18 @@ export default class Home extends React.Component {
             </div>
           <div className="row mb-3 justify-content-center">
             <div className="col-md-12">
-              <Tabs defaultActiveKey="USD" className=" blue-border amaano-blue">
-                <Tab eventKey="USD" title="US Dollar" className='blue-border border-top'>
-                  <i class="fa-brands fa-bitcoin"></i> = ${this.state.usd}
+              <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
+                <Tab eventKey="USD" title="US Dollar" className='blue-border border-top px-2 amaano-secondary'>
+                  <i class="fa-brands fa-bitcoin orange"></i> = ${this.state.usd}
                 </Tab>
-                <Tab eventKey="KES" title="Kenyan Shilling" className='blue-border'>
-                  <i class="fa-brands fa-bitcoin"></i> = KSh {this.state.kes}
+                <Tab eventKey="KES" title="Kenyan Shilling" className='blue-border border-top px-2'>
+                  <i class="fa-brands fa-bitcoin orange"></i> = KSh {this.state.kes}
                 </Tab>
-                <Tab eventKey="NGN" title="Nigerian Naira" className='blue-border'>
-                  <i class="fa-brands fa-bitcoin"></i> = ₦ {this.state.ngn}
+                <Tab eventKey="NGN" title="Nigerian Naira" className='blue-border border-top px-2'>
+                  <i class="fa-brands fa-bitcoin orange"></i> = ₦ {this.state.ngn}
                 </Tab>
-                <Tab eventKey="UGX" title="Ugandan Shilling" className='blue-border'>
-                  <i class="fa-brands fa-bitcoin"></i> = USh {this.state.ugx}
+                <Tab eventKey="UGX" title="Ugandan Shilling" className='blue-border border-top px-2'>
+                  <i class="fa-brands fa-bitcoin orange"></i> = USh {this.state.ugx}
                 </Tab>
               </Tabs>
             </div>
@@ -153,7 +153,7 @@ export default class Home extends React.Component {
                 <Table className='blue-border'>
                   <tbody className='blue-border'>
                     <tr >
-                      <td colSpan={2} className='blue-border font-bold'>Current Transaction Fees</td>
+                      <td colSpan={2} className='blue-border font-bold '>Current Transaction Fees</td>
                     </tr>
                     <tr>
                       <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
