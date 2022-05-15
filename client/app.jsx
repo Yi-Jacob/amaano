@@ -24,6 +24,8 @@ export default class App extends React.Component {
               component={Wrapper(Mining)} />
             <Route exact path="/transactions"
               component={Wrapper(Transactions)} />
+            <Route exact path="/download"
+              component={Wrapper(Transactions)} />
           </Switch>
         </Router>
       </>
