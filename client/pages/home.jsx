@@ -96,7 +96,7 @@ export default class Home extends React.Component {
             </div>
             <div className="row my-3">
               <div className="col-sm-12">
-              <h2 className='text-center font-bold amaano-blue'><span className='font-italic'>Explore</span> the Bitcoin Blockchain in <span className='font-italic '>Real-Time</span> with amaano</h2>
+              <h2 className='text-center font-bold amaano-blue'><span className='font-italic'>Explore</span> the Bitcoin Blockchain in <span className='font-italic '>Real-Time</span></h2>
               </div>
             </div>
             <div className="row justify-content-center mb-4" >
