@@ -37,7 +37,17 @@ export default class Home extends React.Component {
           value: null,
           fee: null
         }
-      ]
+      ],
+      usd: null,
+      kes: {
+        rate: null
+      },
+      ngn: {
+        rate: null
+      },
+      ugx: {
+        rate: null
+      }
     });
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -77,11 +87,20 @@ export default class Home extends React.Component {
           .then(res => res.json())
           .then(data => {
             this.setState({ transactions: data });
+          }),
+        fetch('https://bitpay.com/api/rates')
+          .then(res => res.json())
+          .then(data => {
+            this.setState({
+              usd: data[2].rate,
+              kes: data[81].rate,
+              ngn: data[110].rate,
+              ugx: data[151].rate
+            });
+            console.log(data[2].rate)
           })
       ]), 10000
     )
-
-
   }
 
   render() {
@@ -114,7 +133,14 @@ export default class Home extends React.Component {
                   </Button>
                 </InputGroup>
               </Form>
+
+            <a>{this.state.usd}test</a>
+            {/* <a>{this.state.price[81].rate}</a>
+            <a>{this.state.price[110].rate}</a>
+            <a>{this.state.price[151].rate}</a> */}
+
             </div>
+
             <div className="row mb-3 justify-content-center">
               <div className="col-md-6">
                 <Table className='blue-border'>
