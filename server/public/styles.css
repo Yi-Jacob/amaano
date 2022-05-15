@@ -263,3 +263,7 @@ h1 {
   color: rgb(114, 123, 154);
   font-weight: 500;
 }
+
+.border-top {
+  border-top: none;
+}

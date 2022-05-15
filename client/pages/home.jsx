@@ -103,7 +103,7 @@ export default class Home extends React.Component {
       <>
           <Nav history={this.props.history} />
         <div className="container work-sans ">
-          <div className="row amaano-blue my-4">
+          <div className="row amaano-blue my-3">
               <div className="col-sm-12">
                 <h1 className='text-center font-bold'>amaano</h1>
               </div>
@@ -128,23 +128,25 @@ export default class Home extends React.Component {
                   </Button>
                 </InputGroup>
               </Form>
-
             </div>
           <div className="row mb-3 justify-content-center">
-            <Tabs defaultActiveKey="USD" id="uncontrolled-tab-example" className="mb-3">
-              <Tab eventKey="USD" title="US Dollar">
-                ${this.state.usd}
-              </Tab>
-              <Tab eventKey="KES" title="Kenyan Shilling">
-                {this.state.kes}
-              </Tab>
-              <Tab eventKey="NGN" title="Nigerian Naira">
-                {this.state.ngn}
-              </Tab>
-              <Tab eventKey="UGX" title="Ugandan Shilling">
-                {this.state.ugx}
-              </Tab>
-            </Tabs>
+            <div className="col-md-12">
+              <Tabs defaultActiveKey="USD" className=" blue-border amaano-blue">
+                <Tab eventKey="USD" title="US Dollar" className='blue-border border-top'>
+                  <i class="fa-brands fa-bitcoin"></i> = ${this.state.usd}
+                </Tab>
+                <Tab eventKey="KES" title="Kenyan Shilling" className='blue-border'>
+                  <i class="fa-brands fa-bitcoin"></i> = KSh {this.state.kes}
+                </Tab>
+                <Tab eventKey="NGN" title="Nigerian Naira" className='blue-border'>
+                  <i class="fa-brands fa-bitcoin"></i> = ₦ {this.state.ngn}
+                </Tab>
+                <Tab eventKey="UGX" title="Ugandan Shilling" className='blue-border'>
+                  <i class="fa-brands fa-bitcoin"></i> = USh {this.state.ugx}
+                </Tab>
+              </Tabs>
+            </div>
+
           </div>
             <div className="row mb-3 justify-content-center">
               <div className="col-md-6">
