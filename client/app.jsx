@@ -18,8 +18,6 @@ export default class App extends React.Component {
               component={Wrapper(Home)} />
             <Route exact path="/search-results"
               component={Wrapper(Results)} />
-            <Route exact path="/bookmarks"
-              component={Wrapper(Bookmarks)} />
             <Route exact path="/mining"
               component={Wrapper(Mining)} />
             <Route exact path="/transactions"

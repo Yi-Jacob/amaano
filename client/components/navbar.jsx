@@ -38,7 +38,7 @@ export default class Navbar1 extends React.Component {
       <>
         <Navbar className='navbar-custom d-flex work-sans' expand="lg" sticky="top">
           <div className="container-fluid align-content-center">
-            <Navbar.Brand href="https://amaano.com/index.html" className=' nav-font nav-brand navlink'>
+            <Navbar.Brand href="/" className=' nav-font nav-brand navlink'>
               <div className="white mb-1">
                 amaano
               </div>
@@ -46,9 +46,6 @@ export default class Navbar1 extends React.Component {
             <Navbar.Toggle aria-controls="navbarScroll"/>
             <Navbar.Collapse id="navbarScroll">
               <Nav className="me-auto my-2 my-lg-0 align-items-end justify-content-end">
-                <NavLink to='/' className='nav-font white mx-2 navlink'>
-                  Home
-                </NavLink>
                 <NavLink to='/transactions' className='nav-font white mx-2 navlink'>
                   Transactions
                 </NavLink>
@@ -58,8 +55,8 @@ export default class Navbar1 extends React.Component {
                 <NavLink to='/download' className='nav-font white mx-2 navlink'>
                   Download
                 </NavLink>
-                <a href='https://nakamotoinstitute.org/bitcoin/' className='white mx-2 navlink'>
-                 <i className="fa-brands fa-bitcoin"></i> = ${(this.state.price)}
+                <a href='https://amaano.com/index.html' className='nav-font white mx-2 navlink'>
+                  amaano.com
                 </a>
               </Nav>
               <Form className="d-flex py-3" onSubmit={this.handleSubmit}>
