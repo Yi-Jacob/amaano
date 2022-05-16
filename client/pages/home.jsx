@@ -142,7 +142,7 @@ export default class Home extends React.Component {
                 </InputGroup>
                 </Form>
               </div>
-            <img src='iphone.gif' height="100"></img>
+            <img src='iphone.gif' height="225" width='150'></img>
 
               <div className="row mb-3 justify-content-center">
                 <div className="col-md-6">
