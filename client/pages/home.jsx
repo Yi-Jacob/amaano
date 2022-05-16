@@ -142,9 +142,25 @@ export default class Home extends React.Component {
                 </InputGroup>
                 </Form>
               </div>
-            <img src='iphone.gif' height="225" width='150'></img>
+            <div className="row mb-2 px-3 ">
+              <div className="col-md-6 justify-content-center">
+                <img src='iphone.gif' height="225" width='150'></img>
+              </div>
+              <div className="col-md-6 justify-content-center">
+                <h2>Download Today!</h2>
+                <a href='https://apps.apple.com/us/app/amaano/id1334610525'>
+                  <img src='iphone.png' height="75" width='150' href=""></img>
+                </a>
+                <a href='https://play.google.com/store/apps/details?id=com.creadigol.amaano'>
+                  <img src='google-play.png' height="110" width='175'></img>
+                </a>
+              </div>
+            </div>
 
-              <div className="row mb-3 justify-content-center">
+          </div>
+        </section>
+          <section>
+            <div className="row mb-3 justify-content-center">
                 <div className="col-md-6">
                   <Table className='blue-border'>
                     <tbody className='blue-border'>
@@ -190,9 +206,8 @@ export default class Home extends React.Component {
                   </Table>
                 </div>
               </div>
-            </div>
-          </section>
 
+          </section>
 
 
 
