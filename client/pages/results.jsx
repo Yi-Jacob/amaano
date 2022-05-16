@@ -118,7 +118,6 @@ export default class Results extends React.Component {
                   <p className='address-header font-titillium-web font-underline amaano-blue'>
                     Search Address: {this.state.walletData.address}
                     <OverlayTrigger
-                    onClick={() => { navigator.clipboard.writeText(this.state.address) }}
                     trigger="click"
                     key='right'
                     placement='right'
@@ -130,7 +129,7 @@ export default class Results extends React.Component {
                       </Popover>
                     }
                    >
-                    <button className='scrolldown amaano-blue'>
+                    <button className='scrolldown amaano-blue' onClick={() => { navigator.clipboard.writeText(this.state.address) }}>
                       <i class="fa-solid fa-clipboard"></i>
                     </button>
                   </OverlayTrigger>
@@ -156,7 +155,7 @@ export default class Results extends React.Component {
               </div>
               <div className="row mt-3 mb-5 margin-left-1 margin-right-1 px-0 justify-content-center pb-5">
                 <Card className='blue-border padding-zero font-size-20 grey-background'>
-                <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue'>Transaction History</Card.Header>
+                <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue card-border'>Transaction History</Card.Header>
                 <ul className='px-4 py-2 amaano-blue'>
                     {this.state.transactionData.slice(0, 5).map((transactionData, i) => {
                       return (

@@ -300,3 +300,9 @@ section {
   background-color: none;
   border: none;
 }
+
+.card-border {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
