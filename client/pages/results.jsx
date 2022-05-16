@@ -98,21 +98,6 @@ export default class Results extends React.Component {
 
   handleClick(event) {
     event.preventDefault();
-    // const timeStamp = new Date().toLocaleString();
-    // const postData = {
-    //   userId: 1,
-    //   walletAddress: this.state.address,
-    //   data: this.state.walletData,
-    //   bookmarkedAt: timeStamp
-    // };
-    // fetch('/api/bookmarks', {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(postData)
-    // });
-    // this.setState({ star: true });
   }
 
   render() {
@@ -125,6 +110,9 @@ export default class Results extends React.Component {
                 <div className='col-sm-9 col-md-11'>
                   <p className='address-header font-titillium-web font-underline amaano-blue'>
                     Search Address: {this.state.walletData.address}
+                  <button onClick={() => { navigator.clipboard.writeText(this.state.address) }} className='amaano-blue scrolldown'>
+                      <i class="fa-solid fa-clipboard"></i>
+                    </button>
                     {/* <button className='bookmark-btn' onClick={this.handleClick}>
                       <i className={this.state.star ? 'fa-solid fa-star bookmark-btn' : 'fa-regular fa-star bookmark-btn'}></i>
                     </button> */}
