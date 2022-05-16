@@ -9,6 +9,7 @@ import moment from 'moment';
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 export default class Home extends React.Component {
 
@@ -45,10 +46,14 @@ export default class Home extends React.Component {
       ngn: null,
       ugx: null
     });
+    this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  handleClick(event) {
+    document.getElementById('section2').scrollIntoView();
+  }
 
   handleChange(event) {
     this.setState({ input: event.target.value });
@@ -164,11 +169,16 @@ export default class Home extends React.Component {
                 </div>
               </div>
             </div>
-
+            <div className="row">
+              <button onClick={this.handleClick}>
+                test
+              </button>
+              <HashLink to="/#section2">Section three</HashLink>
+            </div>
           </div>
         </section>
 
-        <section>
+        <section className='section2 pt-3' id='section2'>
           <div className="container">
             <div className="row mb-4 justify-content-center">
               <div className="col-md-12">
@@ -234,13 +244,7 @@ export default class Home extends React.Component {
                   </Table>
                 </div>
               </div>
-          </div>
-        </section>
-
-
-
-
-            <div className="row mb-3 justify-content-center">
+               <div className="row mb-3 justify-content-center">
               <div className="col-md-12">
                 <Table className='orange-border '>
                   <tbody>
@@ -310,9 +314,8 @@ export default class Home extends React.Component {
                 </Table>
               </div>
             </div>
-
-
-
+          </div>
+        </section>
       </>
     );
   }
