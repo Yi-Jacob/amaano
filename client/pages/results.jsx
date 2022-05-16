@@ -2,7 +2,9 @@ import React from 'react';
 import queryString from 'query-string';
 import Nav from '../components/navbar';
 import Card from 'react-bootstrap/Card';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
+import Popover from 'react-bootstrap/Popover'
 
 export default class Results extends React.Component {
   constructor(props) {
@@ -25,13 +27,14 @@ export default class Results extends React.Component {
           status: {
             block_height: null,
             block_time: null
-          },
-          vout: [{
-            value: null,
-            scriptpubkey_address: null
-          }]
+          }
         }
-      ]
+      ],
+      balance: [{
+        time: null,
+        sent: null,
+        received: null
+      }]
     });
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -71,12 +74,13 @@ export default class Results extends React.Component {
       }),
     fetch(`https://btc.nownodes.io/api/v2/balancehistory//${address}`, {
       headers: {
-        "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
+        // "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
         "Content-Type": 'application/json'
       }
     })
       .then(res => res.json())
       .then(data => {
+        this.setState({balance: data})
         console.log(data)
       }),
     fetch('https://bitpay.com/api/rates')
@@ -100,6 +104,9 @@ export default class Results extends React.Component {
     event.preventDefault();
   }
 
+
+
+
   render() {
     return (
       <>
@@ -110,13 +117,25 @@ export default class Results extends React.Component {
                 <div className='col-sm-9 col-md-11'>
                   <p className='address-header font-titillium-web font-underline amaano-blue'>
                     Search Address: {this.state.walletData.address}
-                  <button onClick={() => { navigator.clipboard.writeText(this.state.address) }} className='amaano-blue scrolldown'>
+                    <OverlayTrigger
+                    onClick={() => { navigator.clipboard.writeText(this.state.address) }}
+                    trigger="click"
+                    key='right'
+                    placement='right'
+                    overlay={
+                      <Popover>
+                        <Popover.Body>
+                          Copied!
+                        </Popover.Body>
+                      </Popover>
+                    }
+                   >
+                    <button className='scrolldown amaano-blue'>
                       <i class="fa-solid fa-clipboard"></i>
                     </button>
-                    {/* <button className='bookmark-btn' onClick={this.handleClick}>
-                      <i className={this.state.star ? 'fa-solid fa-star bookmark-btn' : 'fa-regular fa-star bookmark-btn'}></i>
-                    </button> */}
+                  </OverlayTrigger>
                   </p>
+
                 </div>
               </div>
               <div className="row my-2 margin-left-1 margin-right-1">
@@ -149,9 +168,6 @@ export default class Results extends React.Component {
                             </li>
                             <li>
                               <Card.Title className='amaano-secondary'>Time: {(moment.unix(transactionData.status.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}</Card.Title>
-                            </li>
-                            <li>
-                              <Card.Title className='amaano-secondary'>Block Height: {transactionData.vout.value}</Card.Title>
                             </li>
                           </ul>
                         </li>
