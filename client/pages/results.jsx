@@ -209,6 +209,7 @@ export default class Results extends React.Component {
   componentWillUnmount() {
     this.unlisten();
   }
+
   fetchData(address) {
     fetch(`https://blockchain.info/rawaddr/${address}`)
       .then(response => response.ok ? response.json() : Promise.reject({ err: response.status }))
@@ -225,6 +226,7 @@ export default class Results extends React.Component {
         this.setState({ price: (data[2].rate) });
       })
   }
+
   handleSubmit(event) {
     event.preventDefault();
     this.props.history.push('/search-results?address=' + this.state.input);

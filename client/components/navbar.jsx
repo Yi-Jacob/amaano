@@ -36,7 +36,7 @@ export default class Navbar1 extends React.Component {
   render() {
     return (
       <>
-        <Navbar className='navbar-custom d-flex work-sans ' expand="md" sticky="top">
+        <Navbar className='navbar-custom d-flex work-sans' expand="lg" sticky="top">
           <div className="container-fluid align-content-center">
             <Navbar.Brand href="/" className=' nav-font nav-brand navlink'>
               <div className="white mb-1">
@@ -52,11 +52,8 @@ export default class Navbar1 extends React.Component {
                 <NavLink to='/mining' className='nav-font white mx-2 navlink'>
                   Mining
                 </NavLink>
-                {/* <NavLink to='/bookmarks' className='nav-font white mx-2 navlink'>
-                  Bookmarks
-                </NavLink> */}
-                <a href='https://nakamotoinstitute.org/bitcoin/' className='white mx-2 navlink'>
-                 <i className="fa-brands fa-bitcoin"></i> = ${(this.state.price)}
+                <a href='https://amaano.com/index.html' className='nav-font white mx-2 navlink'>
+                  amaano.com
                 </a>
               </Nav>
               <Form className="d-flex py-3" onSubmit={this.handleSubmit}>

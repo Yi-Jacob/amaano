@@ -19,7 +19,7 @@ export default WrappedComponent => {
 
     timer = () => this.setState({ isLoading: false }, () => this.clearTimer());
 
-    setTimer = () => (this.timeout = setTimeout(this.timer, 500));
+    setTimer = () => (this.timeout = setTimeout(this.timer, 250));
 
     render() {
       return (
