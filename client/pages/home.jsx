@@ -85,6 +85,16 @@ export default class Home extends React.Component {
           .then(data => {
             this.setState({ transactions: data });
           }),
+        fetch('https://btcbook.nownodes.io/api/',{
+          headers: {
+            "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
+            "Content-Type": 'application/json'
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data)
+          } ),
         fetch('https://bitpay.com/api/rates')
           .then(res => res.json())
           .then(data => {
@@ -103,34 +113,87 @@ export default class Home extends React.Component {
     return (
       <>
           <Nav history={this.props.history} />
-        <div className="container work-sans ">
-          <div className="row amaano-blue my-3">
-              <div className="col-sm-12">
-                <h1 className='text-center font-bold'>amaano</h1>
+          <section className='section'>
+            <div className="container work-sans ">
+              <div className="row amaano-blue my-3">
+                <div className="col-sm-12">
+                  <h1 className='text-center font-bold'>amaano</h1>
+                </div>
               </div>
-            </div>
-            <div className="row my-3">
-              <div className="col-sm-12">
-              <h2 className='text-center font-bold amaano-blue'><span className='font-italic'>Explore</span> the Bitcoin Blockchain in <span className='font-italic '>Real-Time</span></h2>
+              <div className="row my-3">
+                <div className="col-sm-12">
+                  <h2 className='text-center font-bold amaano-blue'><span className='font-italic'>Explore</span> the Bitcoin Blockchain in <span className='font-italic '>Real-Time</span></h2>
+                </div>
               </div>
-            </div>
-            <div className="row justify-content-center mb-4" >
-              <Form onSubmit={this.handleSubmit} className='my-3 px-2 "col-sm-11'>
+              <div className="row justify-content-center mb-4" >
+                <Form onSubmit={this.handleSubmit} className='my-3 px-2 "col-sm-11'>
                 <InputGroup className="mb-2" >
-                  <FormControl
-                    placeholder="Search for your Wallet Address    i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
-                    className='blue-border'
-                    onChange={this.handleChange}
-                    value={this.state.input}
-                    type='search'
-                  />
-                  <Button className="search-button" type='submit'>
-                    Search
-                  </Button>
+                <FormControl
+                  placeholder="Search for your Wallet Address    i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
+                  className='blue-border'
+                  onChange={this.handleChange}
+                  value={this.state.input}
+                  type='search'
+                />
+                <Button className="search-button" type='submit'>
+                  Search
+                </Button>
                 </InputGroup>
-              </Form>
+                </Form>
+              </div>
+              <div className="row mb-3 justify-content-center">
+                <div className="col-md-6">
+                  <Table className='blue-border'>
+                    <tbody className='blue-border'>
+                      <tr >
+                        <td colSpan={2} className='blue-border font-bold '>Current Transaction Fees</td>
+                      </tr>
+                      <tr>
+                        <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
+                        <td>{this.state.fees.fastestFee} sat/vB</td>
+                      </tr>
+                      <tr>
+                        <td>Medium Priority<span className='small-text py-3 my-4'> ~ 30 minutes</span></td>
+                        <td>{this.state.fees.halfHourFee} sat/vB</td>
+                      </tr>
+                      <tr>
+                        <td>Low Priority<span className='small-text py-3 my-4'> ~ 60 minutes</span></td>
+                        <td>{this.state.fees.hourFee} sat/vB</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+                <div className="col-md-6">
+                  <Table className='orange-border'>
+                    <tbody>
+                      <tr>
+                        <td colSpan={4} className='font-bold'>Estimated Difficulty Adjustment</td>
+                      </tr>
+                      <tr>
+                        <td>Estimate change:</td>
+                        <td><span className={this.state.difficulty.difficultyChange > 0 ? 'green' : 'red'}>
+                        {Number(this.state.difficulty.difficultyChange).toFixed(2)}%
+                        </span></td>
+                      </tr>
+                      <tr>
+                        <td>Current Period Progress:</td>
+                        <td>{Number(this.state.difficulty.progressPercent).toFixed(2)}%</td>
+                      </tr>
+                      <tr>
+                        <td>Remaining Blocks</td>
+                        <td>{this.state.difficulty.remainingBlocks} <span className='small-text py-3 my-4'>~{Number(this.state.difficulty.remainingBlocks / 144).toFixed(1)} days</span></td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </div>
             </div>
-          <div className="row mb-3 justify-content-center">
+          </section>
+
+
+
+
+          <div className="row mb-4 justify-content-center">
             <div className="col-md-12">
               <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
                 <Tab eventKey="USD" title="US Dollar" className='blue-border border-top px-2 amaano-secondary'>
@@ -147,8 +210,10 @@ export default class Home extends React.Component {
                 </Tab>
               </Tabs>
             </div>
-
           </div>
+
+
+
             <div className="row mb-3 justify-content-center">
               <div className="col-md-6">
                 <Table className='blue-border'>
@@ -265,7 +330,7 @@ export default class Home extends React.Component {
                 </Table>
               </div>
             </div>
-          </div>
+
 
 
       </>
