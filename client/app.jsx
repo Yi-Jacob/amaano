@@ -1,7 +1,6 @@
 import React from 'react';
 import Home from './pages/home';
 import Results from './pages/results';
-import Bookmarks from './pages/bookmarks';
 import Transactions from './pages/transactions';
 import Mining from './pages/mining';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
