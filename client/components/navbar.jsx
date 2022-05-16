@@ -52,9 +52,6 @@ export default class Navbar1 extends React.Component {
                 <NavLink to='/mining' className='nav-font white mx-2 navlink'>
                   Mining
                 </NavLink>
-                <NavLink to='/download' className='nav-font white mx-2 navlink'>
-                  Download
-                </NavLink>
                 <a href='https://amaano.com/index.html' className='nav-font white mx-2 navlink'>
                   amaano.com
                 </a>

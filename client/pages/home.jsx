@@ -113,7 +113,7 @@ export default class Home extends React.Component {
     return (
       <>
           <Nav history={this.props.history} />
-          <section className='section'>
+          <section className='section1'>
             <div className="container work-sans ">
               <div className="row amaano-blue my-3">
                 <div className="col-sm-12">
@@ -142,24 +142,52 @@ export default class Home extends React.Component {
                 </InputGroup>
                 </Form>
               </div>
-            <div className="row mb-2 px-3 ">
-              <div className="col-md-6 justify-content-center">
-                <img src='iphone.gif' height="225" width='150'></img>
+            <div className="row mb-2 px-3">
+              <div className="col-md-6">
+                <div class="mx-auto text-center">
+                  <img src='iphone.gif' height="225" width='150' className='margin-left-2'></img>
+                </div>
               </div>
-              <div className="col-md-6 justify-content-center">
-                <h2>Download Today!</h2>
-                <a href='https://apps.apple.com/us/app/amaano/id1334610525'>
-                  <img src='iphone.png' height="75" width='150' href=""></img>
-                </a>
-                <a href='https://play.google.com/store/apps/details?id=com.creadigol.amaano'>
-                  <img src='google-play.png' height="110" width='175'></img>
-                </a>
+              <div className="col-md-6">
+                <div class="mx-auto text-center">
+                  <h2>Download Today!</h2>
+                </div>
+                <div class="mx-auto text-center">
+                  <a href='https://apps.apple.com/us/app/amaano/id1334610525'>
+                    <img src='iphone.png' height="75" width='150' href=""></img>
+                  </a>
+                </div>
+                <div class="mx-auto text-center">
+                  <a href='https://play.google.com/store/apps/details?id=com.creadigol.amaano'>
+                    <img src='google-play.png' height="110" width='175'></img>
+                  </a>
+                </div>
               </div>
             </div>
 
           </div>
         </section>
-          <section>
+
+        <section>
+          <div className="container">
+            <div className="row mb-4 justify-content-center">
+              <div className="col-md-12">
+                <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
+                  <Tab eventKey="USD" title="US Dollar" className='blue-border border-top px-2 amaano-secondary'>
+                    <i class="fa-brands fa-bitcoin orange"></i> = ${this.state.usd}
+                  </Tab>
+                  <Tab eventKey="KES" title="Kenyan Shilling" className='blue-border border-top px-2'>
+                    <i class="fa-brands fa-bitcoin orange"></i> = KSh {this.state.kes}
+                  </Tab>
+                  <Tab eventKey="NGN" title="Nigerian Naira" className='blue-border border-top px-2'>
+                    <i class="fa-brands fa-bitcoin orange"></i> = ₦ {this.state.ngn}
+                  </Tab>
+                  <Tab eventKey="UGX" title="Ugandan Shilling" className='blue-border border-top px-2'>
+                    <i class="fa-brands fa-bitcoin orange"></i> = USh {this.state.ugx}
+                  </Tab>
+                </Tabs>
+              </div>
+            </div>
             <div className="row mb-3 justify-content-center">
                 <div className="col-md-6">
                   <Table className='blue-border'>
@@ -206,78 +234,12 @@ export default class Home extends React.Component {
                   </Table>
                 </div>
               </div>
-
-          </section>
-
-
-
-          <div className="row mb-4 justify-content-center">
-            <div className="col-md-12">
-              <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
-                <Tab eventKey="USD" title="US Dollar" className='blue-border border-top px-2 amaano-secondary'>
-                  <i class="fa-brands fa-bitcoin orange"></i> = ${this.state.usd}
-                </Tab>
-                <Tab eventKey="KES" title="Kenyan Shilling" className='blue-border border-top px-2'>
-                  <i class="fa-brands fa-bitcoin orange"></i> = KSh {this.state.kes}
-                </Tab>
-                <Tab eventKey="NGN" title="Nigerian Naira" className='blue-border border-top px-2'>
-                  <i class="fa-brands fa-bitcoin orange"></i> = ₦ {this.state.ngn}
-                </Tab>
-                <Tab eventKey="UGX" title="Ugandan Shilling" className='blue-border border-top px-2'>
-                  <i class="fa-brands fa-bitcoin orange"></i> = USh {this.state.ugx}
-                </Tab>
-              </Tabs>
-            </div>
           </div>
+        </section>
 
 
 
-            <div className="row mb-3 justify-content-center">
-              <div className="col-md-6">
-                <Table className='blue-border'>
-                  <tbody className='blue-border'>
-                    <tr >
-                      <td colSpan={2} className='blue-border font-bold '>Current Transaction Fees</td>
-                    </tr>
-                    <tr>
-                      <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
-                      <td>{this.state.fees.fastestFee} sat/vB</td>
-                    </tr>
-                    <tr>
-                      <td>Medium Priority<span className='small-text py-3 my-4'> ~ 30 minutes</span></td>
-                      <td>{this.state.fees.halfHourFee} sat/vB</td>
-                    </tr>
-                    <tr>
-                      <td>Low Priority<span className='small-text py-3 my-4'> ~ 60 minutes</span></td>
-                      <td>{this.state.fees.hourFee} sat/vB</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-              <div className="col-md-6">
-                <Table className='orange-border'>
-                  <tbody>
-                    <tr>
-                      <td colSpan={4} className='font-bold'>Estimated Difficulty Adjustment</td>
-                    </tr>
-                    <tr>
-                      <td>Estimate change:</td>
-                      <td><span className={this.state.difficulty.difficultyChange > 0 ? 'green' : 'red'}>
-                        {Number(this.state.difficulty.difficultyChange).toFixed(2)}%
-                      </span></td>
-                    </tr>
-                    <tr>
-                      <td>Current Period Progress:</td>
-                      <td>{Number(this.state.difficulty.progressPercent).toFixed(2)}%</td>
-                    </tr>
-                    <tr>
-                      <td>Remaining Blocks</td>
-                      <td>{this.state.difficulty.remainingBlocks} <span className='small-text py-3 my-4'>~{Number(this.state.difficulty.remainingBlocks / 144).toFixed(1)} days</span></td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </div>
+
             <div className="row mb-3 justify-content-center">
               <div className="col-md-12">
                 <Table className='orange-border '>
