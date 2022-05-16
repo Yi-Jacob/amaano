@@ -98,16 +98,6 @@ export default class Home extends React.Component {
           .then(data => {
             this.setState({ transactions: data });
           }),
-        fetch('https://btcbook.nownodes.io/api/',{
-          headers: {
-            "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
-            "Content-Type": 'application/json'
-          }
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data)
-          } ),
         fetch('https://bitpay.com/api/rates')
           .then(res => res.json())
           .then(data => {

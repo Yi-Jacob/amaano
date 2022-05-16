@@ -69,12 +69,21 @@ export default class Results extends React.Component {
         console.log(data)
         this.setState({ transactionData: data });
       }),
+    fetch(`https://btc.nownodes.io/api/v2/balancehistory//${address}`, {
+      headers: {
+        "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
+        "Content-Type": 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      }),
     fetch('https://bitpay.com/api/rates')
       .then(res => res.json())
       .then(data => {
         this.setState({ price: (data[2].rate) });
       })
-
     ])
   }
 
