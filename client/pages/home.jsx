@@ -122,9 +122,10 @@ export default class Home extends React.Component {
               </div>
               <div className="row my-3">
                 <div className="col-sm-12">
-                  <h2 className='text-center font-bold amaano-blue'><span className='font-italic'>Explore</span> the Bitcoin Blockchain in <span className='font-italic '>Real-Time</span></h2>
+                  <h2 className='text-center font-bold amaano-blue'>Access the Bitcoin Blockchain with amaano</h2>
                 </div>
               </div>
+
               <div className="row justify-content-center mb-4" >
                 <Form onSubmit={this.handleSubmit} className='my-3 px-2 "col-sm-11'>
                 <InputGroup className="mb-2" >
@@ -141,6 +142,8 @@ export default class Home extends React.Component {
                 </InputGroup>
                 </Form>
               </div>
+            <img src='iphone.gif' height="100"></img>
+
               <div className="row mb-3 justify-content-center">
                 <div className="col-md-6">
                   <Table className='blue-border'>
