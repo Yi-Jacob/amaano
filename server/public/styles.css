@@ -295,3 +295,8 @@ li.nav-item {
 section {
   height: 100vh;
 }
+
+.scrolldown {
+  background-color: none;
+  border: none;
+}

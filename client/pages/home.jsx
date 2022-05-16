@@ -47,12 +47,20 @@ export default class Home extends React.Component {
       ugx: null
     });
     this.handleClick = this.handleClick.bind(this);
+    this.handleClickUp = this.handleClickUp.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  handleClickUp(event) {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
   handleClick(event) {
-    document.getElementById('section2').scrollIntoView();
+    document.getElementById('section2').scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
 
   handleChange(event) {
@@ -122,7 +130,7 @@ export default class Home extends React.Component {
             <div className="container work-sans ">
               <div className="row amaano-blue my-3">
                 <div className="col-sm-12">
-                  <h1 className='text-center font-bold'>amaano</h1>
+                  <h1 className='text-center font-bold' id='section1'>amaano</h1>
                 </div>
               </div>
               <div className="row my-3">
@@ -147,10 +155,10 @@ export default class Home extends React.Component {
                 </InputGroup>
                 </Form>
               </div>
-            <div className="row mb-2 px-3">
+            <div className="row mb-2">
               <div className="col-md-6">
-                <div class="mx-auto text-center">
-                  <img src='iphone.gif' height="225" width='150' className='margin-left-2'></img>
+                <div class="mx-auto text-center mb-2">
+                  <img src='iphone.gif' height="225" width='150'></img>
                 </div>
               </div>
               <div className="col-md-6">
@@ -159,7 +167,7 @@ export default class Home extends React.Component {
                 </div>
                 <div class="mx-auto text-center">
                   <a href='https://apps.apple.com/us/app/amaano/id1334610525'>
-                    <img src='iphone.png' height="75" width='150' href=""></img>
+                    <img src='iphone.png' height="75" width='155' href=""></img>
                   </a>
                 </div>
                 <div class="mx-auto text-center">
@@ -170,16 +178,20 @@ export default class Home extends React.Component {
               </div>
             </div>
             <div className="row">
-              <button onClick={this.handleClick}>
-                test
+              <button onClick={this.handleClick} className='scrolldown'>
+                <i class="fa-solid fa-3x fa-caret-down"></i>
               </button>
-              <HashLink to="/#section2">Section three</HashLink>
             </div>
           </div>
         </section>
 
         <section className='section2 pt-3' id='section2'>
           <div className="container">
+            <div className="row">
+              <button onClick={this.handleClickUp} className='scrolldown'>
+                <i class="fa-solid fa-3x fa-caret-up"></i>
+              </button>
+            </div>
             <div className="row mb-4 justify-content-center">
               <div className="col-md-12">
                 <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
