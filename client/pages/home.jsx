@@ -288,7 +288,7 @@ export default class Home extends React.Component {
             </div>
             <div className="row mb-3 justify-content-center">
               <div className="col-md-12">
-                <Table className='orange-border' responsive='sm'>
+                <Table className='blue-border' responsive='sm'>
                   <tbody>
                     <tr>
                       <td colSpan={4} className='orange-border font-bold'>Latest Transactions</td>

@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
 import Popover from 'react-bootstrap/Popover'
+import Table from 'react-bootstrap/Table';
 
 
 export default class Results extends React.Component {
@@ -138,7 +139,6 @@ export default class Results extends React.Component {
                       <i class="fa-solid fa-copy"></i>
                     </button>
                   </OverlayTrigger>
-
                   </p>
 
                 </div>
@@ -160,7 +160,12 @@ export default class Results extends React.Component {
                 </Card>
               </div>
               <div className="row mt-3 mb-5 margin-left-1 margin-right-1 px-0 justify-content-center pb-5">
-                <Card className='blue-border padding-zero font-size-20 grey-background'>
+               <div className="col-md-12">
+                <Table className='blue-border' responsive='sm'>
+                  </Table>
+               </div>
+              </div>
+                {/* <Card className='blue-border padding-zero font-size-20 grey-background'>
                 <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue card-border'>Transaction History</Card.Header>
                 <ul>
                   <li>
@@ -170,7 +175,8 @@ export default class Results extends React.Component {
                     <Card.Title className='amaano-secondary'>Block Height: {this.state.balance[this.state.balance.length-1].received}</Card.Title>
                   </li>
                 </ul>
-                {/* <ul className='px-4 py-2 amaano-blue'>
+
+                <ul className='px-4 py-2 amaano-blue'>
                     {this.state.transactionData.slice(0, 5).map((transactionData, i) => {
                       return (
                         <li key={i}>
@@ -182,17 +188,13 @@ export default class Results extends React.Component {
                             <li>
                               <Card.Title className='amaano-secondary'>Time: {(moment.unix(transactionData.status.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}</Card.Title>
                             </li>
-                            <li>
-                              <Card.Title className='amaano-secondary'>Block Height: {transactionData.balance.received}</Card.Title>
-                            </li>
                           </ul>
                         </li>
                       );
                     })}
 
-                  </ul> */}
-                </Card>
-              </div>
+                  </ul>
+                </Card> */}
             </div>) :
             (<h1 className='amano-blue ml-2 font-titillium-web px-5 py-5'>No Results Found, Please Try again.</h1>)}
       </>
