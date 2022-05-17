@@ -161,8 +161,45 @@ export default class Results extends React.Component {
               </div>
               <div className="row mt-3 mb-5 margin-left-1 margin-right-1 px-0 justify-content-center pb-5">
                <div className="col-md-12">
+
+
                 <Table className='blue-border' responsive='sm'>
-                  </Table>
+                  <tbody>
+                    <tr>
+                      <td className='blue-border font-bold'>Transaction History</td>
+                    </tr>
+                    <tr className='font-bold'>
+                      <td>Transaction Id</td>
+                      <td>Value</td>
+                      <td>Fees</td>
+                    </tr>
+
+                    {this.state.transactionData.map((transaction, i) => {
+                        return (
+                          <>
+                            <tr key={i}>
+                              <td className='grey-text'>{this.state.transactionData[i].txid}</td>
+                            </tr>
+                          </>
+                        )
+                        }
+                      )}
+                    {this.state.balance.map((balance, i) => {
+                      return (
+                        <>
+
+                            <td className='grey-text'>{this.state.balance[i].sent}</td>
+
+
+                        </>
+                      )
+                    }
+                    )}
+
+
+
+                  </tbody>
+                </Table>
                </div>
               </div>
                 {/* <Card className='blue-border padding-zero font-size-20 grey-background'>
