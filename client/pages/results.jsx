@@ -30,11 +30,12 @@ export default class Results extends React.Component {
           }
         }
       ],
-      balance: [{
-        time: null,
+      balance: [
+        {
         sent: null,
         received: null
-      }]
+      }
+    ]
     });
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -74,7 +75,7 @@ export default class Results extends React.Component {
       }),
     fetch(`https://btc.nownodes.io/api/v2/balancehistory//${address}`, {
       headers: {
-        // "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
+        "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
         "Content-Type": 'application/json'
       }
     })
@@ -130,7 +131,7 @@ export default class Results extends React.Component {
                     }
                    >
                     <button className='scrolldown amaano-blue' onClick={() => { navigator.clipboard.writeText(this.state.address) }}>
-                      <i class="fa-solid fa-clipboard"></i>
+                      <i class="fa-solid fa-copy"></i>
                     </button>
                   </OverlayTrigger>
                   </p>
@@ -156,7 +157,15 @@ export default class Results extends React.Component {
               <div className="row mt-3 mb-5 margin-left-1 margin-right-1 px-0 justify-content-center pb-5">
                 <Card className='blue-border padding-zero font-size-20 grey-background'>
                 <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue card-border'>Transaction History</Card.Header>
-                <ul className='px-4 py-2 amaano-blue'>
+                <ul>
+                  <li>
+                    <Card.Title className='amaano-secondary'>Transaction ID: {this.state.transactionData[0].txid}</Card.Title>
+                  </li>
+                  <li>
+                    <Card.Title className='amaano-secondary'>Block Height: {this.state.balance[this.state.balance.length-1].received}</Card.Title>
+                  </li>
+                </ul>
+                {/* <ul className='px-4 py-2 amaano-blue'>
                     {this.state.transactionData.slice(0, 5).map((transactionData, i) => {
                       return (
                         <li key={i}>
@@ -168,11 +177,15 @@ export default class Results extends React.Component {
                             <li>
                               <Card.Title className='amaano-secondary'>Time: {(moment.unix(transactionData.status.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}</Card.Title>
                             </li>
+                            <li>
+                              <Card.Title className='amaano-secondary'>Block Height: {transactionData.balance.received}</Card.Title>
+                            </li>
                           </ul>
                         </li>
                       );
                     })}
-                  </ul>
+
+                  </ul> */}
                 </Card>
               </div>
             </div>) :
