@@ -168,9 +168,14 @@ export default class Home extends React.Component {
               </div>
             </div>
             <div className="row">
-              <button onClick={this.handleClick} className='scrolldown'>
-                <i class="fa-solid fa-3x fa-caret-down"></i>
-              </button>
+              <div className="col-md-12">
+                <div className="text-center">
+                  <button onClick={this.handleClick} className='scrolldown downBtn'>
+                    <i class="fa-solid fa-3x fa-caret-down"></i>
+                  </button>
+                </div>
+
+              </div>
             </div>
           </div>
         </section>
