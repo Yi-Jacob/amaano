@@ -6,6 +6,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
 import Popover from 'react-bootstrap/Popover'
 
+
 export default class Results extends React.Component {
   constructor(props) {
     super(props);
@@ -105,7 +106,9 @@ export default class Results extends React.Component {
     event.preventDefault();
   }
 
-
+  hidePopover(event) {
+    setTimeout(function () { closePopPver() }, 5000);
+  }
 
 
   render() {
@@ -116,13 +119,15 @@ export default class Results extends React.Component {
             (<div className="container-fluid" style={{ maxWidth: '1200px' }}>
               <div className="row pt-3 margin-right-10 margin-left-6">
                 <div className='col-sm-9 col-md-11'>
-                  <p className='address-header font-titillium-web font-underline amaano-blue'>
+                  <p className='address-header font-titillium-web amaano-blue'>
                     Search Address: {this.state.walletData.address}
                     <OverlayTrigger
-                    trigger="click"
+                    delay
+                    rootClose
+                    trigger='click'
                     placement='right'
                     overlay={
-                      <Popover>
+                      <Popover className='blue-border'>
                         <Popover.Body>
                           Copied!
                         </Popover.Body>
@@ -133,6 +138,7 @@ export default class Results extends React.Component {
                       <i class="fa-solid fa-copy"></i>
                     </button>
                   </OverlayTrigger>
+
                   </p>
 
                 </div>
