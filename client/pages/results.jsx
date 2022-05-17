@@ -120,7 +120,6 @@ export default class Results extends React.Component {
                     Search Address: {this.state.walletData.address}
                     <OverlayTrigger
                     trigger="click"
-                    key='right'
                     placement='right'
                     overlay={
                       <Popover>
