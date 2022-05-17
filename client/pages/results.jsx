@@ -29,7 +29,7 @@ export default class Results extends React.Component {
           status: {
             block_height: null,
             block_time: null
-          }
+          },
         }
       ],
       balance: [
@@ -72,11 +72,12 @@ export default class Results extends React.Component {
     fetch(`https://mempool.space/api/address/${address}/txs`)
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         this.setState({ transactionData: data });
       }),
     fetch(`https://btc.nownodes.io/api/v2/balancehistory//${address}`, {
       headers: {
-        "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
+        // "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
         "Content-Type": 'application/json'
       }
     })
@@ -158,11 +159,11 @@ export default class Results extends React.Component {
                   </div>
                 </Card>
               </div>
-              <div className="row mt-3 mb-5 margin-left-1 margin-right-1 px-0 justify-content-center pb-5">
-               <div className="col-md-12">
+              {/* <div className="row mt-3 mb-5 margin-left-1 margin-right-1 px-0 justify-content-center pb-5">
+               <div className="col-md-12"> */}
 
 
-                <Table className='blue-border' responsive='sm'>
+                {/* <Table className='blue-border' responsive='sm'>
                   <tbody>
                     <tr>
                       <td className='blue-border font-bold'>Transaction History</td>
@@ -171,7 +172,7 @@ export default class Results extends React.Component {
                       <td>Transaction Id</td>
                       <td>Value</td>
                       <td>Fees</td>
-                    </tr>
+                    </tr> */}
 
                     {/* {this.state.transactionData.map((transaction, i) => {
                         return (
@@ -193,35 +194,60 @@ export default class Results extends React.Component {
                     )} */}
 
 
-
+{/*
                   </tbody>
-                </Table>
-               </div>
+                </Table> */}
+               {/* </div>
               </div>
               <Card className='blue-border padding-zero font-size-20 grey-background'>
                 <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue card-border'>Transaction History</Card.Header>
                 <ul>
-                  <li>
-                    <Card.Title className='amaano-secondary'>Transaction ID: {this.state.transactionData[0].txid}</Card.Title>
-                  </li>
-                  <li>
+
+                  {this.state.transactionData.map((transaction, i) => {
+                    return (
+                      <>
+                        <div key={i}>
+                          <li className='grey-text'>{this.state.transactionData[i].txid}</li>
+                        </div>
+                      </>
+                    )
+                  }
+                  )}
+                {this.state.balance.reverse().map((balance, i) => {
+                  return (
+                    <>
+                      <li className='grey-text'>{this.state.balance[i].sent}</li>
+                    </>
+                  )
+                } */}
+                {/* )} */}
+                    {/* <Card.Title className='amaano-secondary'>Transaction ID: {this.state.transactionData[0].txid}</Card.Title> */}
+
+                  {/* <li>
                     <Card.Title className='amaano-secondary'>Block Height: {this.state.balance[this.state.balance.length-1].received}</Card.Title>
                   </li>
                 </ul>
-              </Card>
-                {/* <Card className='blue-border padding-zero font-size-20 grey-background'>
+              </Card> */}
+                <Card className='blue-border padding-zero font-size-20 grey-background'>
                 <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue card-border'>Transaction History</Card.Header>
-                <ul>
+                {/* <ul>
                   <li>
                     <Card.Title className='amaano-secondary'>Transaction ID: {this.state.transactionData[0].txid}</Card.Title>
                   </li>
                   <li>
                     <Card.Title className='amaano-secondary'>Block Height: {this.state.balance[this.state.balance.length-1].received}</Card.Title>
                   </li>
-                </ul>
+                </ul> */}
 
                 <ul className='px-4 py-2 amaano-blue'>
-                    {this.state.transactionData.slice(0, 5).map((transactionData, i) => {
+                {/* {this.state.balance.map((balance, i) => {
+                    return (
+                      <>
+                        <li className='grey-text'>{this.state.balance[i].sent}</li>
+                      </>
+                    )
+                }) } */}
+                    {/* {this.state.transactionData.slice(0, 5).map((transactionData, i) => {
                       return (
                         <li key={i}>
                           <Card.Title className='amaano-secondary'>Transaction ID: {transactionData.txid}</Card.Title>
@@ -230,17 +256,31 @@ export default class Results extends React.Component {
                               <Card.Title className='amaano-secondary'>Block Height: {transactionData.status.block_height}</Card.Title>
                             </li>
                             <li>
-                              <Card.Title className='amaano-secondary'>Time: {(moment.unix(transactionData.status.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}</Card.Title>
+                              <Card.Title className='amaano-secondary'>Confirmed: {(moment.unix(transactionData.status.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}</Card.Title>
                             </li>
+
                           </ul>
                         </li>
                       );
-                    })}
+                    })} */}
 
                   </ul>
-                </Card> */}
+                </Card>
             </div>) :
-            (<h1 className='amano-blue ml-2 font-titillium-web px-5 py-5'>No Results Found, Please Try again.</h1>)}
+            (
+            <div className="row my-2 margin-left-1 margin-right-1">
+              <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
+                <div className="row no-gutters">
+                  <div className="col-md-12 px-1 justify-content-center text-center">
+                    <h2 className='amaano-blue'>
+                      No Results Found
+                    </h2>
+                  </div>
+
+                </div>
+              </Card>
+            </div>
+            )}
       </>
     );
   }
