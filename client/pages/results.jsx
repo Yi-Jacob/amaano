@@ -72,7 +72,6 @@ export default class Results extends React.Component {
     fetch(`https://mempool.space/api/address/${address}/txs`)
       .then(res => res.json())
       .then(data => {
-        console.log(data)
         this.setState({ transactionData: data });
       }),
     fetch(`https://btc.nownodes.io/api/v2/balancehistory//${address}`, {
@@ -174,7 +173,7 @@ export default class Results extends React.Component {
                       <td>Fees</td>
                     </tr>
 
-                    {this.state.transactionData.map((transaction, i) => {
+                    {/* {this.state.transactionData.map((transaction, i) => {
                         return (
                           <>
                             <tr key={i}>
@@ -184,17 +183,14 @@ export default class Results extends React.Component {
                         )
                         }
                       )}
-                    {this.state.balance.map((balance, i) => {
+                    {this.state.balance.reverse().map((balance, i) => {
                       return (
                         <>
-
                             <td className='grey-text'>{this.state.balance[i].sent}</td>
-
-
                         </>
                       )
                     }
-                    )}
+                    )} */}
 
 
 
@@ -202,6 +198,17 @@ export default class Results extends React.Component {
                 </Table>
                </div>
               </div>
+              <Card className='blue-border padding-zero font-size-20 grey-background'>
+                <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue card-border'>Transaction History</Card.Header>
+                <ul>
+                  <li>
+                    <Card.Title className='amaano-secondary'>Transaction ID: {this.state.transactionData[0].txid}</Card.Title>
+                  </li>
+                  <li>
+                    <Card.Title className='amaano-secondary'>Block Height: {this.state.balance[this.state.balance.length-1].received}</Card.Title>
+                  </li>
+                </ul>
+              </Card>
                 {/* <Card className='blue-border padding-zero font-size-20 grey-background'>
                 <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue card-border'>Transaction History</Card.Header>
                 <ul>
