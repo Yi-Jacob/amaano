@@ -90,7 +90,12 @@ export default class Results extends React.Component {
       .then(res => res.json())
       .then(data => {
         this.setState({ price: (data[2].rate) });
-      })
+      }),
+      fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${address}`)
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+        })
     ])
   }
 
@@ -166,8 +171,11 @@ export default class Results extends React.Component {
                     return (
                       <ul key={i} className='px-4 py-2 amaano-blue'>
                         <li>
-                          {balance.received} ||{balance.sent}
+                          {this.state.balance.received > 0 ?
+                          (<p>test1</p>) :
+                          (<p>test</p>)}
                         </li>
+
                       </ul>
                     )
                   })}
