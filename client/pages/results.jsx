@@ -172,13 +172,56 @@ export default class Results extends React.Component {
               <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
                 {this.state.transactionHistory.data.list.map((transaction, i) => {
                   return (
+              <div className="container" key={i}>
                 <div className="row no-gutters">
                   <div className="col-md-12">
-                    <Card.Title className='info-text' key={i}>
-                      {transaction.hash}
-                    </Card.Title>
+                   <Card.Title>
+                      Transaction ID: {transaction.hash}
+                   </Card.Title>
+
                   </div>
                 </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <ul>
+                       <li>
+                        {(transaction.balance_diff) > 0 ?
+                        (<span>Recieved: </span>) :
+                        (<span>Sent:  </span>)
+                        }
+                         <span className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>{(transaction.balance_diff) / 100000000} BTC ~ </span>
+                          <span className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>
+                            ${((transaction.balance_diff) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </span>
+                        </li>
+                        <ul>
+                          <li>
+                             <span>Fees: </span>
+                              <span className='red'>{(transaction.fee) / 100000000} BTC</span>
+                            <span className='red'> ${((transaction.fee) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+
+                          </li>
+                        </ul>
+
+                    </ul>
+                  </div>
+                  <div className="col-md-6">
+                    <ul>
+                      <li>
+                       Block {transaction.block_height}
+                      </li>
+                      <ul>
+                          <li>
+                            <span className='green'>Confirmed:</span> {(moment.unix(transaction.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}
+                          </li>
+                        </ul>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+
+
                   )
                 }
 
