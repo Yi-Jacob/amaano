@@ -72,28 +72,19 @@ export default class Results extends React.Component {
           alert('No Results Found', err)
           this.setState({ results: false })
         }),
-    // fetch(`https://btc.nownodes.io/api/v2/balancehistory//${address}`, {
-    //   headers: {
-    //     "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
-    //     "Content-Type": 'application/json'
-    //   }
-    // })
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({balance: data})
-    //     console.log(data)
-    //   }),
     fetch('https://bitpay.com/api/rates')
       .then(res => res.json())
       .then(data => {
         this.setState({ price: (data[2].rate) });
       }),
-
-    fetch(`https://chain.api.btc.com/v3/address/${address}/tx?pagesize=25`,
-      )
+    fetch(`https://chain.api.btc.com/v3/address/${address}/tx?pagesize=25`)
         .then(res => res.json())
         .then(data => {
           this.setState({ transactionHistory: (data) });
+        }),
+      fetch(`https://blockstream.info/api/address/${address}/txs`)
+        .then(res => res.json())
+        .then(data => {
           console.log(data)
         })
     ])
@@ -173,14 +164,15 @@ export default class Results extends React.Component {
             </div>
 
            <div className="row my-2 margin-left-1 margin-right-1">
-              <Card className='mb-2 my-2 font-titillium-web px-4 py-4 blue-border'>
-
+              <Card className='mb-2 my-2 font-titillium-web px-3 py-3 blue-border'>
                 {this.state.transactionHistory.data.list.slice(0,10).map((transaction, i) => {
                   return (
-              <div className="container" key={i}>
-                <div className="row">
+              <div className="" key={i}>
+                <div className="row" key={i}>
                   <div className="col-md-12">
-                    <p>Transaction ID: {transaction.hash}</p>
+                    <Card.Title className='amaano-secondary' style={{fontWeight: '700'}}>
+                            Transaction ID: {transaction.hash}
+                    </Card.Title>
                   </div>
                 </div>
                 <div className="row">
@@ -230,7 +222,7 @@ export default class Results extends React.Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <ul>
                       <li>
                         Confirmations: {transaction.confirmations}
@@ -244,7 +236,7 @@ export default class Results extends React.Component {
                       </li>
                     </ul>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-5">
                     <ul>
                       <li>
                         {((transaction.size) / 1000).toFixed(2)} kb || {((transaction.vsize) / 1000).toFixed(2)} kvB || {((transaction.weight) /1000).toFixed(0)} kwu
