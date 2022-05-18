@@ -33,7 +33,10 @@ export default class Results extends React.Component {
             confirmations: null,
             hash: null,
             inputs_count: null,
-            outputs_count: null
+            outputs_count: null,
+            vsize: null,
+            size: null,
+            weight: null
           }]
         }
       }
@@ -168,44 +171,52 @@ export default class Results extends React.Component {
                 </p>
               </div>
             </div>
+
             <div className="row my-2 margin-left-1 margin-right-1">
-              <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
-                {this.state.transactionHistory.data.list.map((transaction, i) => {
+              <Card className='mb-2 my-2 font-titillium-web px-4 py-4 blue-border'>
+
+                {this.state.transactionHistory.data.list.slice(0,10).map((transaction, i) => {
                   return (
               <div className="container" key={i}>
-                <div className="row no-gutters">
-                  <div className="col-md-12">
-                   <Card.Title>
-                      Transaction ID: {transaction.hash}
-                   </Card.Title>
-
-                  </div>
+                <div className="row">
+                  Transaction ID: {transaction.hash}
                 </div>
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-md-3">
                     <ul>
                        <li>
                         {(transaction.balance_diff) > 0 ?
                         (<span>Recieved: </span>) :
                         (<span>Sent:  </span>)
                         }
-                         <span className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>{(transaction.balance_diff) / 100000000} BTC ~ </span>
-                          <span className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>
+                         <span className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>{(transaction.balance_diff) / 100000000} BTC</span>
+                          <ul className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>
+                            <li>
                             ${((transaction.balance_diff) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </span>
+                            </li>
+                          </ul>
                         </li>
-                        <ul>
-                          <li>
-                             <span>Fees: </span>
-                              <span className='red'>{(transaction.fee) / 100000000} BTC</span>
-                            <span className='red'> ${((transaction.fee) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-
-                          </li>
-                        </ul>
-
                     </ul>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-4">
+                    <ul>
+                      <li>
+                          <li>
+                            <span>Fees: </span>
+                            <span className='red'>{(transaction.fee) / 100000000} BTC</span>
+                                <ul>
+                                  <li>
+                                    <span className='red'> ${((transaction.fee) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    <span> ~ {((transaction.fee) / transaction.vsize).toFixed(2)} sat/vB</span>
+                                  </li>
+                                </ul>
+                          </li>
+                        </li>
+                    </ul>
+
+
+                  </div>
+                  <div className="col-md-5">
                     <ul>
                       <li>
                        Block {transaction.block_height}
@@ -214,8 +225,22 @@ export default class Results extends React.Component {
                           <li>
                             <span className='green'>Confirmed:</span> {(moment.unix(transaction.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}
                           </li>
-                        </ul>
+                          <ul>
+                            <li>
+                              Confirmations: {transaction.confirmations}
+                            </li>
+                            <li>
+                              Inputs: {transaction.inputs_count} || Outputs: {transaction.outputs_count}
+                            </li>
+                            <ul>
+                              <li>
+                                {((transaction.size) / 1000).toFixed(2)} kb || {((transaction.vsize) / 1000).toFixed(2)} kvB || {((transaction.weight) /1000).toFixed(0)} kwu
+                              </li>
+                            </ul>
+                          </ul>
+                      </ul>
                     </ul>
+
                   </div>
                 </div>
 
