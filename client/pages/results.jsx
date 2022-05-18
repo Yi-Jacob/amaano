@@ -165,28 +165,30 @@ export default class Results extends React.Component {
                 </Card>
               </div>
             <div className="row pt-3 margin-right-10 margin-left-6">
-              <div className='col-sm-9 col-md-11'>
+              <div className='col-md-12'>
                 <p className='address-header font-titillium-web amaano-blue'>
                   Transaction History
                 </p>
               </div>
             </div>
 
-            <div className="row my-2 margin-left-1 margin-right-1">
+           <div className="row my-2 margin-left-1 margin-right-1">
               <Card className='mb-2 my-2 font-titillium-web px-4 py-4 blue-border'>
 
                 {this.state.transactionHistory.data.list.slice(0,10).map((transaction, i) => {
                   return (
               <div className="container" key={i}>
                 <div className="row">
-                  Transaction ID: {transaction.hash}
+                  <div className="col-md-12">
+                    <p>Transaction ID: {transaction.hash}</p>
+                  </div>
                 </div>
                 <div className="row">
                   <div className="col-md-3">
                     <ul>
                        <li>
                         {(transaction.balance_diff) > 0 ?
-                        (<span>Recieved: </span>) :
+                        (<span>Received: </span>) :
                         (<span>Sent:  </span>)
                         }
                          <span className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>{(transaction.balance_diff) / 100000000} BTC</span>
@@ -213,8 +215,6 @@ export default class Results extends React.Component {
                           </li>
                         </li>
                     </ul>
-
-
                   </div>
                   <div className="col-md-5">
                     <ul>
@@ -225,42 +225,40 @@ export default class Results extends React.Component {
                           <li>
                             <span className='green'>Confirmed:</span> {(moment.unix(transaction.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}
                           </li>
-                          <ul>
-                            <li>
-                              Confirmations: {transaction.confirmations}
-                            </li>
-                            <li>
-                              Inputs: {transaction.inputs_count} || Outputs: {transaction.outputs_count}
-                            </li>
-                            <ul>
-                              <li>
-                                {((transaction.size) / 1000).toFixed(2)} kb || {((transaction.vsize) / 1000).toFixed(2)} kvB || {((transaction.weight) /1000).toFixed(0)} kwu
-                              </li>
-                            </ul>
-                          </ul>
-                      </ul>
+                        </ul>
                     </ul>
-
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-4">
+                    <ul>
+                      <li>
+                        Confirmations: {transaction.confirmations}
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="col-md-4">
+                    <ul>
+                       <li>
+                        Inputs: {transaction.inputs_count} || Outputs: {transaction.outputs_count}
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="col-md-4">
+                    <ul>
+                      <li>
+                        {((transaction.size) / 1000).toFixed(2)} kb || {((transaction.vsize) / 1000).toFixed(2)} kvB || {((transaction.weight) /1000).toFixed(0)} kwu
+                      </li>
+                    </ul>
                   </div>
                 </div>
 
               </div>
-
-
-                  )
-                }
-
+                  )}
                   )}
 
               </Card>
             </div>
-
-
-
-
-
-
-
             </div>) :
             (
             <div className="row my-2 margin-left-1 margin-right-1">
