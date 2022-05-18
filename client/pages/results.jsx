@@ -69,29 +69,25 @@ export default class Results extends React.Component {
           alert('No Results Found', err)
           this.setState({ results: false })
         }),
-    fetch(`https://mempool.space/api/address/${address}/txs`)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        this.setState({ transactionData: data });
-      }),
-    fetch(`https://btc.nownodes.io/api/v2/balancehistory//${address}`, {
-      headers: {
-        "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
-        "Content-Type": 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        this.setState({balance: data})
-        console.log(data)
-      }),
+    // fetch(`https://btc.nownodes.io/api/v2/balancehistory//${address}`, {
+    //   headers: {
+    //     "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
+    //     "Content-Type": 'application/json'
+    //   }
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     this.setState({balance: data})
+    //     console.log(data)
+    //   }),
     fetch('https://bitpay.com/api/rates')
       .then(res => res.json())
       .then(data => {
         this.setState({ price: (data[2].rate) });
       }),
-      fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${address}`)
+
+    fetch(`https://chain.api.btc.com/v3/address/${address}/tx?pagesize=25`,
+      )
         .then(res => res.json())
         .then(data => {
           console.log(data)
