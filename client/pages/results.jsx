@@ -23,21 +23,21 @@ export default class Results extends React.Component {
           spent_txo_sum: 0
         }
       },
-      transactionData: [
-        {
-          txid: '',
-          status: {
+      transactionHistory: {
+        data: {
+          list: [{
+            fee: null,
+            balance_diff: null,
             block_height: null,
-            block_time: null
-          },
+            block_time: null,
+            confirmations: null,
+            hash: null,
+            inputs_count: null,
+            outputs_count: null
+          }]
         }
-      ],
-      balance: [
-        {
-        sent: null,
-        received: null
       }
-    ]
+
     });
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -90,6 +90,7 @@ export default class Results extends React.Component {
       )
         .then(res => res.json())
         .then(data => {
+          this.setState({ transactionHistory: (data) });
           console.log(data)
         })
     ])
@@ -160,23 +161,38 @@ export default class Results extends React.Component {
                   </div>
                 </Card>
               </div>
-                <Card className='blue-border padding-zero font-size-20 grey-background'>
-                <Card.Header className='mx-0 font-titillium-web font-bold amaano-blue card-border'>Transaction History</Card.Header>
+            <div className="row pt-3 margin-right-10 margin-left-6">
+              <div className='col-sm-9 col-md-11'>
+                <p className='address-header font-titillium-web amaano-blue'>
+                  Transaction History
+                </p>
+              </div>
+            </div>
+            <div className="row my-2 margin-left-1 margin-right-1">
+              <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
+                {this.state.transactionHistory.data.list.map((transaction, i) => {
+                  return (
+                <div className="row no-gutters">
+                  <div className="col-md-12">
+                    <Card.Title className='info-text' key={i}>
+                      {transaction.hash}
+                    </Card.Title>
+                  </div>
+                </div>
+                  )
+                }
 
-                {this.state.balance.reverse().map((balance, i) => {
-                    return (
-                      <ul key={i} className='px-4 py-2 amaano-blue'>
-                        <li>
-                          {this.state.balance.received > 0 ?
-                          (<p>test1</p>) :
-                          (<p>test</p>)}
-                        </li>
+                  )}
 
-                      </ul>
-                    )
-                  })}
+              </Card>
+            </div>
 
-                </Card>
+
+
+
+
+
+
             </div>) :
             (
             <div className="row my-2 margin-left-1 margin-right-1">
