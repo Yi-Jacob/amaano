@@ -98,16 +98,6 @@ export default class Home extends React.Component {
           .then(data => {
             this.setState({ transactions: data });
           }),
-        fetch('https://btcbook.nownodes.io/api/',{
-          headers: {
-            "api-key": '66783fe5-6850-495a-a41e-dd61e133335d',
-            "Content-Type": 'application/json'
-          }
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data)
-          } ),
         fetch('https://bitpay.com/api/rates')
           .then(res => res.json())
           .then(data => {
@@ -178,9 +168,14 @@ export default class Home extends React.Component {
               </div>
             </div>
             <div className="row">
-              <button onClick={this.handleClick} className='scrolldown'>
-                <i class="fa-solid fa-3x fa-caret-down"></i>
-              </button>
+              <div className="col-md-12">
+                <div className="text-center">
+                  <button onClick={this.handleClick} className='scrolldown downBtn'>
+                    <i class="fa-solid fa-3x fa-caret-down"></i>
+                  </button>
+                </div>
+
+              </div>
             </div>
           </div>
         </section>
@@ -256,9 +251,9 @@ export default class Home extends React.Component {
                   </Table>
                 </div>
               </div>
-               <div className="row mb-3 justify-content-center">
-              <div className="col-md-12">
-                <Table className='orange-border '>
+              <div className="row mb-3 justify-content-center">
+                <div className="col-md-12">
+                <Table className='blue-border'>
                   <tbody>
                     <tr>
                       <td colSpan={4} className='font-bold'>Latest Blocks</td>
@@ -293,13 +288,13 @@ export default class Home extends React.Component {
             </div>
             <div className="row mb-3 justify-content-center">
               <div className="col-md-12">
-                <Table className='orange-border' responsive='sm'>
+                <Table className='blue-border' responsive='sm'>
                   <tbody>
                     <tr>
                       <td colSpan={4} className='orange-border font-bold'>Latest Transactions</td>
                     </tr>
                     <tr className='font-bold'>
-                      <td>Transaction Id</td>
+                      <td>Transaction ID</td>
                       <td>Value</td>
                       <td>Fees</td>
                     </tr>

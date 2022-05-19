@@ -35,20 +35,6 @@ export default class Transactions extends React.Component {
   }
 
   componentDidMount() {
-    // Promise.all([
-    //   fetch('https://mempool.space/api/v1/fees/recommended'),
-    //   fetch('https://mempool.space/api/mempool/recent')
-    // ]).then(async ([data1, data2]) => {
-    //   const a = await data1.json();
-    //   const b = await data2.json();
-    //   return [a, b]
-    // })
-    //   .then((res) => {
-    //     this.setState({ fees: data });
-    //     console.log(res)
-    //   }).catch((err) => {
-    //     console.log(err);
-    //   });
     Promise.all([
       fetch('https://mempool.space/api/v1/fees/recommended')
         .then(res => res.json())
@@ -104,7 +90,7 @@ export default class Transactions extends React.Component {
         </div>
         <div className="row mx-4 my-3">
           <div className="col-md-12">
-            <Card className='mb-2 my-1 px-4 py-4 orange-border work-sans  grey-background'>
+            <Card className='mb-2 my-1 px-4 py-4 orange-border work-sans  grey-background blue-border'>
               <Card.Title className='card-text amaano-secondary'>
                 Here are the last 10 transactions to occur.
               </Card.Title>

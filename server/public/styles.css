@@ -297,6 +297,20 @@ section {
 }
 
 .scrolldown {
-  background-color: none;
+  background-color: rgba(236, 241, 244, 1);
   border: none;
+}
+
+.card-border {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.test {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  white-space: -webkit-pre-wrap;
+  word-wrap: break-word;
 }
