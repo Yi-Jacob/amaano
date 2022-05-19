@@ -90,7 +90,7 @@ export default class Transactions extends React.Component {
         </div>
         <div className="row mx-4 my-3">
           <div className="col-md-12">
-            <Card className='mb-2 my-1 px-4 py-4 orange-border work-sans  grey-background'>
+            <Card className='mb-2 my-1 px-4 py-4 orange-border work-sans  grey-background blue-border'>
               <Card.Title className='card-text amaano-secondary'>
                 Here are the last 10 transactions to occur.
               </Card.Title>

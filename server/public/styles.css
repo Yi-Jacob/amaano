@@ -312,4 +312,5 @@ section {
   text-overflow: ellipsis;
   max-width: 200px;
   white-space: -webkit-pre-wrap;
+  word-wrap: break-word;
 }

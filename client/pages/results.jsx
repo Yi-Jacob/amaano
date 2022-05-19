@@ -114,9 +114,9 @@ export default class Results extends React.Component {
         <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
           {this.state.results ?
             (<div className="container-fluid" style={{ maxWidth: '1200px' }}>
-              <div className="row pt-3 margin-right-10 margin-left-6">
-                <div className='col-sm-9 col-md-11'>
-                  <p className='address-header font-titillium-web amaano-blue'>
+            <div className="row margin-right-10 margin-left-6">
+              <div className='col-sm-9 col-md-11'>
+                <p className='address-header font-titillium-web amaano-blue pt-3 pb-0 mb-0'>
                     Search Address: {this.state.walletData.address}
                     <OverlayTrigger
                     delay
@@ -139,7 +139,7 @@ export default class Results extends React.Component {
 
                 </div>
               </div>
-              <div className="row my-2 margin-left-1 margin-right-1">
+              <div className="row my-0 margin-left-1 margin-right-1">
                 <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
                   <div className="row no-gutters">
                     <div className="col-md-3 col-sm-10 px-1 justify-content-center margin-left-14" style={{ minWidth: '275px' }}>
@@ -155,16 +155,16 @@ export default class Results extends React.Component {
                   </div>
                 </Card>
               </div>
-            <div className="row pt-3 margin-right-10 margin-left-6">
+            <div className="row margin-right-10 margin-left-6">
               <div className='col-md-12'>
-                <p className='address-header font-titillium-web amaano-blue'>
+                <p className='address-header font-titillium-web amaano-blue pt-2 pb-0'>
                   Transaction History
                 </p>
               </div>
             </div>
 
-           <div className="row my-3 margin-left-1 margin-right-1 mb-3">
-              <Card className='mb-2 my-2 font-titillium-web px-3 py-3 blue-border'>
+           <div className="row margin-left-1 margin-right-1 mb-3">
+              <Card className='mb-2 font-titillium-web px-3 py-2  blue-border'>
                 {this.state.transactionHistory.data.list.slice(0,10).map((transaction, i) => {
                   return (
               <div className="" key={i}>
@@ -176,7 +176,7 @@ export default class Results extends React.Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-md-3 px-0">
                     <ul>
                        <li>
                         {(transaction.balance_diff) > 0 ?
@@ -192,7 +192,7 @@ export default class Results extends React.Component {
                         </li>
                     </ul>
                   </div>
-                  <div className="col-md-4">
+                        <div className="col-md-4 px-0">
                     <ul>
                       <li>
                           <li>
@@ -201,65 +201,35 @@ export default class Results extends React.Component {
                                 <ul>
                                   <li>
                                     <span className='red'> ${((transaction.fee) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                                    <span> ~ {((transaction.fee) / transaction.vsize).toFixed(2)} sat/vB</span>
+                                    <span className='small-text py-3 my-4'> ~ {((transaction.fee) / transaction.vsize).toFixed(2)} sat/vB</span>
                                   </li>
                                 </ul>
                           </li>
                         </li>
                     </ul>
                   </div>
-                  <div className="col-md-5">
+                        <div className="col-md-5 px-0 my-0">
                     <ul>
                       <li>
                         <span className='green'>Confirmed:</span> {(moment.unix(transaction.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}
                       </li>
-
                       <ul>
                         <li>
                           Block {transaction.block_height}
-                      </li></ul>
+                        </li>
+                        <li>
+                          Confirmations: <span className='green'>{transaction.confirmations}</span>
+                        </li>
+                      </ul>
                     </ul>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-3">
-                    <ul>
-                      <li>
-                        Confirmations: {transaction.confirmations}
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="col-md-4">
-                    <ul>
-                       <li>
-                        Inputs: {transaction.inputs_count} || Outputs: {transaction.outputs_count}
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="col-md-5">
-                    <ul>
-                      <li>
-                        {((transaction.size) / 1000).toFixed(2)} kb || {((transaction.vsize) / 1000).toFixed(2)} kvB || {((transaction.weight) /1000).toFixed(0)} kwu
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
               </div>
                   )}
                   )}
 
               </Card>
             </div>
-            <Table>
-              <tbody>
-                <tr>
-                  <td className='test'>
-                    172ccfc65125ffd730d68c7c92986597b4efc73ad7374fe8767b64c0032d8a84
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
             </div>) :
             (
             <div className="row my-2 margin-left-1 margin-right-1">
@@ -270,7 +240,6 @@ export default class Results extends React.Component {
                       No Results Found
                     </h2>
                   </div>
-
                 </div>
               </Card>
             </div>
