@@ -145,24 +145,24 @@ export default class Home extends React.Component {
                 </InputGroup>
                 </Form>
               </div>
-            <div className="row mb-2">
+            <div className="row mx-2 my-2">
               <div className="col-md-6">
-                <div class="mx-auto text-center mb-2">
-                  <img src='iphone.gif' height="225" width='150'></img>
+                <div class="mx-auto text-center">
+                  <img src='iPhone.gif' width={175}></img>
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 mt-4">
                 <div class="mx-auto text-center">
                   <h2>Download Today!</h2>
                 </div>
-                <div class="mx-auto text-center">
+                <div class="mx-auto text-center mb-3">
                   <a href='https://apps.apple.com/us/app/amaano/id1334610525'>
-                    <img src='iphone.png' height="75" width='155' href=""></img>
+                    <img src='appstore.png' width={250}></img>
                   </a>
                 </div>
                 <div class="mx-auto text-center">
                   <a href='https://play.google.com/store/apps/details?id=com.creadigol.amaano'>
-                    <img src='google-play.png' height="110" width='175'></img>
+                    <img src='playstore.png' width={250} ></img>
                   </a>
                 </div>
               </div>
