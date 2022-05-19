@@ -81,12 +81,12 @@ export default class Results extends React.Component {
         .then(res => res.json())
         .then(data => {
           this.setState({ transactionHistory: (data) });
-        }),
-      fetch(`https://blockstream.info/api/address/${address}/txs`)
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
         })
+      // fetch(`https://api.bitaps.com/btc/v1/blockchain/address/transactions/${address}`)
+      //   .then(res => res.json())
+      //   .then(data => {
+      //     console.log(data)
+      //   })
     ])
   }
 
@@ -163,7 +163,7 @@ export default class Results extends React.Component {
               </div>
             </div>
 
-           <div className="row my-2 margin-left-1 margin-right-1">
+           <div className="row my-3 margin-left-1 margin-right-1 mb-3">
               <Card className='mb-2 my-2 font-titillium-web px-3 py-3 blue-border'>
                 {this.state.transactionHistory.data.list.slice(0,10).map((transaction, i) => {
                   return (
@@ -211,13 +211,13 @@ export default class Results extends React.Component {
                   <div className="col-md-5">
                     <ul>
                       <li>
-                       Block {transaction.block_height}
+                        <span className='green'>Confirmed:</span> {(moment.unix(transaction.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}
                       </li>
+
                       <ul>
-                          <li>
-                            <span className='green'>Confirmed:</span> {(moment.unix(transaction.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}
-                          </li>
-                        </ul>
+                        <li>
+                          Block {transaction.block_height}
+                      </li></ul>
                     </ul>
                   </div>
                 </div>
@@ -251,6 +251,15 @@ export default class Results extends React.Component {
 
               </Card>
             </div>
+            <Table>
+              <tbody>
+                <tr>
+                  <td className='test'>
+                    172ccfc65125ffd730d68c7c92986597b4efc73ad7374fe8767b64c0032d8a84
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
             </div>) :
             (
             <div className="row my-2 margin-left-1 margin-right-1">

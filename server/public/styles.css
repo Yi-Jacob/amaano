@@ -306,3 +306,10 @@ section {
   border-left: none;
   border-right: none;
 }
+
+.test {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  white-space: -webkit-pre-wrap;
+}
