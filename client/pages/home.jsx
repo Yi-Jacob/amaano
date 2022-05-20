@@ -82,18 +82,30 @@ export default class Home extends React.Component {
       fetch('https://mempool.space/api/blocks/'),
       fetch('https://mempool.space/api/mempool/recent'),
       fetch('https://bitpay.com/api/rates'),
-      fetch('https://bitcoinexplorer.org/api/quotes/random')
-    ]).then(async ([a, b, c, d, e, f]) => {
+      fetch('https://bitcoinexplorer.org/api/quotes/random'),
+      fetch('https://api.bitaps.com/market/v1//ticker/btcusd'),
+      fetch('https://bitcoinexplorer.org/api/mining/hashrate'),
+      fetch('https://bitcoinexplorer.org/api/price/usd/marketcap')
+    ]).then(async ([a, b, c, d, e, f, g, h, i]) => {
       const difficulty = await a.json();
       const fees = await b.json();
       const blocks = await c.json();
       const mempool = await d.json();
       const prices = await e.json();
-      const coins = await f.json();
-      return [difficulty, fees, blocks, mempool, prices, coins]
+      const quote = await f.json();
+      const usd = await g.json();
+      const hash = await h.json();
+      const test = await i.json();
+      return [difficulty, fees, blocks, mempool, prices, quote, usd, hash, test]
     })
       .then((data) => {
         console.log(data);
+       this.setState({
+          difficulty: data[0],
+          fees: data[1],
+          blocks: data[2],
+          transactions: data[3]
+        })
 
       }).catch((err) => {
         console.log(err);
