@@ -76,40 +76,64 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(
-      Promise.all([
-        fetch('https://mempool.space/api/v1/difficulty-adjustment')
-          .then(res => res.json())
-          .then(data => {
-            this.setState({ difficulty: data });
-          }),
-        fetch('https://mempool.space/api/v1/fees/recommended')
-          .then(res => res.json())
-          .then(data => {
-            this.setState({ fees: data });
-          }),
-        fetch('https://mempool.space/api/blocks/')
-          .then(res => res.json())
-          .then(data => {
-            this.setState({ blocks: data });
-          }),
-        fetch('https://mempool.space/api/mempool/recent')
-          .then(res => res.json())
-          .then(data => {
-            this.setState({ transactions: data });
-          }),
-        fetch('https://bitpay.com/api/rates')
-          .then(res => res.json())
-          .then(data => {
-            this.setState({
-              usd: data[2].rate,
-              kes: data[81].rate,
-              ngn: data[110].rate,
-              ugx: data[151].rate
-            });
-          })
-      ]), 10000
-    )
+    Promise.all([
+      fetch('https://mempool.space/api/v1/difficulty-adjustment'),
+      fetch('https://mempool.space/api/v1/fees/recommended'),
+      fetch('https://mempool.space/api/blocks/'),
+      fetch('https://mempool.space/api/mempool/recent'),
+      fetch('https://bitpay.com/api/rates'),
+      fetch('https://bitcoinexplorer.org/api/quotes/random')
+    ]).then(async ([a, b, c, d, e, f]) => {
+      const difficulty = await a.json();
+      const fees = await b.json();
+      const blocks = await c.json();
+      const mempool = await d.json();
+      const prices = await e.json();
+      const coins = await f.json();
+      return [difficulty, fees, blocks, mempool, prices, coins]
+    })
+      .then((data) => {
+        console.log(data);
+
+      }).catch((err) => {
+        console.log(err);
+      });
+
+
+
+
+      // Promise.all([
+      //   fetch('https://mempool.space/api/v1/difficulty-adjustment')
+      //     .then(res => res.json())
+      //     .then(data => {
+      //       this.setState({ difficulty: data });
+      //     }),
+      //   fetch('https://mempool.space/api/v1/fees/recommended')
+      //     .then(res => res.json())
+      //     .then(data => {
+      //       this.setState({ fees: data });
+      //     }),
+      //   fetch('https://mempool.space/api/blocks/')
+      //     .then(res => res.json())
+      //     .then(data => {
+      //       this.setState({ blocks: data });
+      //     }),
+      //   fetch('https://mempool.space/api/mempool/recent')
+      //     .then(res => res.json())
+      //     .then(data => {
+      //       this.setState({ transactions: data });
+      //     }),
+      //   fetch('https://bitpay.com/api/rates')
+      //     .then(res => res.json())
+      //     .then(data => {
+      //       this.setState({
+      //         usd: data[2].rate,
+      //         kes: data[81].rate,
+      //         ngn: data[110].rate,
+      //         ugx: data[151].rate
+      //       });
+      //     })
+      // ])
   }
 
   render() {

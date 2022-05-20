@@ -27,16 +27,14 @@ export default class Results extends React.Component {
         data: {
           list: [{
             fee: null,
-            balance_diff: null,
-            block_height: null,
-            block_time: null,
+            amount: null,
+            blockHeight: null,
+            blockTime: null,
             confirmations: null,
-            hash: null,
-            inputs_count: null,
-            outputs_count: null,
-            vsize: null,
-            size: null,
-            weight: null
+            txId: null,
+            inputsCount: null,
+            outsCount: null,
+            vSize: null
           }]
         }
       }
@@ -77,16 +75,18 @@ export default class Results extends React.Component {
       .then(data => {
         this.setState({ price: (data[2].rate) });
       }),
-    fetch(`https://chain.api.btc.com/v3/address/${address}/tx?pagesize=25`)
+      fetch(`https://api.bitaps.com/btc/v1/blockchain/address/transactions/${address}`)
         .then(res => res.json())
         .then(data => {
-          this.setState({ transactionHistory: (data) });
+          this.setState({ transactionHistory: data });
+        }),
+      fetch('/api/random')
+        .then(data => {
+          console.log(data)
         })
-      // fetch(`https://api.bitaps.com/btc/v1/blockchain/address/transactions/${address}`)
-      //   .then(res => res.json())
-      //   .then(data => {
-      //     console.log(data)
-      //   })
+        .catch(err => {
+          console.log(err)
+        })
     ])
   }
 
@@ -171,7 +171,7 @@ export default class Results extends React.Component {
                 <div className="row" key={i}>
                   <div className="col-md-12">
                     <Card.Title className='amaano-secondary' style={{fontWeight: '700'}}>
-                            Transaction ID: {transaction.hash}
+                            Transaction ID: {transaction.txId}
                     </Card.Title>
                   </div>
                 </div>
@@ -179,14 +179,14 @@ export default class Results extends React.Component {
                   <div className="col-md-3 px-0">
                     <ul>
                        <li>
-                        {(transaction.balance_diff) > 0 ?
+                        {(transaction.amount) > 0 ?
                         (<span>Received: </span>) :
                         (<span>Sent:  </span>)
                         }
-                         <span className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>{(transaction.balance_diff) / 100000000} BTC</span>
-                          <ul className={(transaction.balance_diff) > 0 ? 'green' : 'red'}>
+                         <span className={(transaction.amount) > 0 ? 'green' : 'red'}>{(transaction.amount) / 100000000} BTC</span>
+                          <ul className={(transaction.amount) > 0 ? 'green' : 'red'}>
                             <li>
-                            ${((transaction.balance_diff) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            ${((transaction.amount) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </li>
                           </ul>
                         </li>
@@ -201,7 +201,7 @@ export default class Results extends React.Component {
                                 <ul>
                                   <li>
                                     <span className='red'> ${((transaction.fee) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                                    <span className='small-text py-3 my-4'> ~ {((transaction.fee) / transaction.vsize).toFixed(2)} sat/vB</span>
+                                    <span className='small-text py-3 my-4'> ~ {((transaction.fee) / transaction.vSize).toFixed(2)} sat/vB</span>
                                   </li>
                                 </ul>
                           </li>
@@ -211,11 +211,11 @@ export default class Results extends React.Component {
                         <div className="col-md-5 px-0 my-0">
                     <ul>
                       <li>
-                        <span className='green'>Confirmed:</span> {(moment.unix(transaction.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}
+                        <span className='green'>Confirmed:</span> {(moment.unix(transaction.blockTime).format('MMMM Do YYYY, h:mm:ss a').toString())}
                       </li>
                       <ul>
                         <li>
-                          Block {transaction.block_height}
+                          Block Height {transaction.blockHeight}
                         </li>
                         <li>
                           Confirmations: <span className='green'>{transaction.confirmations}</span>

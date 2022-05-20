@@ -6,10 +6,13 @@ const staticMiddleware = require('./static-middleware');
 const pg = require('pg');
 const expressJson = express.json();
 const path = require('path');
+const cors = require('cors');
+const request = require('request');
 
 app.use(expressJson);
 app.use(staticMiddleware);
 app.use(errorMiddleware);
+app.use(cors());
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -17,6 +20,25 @@ const db = new pg.Pool({
     rejectUnauthorized: false
   }
 });
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
+app.get('/api/random', (req, res) => {
+  request(
+    { url: 'https://bitcoinexplorer.org/api/mining/hashrate' },
+    (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.status(500).json({ type: 'error', message: err.message });
+      }
+
+      res.json(JSON.parse(body));
+    }
+  )
+});
+
 
 app.get('/api/bookmarks', (req, res) => {
   const sql = `
