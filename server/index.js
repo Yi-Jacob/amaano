@@ -6,13 +6,22 @@ const staticMiddleware = require('./static-middleware');
 const pg = require('pg');
 const expressJson = express.json();
 const path = require('path');
-const cors = require('cors');
 const request = require('request');
+const proxy = require('express-http-proxy');
 
 app.use(expressJson);
 app.use(staticMiddleware);
 app.use(errorMiddleware);
 app.use(cors());
+
+const cors = require("cors");
+const corsOptions = {
+  origin: '*',
+  credentials: true,            //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions))
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -21,23 +30,31 @@ const db = new pg.Pool({
   }
 });
 
+var staticFilesPath = path.resolve(__dirname, '..', 'build');
+
+app.use(express.static(staticFilesPath));
+
+app.use('/api/api-server', proxy('www.api-server.com'));
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   next();
 });
 
-app.get('/api/random', (req, res) => {
-  request(
-    { url: 'https://bitcoinexplorer.org/api/mining/hashrate' },
-    (error, response, body) => {
-      if (error || response.statusCode !== 200) {
-        return res.status(500).json({ type: 'error', message: err.message });
-      }
+// Listen on a specific host via the HOST environment variable
+var host = process.env.HOST || '0.0.0.0';
+// Listen on a specific port via the PORT environment variable
+var port = process.env.PORT || 8080;
 
-      res.json(JSON.parse(body));
-    }
-  )
+var cors_proxy = require('cors-anywhere');
+cors_proxy.createServer({
+  originWhitelist: [], // Allow all origins
+  requireHeader: ['origin', 'x-requested-with'],
+  removeHeaders: ['cookie', 'cookie2']
+}).listen(port, host, function () {
+  console.log('Running CORS Anywhere on ' + host + ':' + port);
 });
+
 
 
 app.get('/api/bookmarks', (req, res) => {

@@ -32,7 +32,12 @@ export default class Home extends React.Component {
         {
           height: null,
           tx_count: 0,
-          timestamp: null
+          timestamp: null,
+          extras: {
+            pool: {
+              name: null
+            }
+          }
         }
       ],
       transactions: [
@@ -104,14 +109,14 @@ export default class Home extends React.Component {
     Promise.all([
       fetch('https://mempool.space/api/v1/difficulty-adjustment'),
       fetch('https://mempool.space/api/v1/fees/recommended'),
-      fetch('https://mempool.space/api/blocks/'),
+      fetch('https://mempool.space/api/v1/blocks-extras/'),
       fetch('https://mempool.space/api/mempool/recent'),
       fetch('https://bitpay.com/api/rates'),
-      fetch('https://bitcoinexplorer.org/api/quotes/random'),
+      fetch('https://thingproxy.freeboard.io/fetch/https://bitcoinexplorer.org/api/quotes/random'),
       fetch('https://api.bitaps.com/market/v1/ticker/btcusd'),
-      fetch('https://bitcoinexplorer.org/api/mining/hashrate'),
-      fetch('https://bitcoinexplorer.org/api/price/usd/marketcap'),
-      fetch('https://bitcoinexplorer.org/api/blockchain/coins'),
+      fetch('https://thingproxy.freeboard.io/fetch/https://bitcoinexplorer.org/api/mining/hashrate'),
+      fetch('https://thingproxy.freeboard.io/fetch/https://bitcoinexplorer.org/api/price/usd/marketcap'),
+      fetch('https://thingproxy.freeboard.io/fetch/https://bitcoinexplorer.org/api/blockchain/coins'),
       fetch('https://api.bitaps.com/btc/v1/nodes/list'),
       fetch('https://mempool.space/api/mempool'),
       fetch('https://api.pro.coinbase.com/products/BTC-USD/stats')
@@ -161,12 +166,12 @@ export default class Home extends React.Component {
     return (
       <>
           <Nav history={this.props.history} />
-        <section className='banner py-4'>
+        <section className='banner pt-4 pb-4'>
           <div className="container work-sans">
-              <div className="row mt-3">
+              <div className="row pt-3">
                 <div className="col-md-12">
                   <div className="text-center">
-                    <h1 className='pt-2' style={{color: 'white'}}> Explorer</h1>
+                    <h1 className='pt-4' style={{color: 'white'}}> Explorer</h1>
                   </div>
                 </div>
               </div>
@@ -182,14 +187,12 @@ export default class Home extends React.Component {
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Price</p>
                         <p>${(this.state.usd.data.last)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p>24hr change:
-                          <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
+                        <p>24hr change: <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
                             {((this.state.change.last - this.state.change.open) / this.state.change.open*100).toFixed(2)}%
-
                           </span>
                         </p>
                       </div>
-                      <div className="col-md-3 text-left">
+                      <div className="col-lg-3 text-left">
                         <p className='font-underline'>Supply</p>
                         <p>
                           Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
@@ -222,9 +225,9 @@ export default class Home extends React.Component {
                     <div className="row">
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Price</p>
-                        <p>${(this.state.kes)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
-                          {this.state.usd.data.last_change}%
+                        <p>Ksh {(this.state.kes)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p>24hr change: <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
+                          {((this.state.change.last - this.state.change.open) / this.state.change.open * 100).toFixed(2)}%
                         </span>
                         </p>
                       </div>
@@ -261,9 +264,9 @@ export default class Home extends React.Component {
                     <div className="row">
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Price</p>
-                        <p>${(this.state.ngn)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
-                          {this.state.usd.data.last_change}%
+                        <p>₦ {(this.state.ngn)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p>24hr change: <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
+                          {((this.state.change.last - this.state.change.open) / this.state.change.open * 100).toFixed(2)}%
                         </span>
                         </p>
                       </div>
@@ -300,9 +303,9 @@ export default class Home extends React.Component {
                     <div className="row">
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Price</p>
-                        <p>${(this.state.ugx)}</p>
-                        <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
-                          {this.state.usd.data.last_change}%
+                        <p>USh {(this.state.ugx)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p>24hr change: <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
+                          {((this.state.change.last - this.state.change.open) / this.state.change.open * 100).toFixed(2)}%
                         </span>
                         </p>
                       </div>
@@ -341,7 +344,7 @@ export default class Home extends React.Component {
               </div>
               <div className="row my-3">
                 <div className="col-sm-12">
-                <Card className='px-2 py-2 grey-background blue-border'>
+                <Card className='px-2 py-3 grey-background blue-border'>
                     <p>{this.state.random.text} - {this.state.random.speaker}, {this.state.random.date}
                     </p>
                   </Card>
@@ -366,65 +369,54 @@ export default class Home extends React.Component {
                 </Form>
                 </div>
               </div>
-          </div>
-        </section>
-
-        <section className='section2 pt-3' id='section2'>
-          <div className="container">
-            <div className="row">
-              <button onClick={this.handleClickUp} className='scrolldown'>
-                <i class="fa-solid fa-3x fa-caret-up"></i>
-              </button>
-            </div>
-
             <div className="row mb-3 justify-content-center">
-                <div className="col-md-6">
-                  <Table className='blue-border'>
-                    <tbody className='blue-border'>
-                      <tr >
-                        <td colSpan={2} className='blue-border font-bold '>Current Transaction Fees</td>
-                      </tr>
-                      <tr>
-                        <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
-                        <td>{this.state.fees.fastestFee} sat/vB</td>
-                      </tr>
-                      <tr>
-                        <td>Medium Priority<span className='small-text py-3 my-4'> ~ 30 minutes</span></td>
-                        <td>{this.state.fees.halfHourFee} sat/vB</td>
-                      </tr>
-                      <tr>
-                        <td>Low Priority<span className='small-text py-3 my-4'> ~ 60 minutes</span></td>
-                        <td>{this.state.fees.hourFee} sat/vB</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </div>
-                <div className="col-md-6">
-                  <Table className='orange-border'>
-                    <tbody>
-                      <tr>
-                        <td colSpan={4} className='font-bold'>Estimated Difficulty Adjustment</td>
-                      </tr>
-                      <tr>
-                        <td>Estimate change:</td>
-                        <td><span className={this.state.difficulty.difficultyChange > 0 ? 'green' : 'red'}>
-                        {Number(this.state.difficulty.difficultyChange).toFixed(2)}%
-                        </span></td>
-                      </tr>
-                      <tr>
-                        <td>Current Period Progress:</td>
-                        <td>{Number(this.state.difficulty.progressPercent).toFixed(2)}%</td>
-                      </tr>
-                      <tr>
-                        <td>Remaining Blocks</td>
-                        <td>{this.state.difficulty.remainingBlocks} <span className='small-text py-3 my-4'>~{Number(this.state.difficulty.remainingBlocks / 144).toFixed(1)} days</span></td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </div>
+              <div className="col-md-6">
+                <Table className='blue-border'>
+                  <tbody className='blue-border'>
+                    <tr >
+                      <td colSpan={2} className='blue-border font-bold '>Current Transaction Fees</td>
+                    </tr>
+                    <tr>
+                      <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
+                      <td>{this.state.fees.fastestFee} sat/vB</td>
+                    </tr>
+                    <tr>
+                      <td>Medium Priority<span className='small-text py-3 my-4'> ~ 30 minutes</span></td>
+                      <td>{this.state.fees.halfHourFee} sat/vB</td>
+                    </tr>
+                    <tr>
+                      <td>Low Priority<span className='small-text py-3 my-4'> ~ 60 minutes</span></td>
+                      <td>{this.state.fees.hourFee} sat/vB</td>
+                    </tr>
+                  </tbody>
+                </Table>
               </div>
-              <div className="row mb-3 justify-content-center">
-                <div className="col-md-12">
+              <div className="col-md-6">
+                <Table className='orange-border'>
+                  <tbody>
+                    <tr>
+                      <td colSpan={4} className='font-bold'>Estimated Difficulty Adjustment</td>
+                    </tr>
+                    <tr>
+                      <td>Estimate change:</td>
+                      <td><span className={this.state.difficulty.difficultyChange > 0 ? 'green' : 'red'}>
+                        {Number(this.state.difficulty.difficultyChange).toFixed(2)}%
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td>Current Period Progress:</td>
+                      <td>{Number(this.state.difficulty.progressPercent).toFixed(2)}%</td>
+                    </tr>
+                    <tr>
+                      <td>Remaining Blocks</td>
+                      <td>{this.state.difficulty.remainingBlocks} <span className='small-text py-3 my-4'>~{Number(this.state.difficulty.remainingBlocks / 144).toFixed(1)} days</span></td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </div>
+            </div>
+            <div className="row mb-3 justify-content-center">
+              <div className="col-md-12">
                 <Table className='blue-border'>
                   <tbody>
                     <tr>
@@ -433,6 +425,7 @@ export default class Home extends React.Component {
                     <tr className='font-bold'>
                       <td>Block Height</td>
                       <td>Number of Transactions</td>
+                      <td>Mining Pool</td>
                       <td>TimeStamp</td>
                     </tr>
                     {this.state.blocks.slice(0, 5).map((block, i) => {
@@ -441,6 +434,7 @@ export default class Home extends React.Component {
                           <tr key={i}>
                             <td className='grey-text'>{this.state.blocks[i].height}</td>
                             <td className='grey-text'>{this.state.blocks[i].tx_count}</td>
+                            <td className='grey-text'>{this.state.blocks[i].extras.pool.name}</td>
                             <td className='grey-text'>{(moment.unix(this.state.blocks[i].timestamp).format('MMMM Do YYYY, h:mm:ss a').toString())}</td>
                           </tr>
                         </>
@@ -449,8 +443,8 @@ export default class Home extends React.Component {
                     )}
                     <tr>
                       <td colSpan={4}>
-                      <Link to='/mining' className='amaano-secondary mx-2 viewmore font-bold'>
-                        Learn more about Mining
+                        <Link to='/mining' className='amaano-secondary mx-2 viewmore font-bold'>
+                          Learn more about Mining
                         </Link>
                       </td>
                     </tr>
@@ -484,8 +478,8 @@ export default class Home extends React.Component {
                     )}
                     <tr>
                       <td colSpan={4}>
-                      <Link to='/transactions' className='amaano-secondary mx-2 viewmore font-bold'>
-                        Learn more about Transactions
+                        <Link to='/transactions' className='amaano-secondary mx-2 viewmore font-bold'>
+                          Learn more about Transactions
                         </Link>
                       </td>
                     </tr>
@@ -493,8 +487,15 @@ export default class Home extends React.Component {
                 </Table>
               </div>
             </div>
+
+            <div className="row">
+              <button onClick={this.handleClickUp} className='scrolldown'>
+                <i class="fa-solid fa-3x fa-caret-up"></i>
+              </button>
+            </div>
           </div>
         </section>
+
       </>
     );
   }

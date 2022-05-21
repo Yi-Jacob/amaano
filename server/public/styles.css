@@ -326,5 +326,8 @@ section {
 .banner {
   background-image: url("banner.png");
   background-repeat: no-repeat;
-  height: 225px;
+  background-size: cover;
+  height: 250px;
+  padding-top: 150px;
+  padding-bottom: 150px;
 }
