@@ -59,7 +59,9 @@ export default class Home extends React.Component {
       coins: null,
       nodes: null,
       nextBlock: {
-        txCount: null
+        count: null,
+        total_fee: null,
+        vsize: null
       }
     });
     this.handleClick = this.handleClick.bind(this);
@@ -104,7 +106,7 @@ export default class Home extends React.Component {
       fetch('https://bitcoinexplorer.org/api/price/usd/marketcap'),
       fetch('https://bitcoinexplorer.org/api/blockchain/coins'),
       fetch('https://api.bitaps.com/btc/v1/nodes/list'),
-      fetch('https://bitcoinexplorer.org/api/mining/next-block')
+      fetch('https://mempool.space/api/mempool')
     ]).then(async ([a, b, c, d, e, f, g, h, i, j, k, l]) => {
       const difficulty = await a.json();
       const fees = await b.json();
@@ -122,6 +124,7 @@ export default class Home extends React.Component {
     })
       .then((data) => {
         console.log(data);
+
        this.setState({
           difficulty: data[0],
           fees: data[1],
@@ -136,7 +139,7 @@ export default class Home extends React.Component {
           marketCap: data[8],
           coins: data[9],
           nodes: data[10].data.length,
-          nextBlock: data[10]
+          nextBlock: data[11]
         })
 
       }).catch((err) => {
@@ -167,6 +170,7 @@ export default class Home extends React.Component {
                   <Tab eventKey="USD" title="USD" className='blue-border border-top px-4 py-4 amaano-secondary'>
                     <div className="row">
                       <div className="col-md-3 text-left">
+                        <p>Price</p>
                         <p>${this.state.usd.data.last}</p>
                         <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
                             {this.state.usd.data.last_change}%
@@ -174,12 +178,14 @@ export default class Home extends React.Component {
                         </p>
                       </div>
                       <div className="col-md-3 text-left">
+                        <p>Supply</p>
                         <p>
                           Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
                         </p>
-                        <p>Total Bitcoin Market Cap: ${(this.state.marketCap) / 1000000000} Billion</p>
+                        <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
                       </div>
                       <div className="col-md-3 text-left">
+                        <p>Network</p>
                         <p>
                           Network Hashrate: {this.state.hash} EH 7 Day Moving Average
                         </p>
@@ -189,8 +195,13 @@ export default class Home extends React.Component {
                       </div>
                       <div className="col-md-3 text-left">
                         <p>
-                          test
-                          {this.state.nextBlock.txCount}
+                          Mempool
+                        </p>
+                        <p>
+                          Unconfirmed Transactions: {this.state.nextBlock.count}
+                        </p>
+                        <p>
+                          Average Fees: {(this.state.nextBlock.total_fee / this.state.nextBlock.vsize).toFixed(2)} sat/vB
                         </p>
                       </div>
                     </div>
