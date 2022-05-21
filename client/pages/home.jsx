@@ -11,6 +11,8 @@ import Tab from 'react-bootstrap/Tab'
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
+import App from '../components/app';
+
 
 export default class Home extends React.Component {
 
@@ -156,26 +158,41 @@ export default class Home extends React.Component {
           nextBlock: data[11],
           change : data[12]
         })
-
       }).catch((err) => {
         console.log(err);
       });
   }
 
+
+
   render() {
     return (
       <>
           <Nav history={this.props.history} />
+
+
         <section className='banner pt-4 pb-4'>
           <div className="container work-sans">
               <div className="row pt-3">
                 <div className="col-md-12">
                   <div className="text-center">
+                  <div id="root"></div>
                     <h1 className='pt-4' style={{color: 'white'}}> Explorer</h1>
                   </div>
                 </div>
               </div>
             </div>
+          </section>
+          <section>
+          <div className="container work-sans">
+            <div className="row pt-3">
+              <div className="col-md-12">
+                <div className="text-center">
+                  <App />
+                </div>
+              </div>
+            </div>
+          </div>
           </section>
           <section className='section1'>
             <div className="container work-sans ">
