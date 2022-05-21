@@ -79,13 +79,6 @@ export default class Results extends React.Component {
         .then(res => res.json())
         .then(data => {
           this.setState({ transactionHistory: data });
-        }),
-      fetch('/api/random')
-        .then(data => {
-          console.log(data)
-        })
-        .catch(err => {
-          console.log(err)
         })
     ])
   }

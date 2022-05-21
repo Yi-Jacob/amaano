@@ -41,10 +41,22 @@ export default class Home extends React.Component {
           fee: null
         }
       ],
-      usd: null,
+      usd: {
+        data: {
+          last: null,
+          last_change: null
+        }
+      },
       kes: null,
       ngn: null,
-      ugx: null
+      ugx: null,
+      random: {
+        speaker: null,
+        text: null
+      },
+      hash: null,
+      marketCap: null,
+      coins: null
     });
     this.handleClick = this.handleClick.bind(this);
     this.handleClickUp = this.handleClickUp.bind(this);
@@ -85,8 +97,9 @@ export default class Home extends React.Component {
       fetch('https://bitcoinexplorer.org/api/quotes/random'),
       fetch('https://api.bitaps.com/market/v1//ticker/btcusd'),
       fetch('https://bitcoinexplorer.org/api/mining/hashrate'),
-      fetch('https://bitcoinexplorer.org/api/price/usd/marketcap')
-    ]).then(async ([a, b, c, d, e, f, g, h, i]) => {
+      fetch('https://bitcoinexplorer.org/api/price/usd/marketcap'),
+      fetch('https://bitcoinexplorer.org/api/blockchain/coins')
+    ]).then(async ([a, b, c, d, e, f, g, h, i, j]) => {
       const difficulty = await a.json();
       const fees = await b.json();
       const blocks = await c.json();
@@ -95,8 +108,9 @@ export default class Home extends React.Component {
       const quote = await f.json();
       const usd = await g.json();
       const hash = await h.json();
-      const test = await i.json();
-      return [difficulty, fees, blocks, mempool, prices, quote, usd, hash, test]
+      const marketCap = await i.json();
+      const coins = await j.json();
+      return [difficulty, fees, blocks, mempool, prices, quote, usd, hash, marketCap, coins]
     })
       .then((data) => {
         console.log(data);
@@ -104,59 +118,78 @@ export default class Home extends React.Component {
           difficulty: data[0],
           fees: data[1],
           blocks: data[2],
-          transactions: data[3]
+          transactions: data[3],
+          usd: data[6],
+          kes: data[4][81].rate,
+          ngn: data[4][110].rate,
+          ugx: data[4][151].rate,
+          random: data[5],
+          hash: data[7]['7Day'].val,
+          marketCap: data[8],
+          coins: data[9]
         })
 
       }).catch((err) => {
         console.log(err);
       });
-
-
-
-
-      // Promise.all([
-      //   fetch('https://mempool.space/api/v1/difficulty-adjustment')
-      //     .then(res => res.json())
-      //     .then(data => {
-      //       this.setState({ difficulty: data });
-      //     }),
-      //   fetch('https://mempool.space/api/v1/fees/recommended')
-      //     .then(res => res.json())
-      //     .then(data => {
-      //       this.setState({ fees: data });
-      //     }),
-      //   fetch('https://mempool.space/api/blocks/')
-      //     .then(res => res.json())
-      //     .then(data => {
-      //       this.setState({ blocks: data });
-      //     }),
-      //   fetch('https://mempool.space/api/mempool/recent')
-      //     .then(res => res.json())
-      //     .then(data => {
-      //       this.setState({ transactions: data });
-      //     }),
-      //   fetch('https://bitpay.com/api/rates')
-      //     .then(res => res.json())
-      //     .then(data => {
-      //       this.setState({
-      //         usd: data[2].rate,
-      //         kes: data[81].rate,
-      //         ngn: data[110].rate,
-      //         ugx: data[151].rate
-      //       });
-      //     })
-      // ])
   }
 
   render() {
     return (
       <>
           <Nav history={this.props.history} />
+        <section className='banner py-4'>
+          <div className="container work-sans">
+              <div className="row mt-3">
+                <div className="col-md-12">
+                  <div className="text-center">
+                    <h1 className='pt-2' style={{color: 'white'}}> Explorer</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
           <section className='section1'>
             <div className="container work-sans ">
               <div className="row amaano-blue my-3">
-                <div className="col-sm-12">
-                  <h1 className='text-center font-bold' id='section1'>amaano</h1>
+                <div className="col-md-12">
+                <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
+                  <Tab eventKey="USD" title="USD" className='blue-border border-top px-4 py-4 amaano-secondary'>
+                    <div className="row">
+                      <div className="col-md-3 text-left">
+                        <p>${this.state.usd.data.last}</p>
+                        <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
+                            {this.state.usd.data.last_change}%
+                          </span>
+                        </p>
+                      </div>
+                      <div className="col-md-3">
+                        <p>
+                          Total Circulating Supply: {this.state.coins?.toFixed(2)}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
+                        </p>
+
+                      </div>
+                      <div className="col-md-3">
+                        <p>Total Bitcoin Market Cap: ${(this.state.marketCap) / 1000000000} Billion</p>
+                      </div>
+                      <div className="col-md-3">
+                        <p className='text-center font-bold'>
+                          Network Hashrate: {this.state.hash} EH 7 Day Moving Average
+                        </p>
+                      </div>
+                    </div>
+                  </Tab>
+                  <Tab eventKey="KES" title="KES" className='blue-border border-top px-2'>
+                    <i class="fa-brands fa-bitcoin orange"></i> = KSh {this.state.kes}
+                  </Tab>
+                  <Tab eventKey="NGN" title="NGN" className='blue-border border-top px-2'>
+                    <i class="fa-brands fa-bitcoin orange"></i> = ₦ {this.state.ngn}
+                  </Tab>
+                  <Tab eventKey="UGX" title="UGX" className='blue-border border-top px-2'>
+                    <i class="fa-brands fa-bitcoin orange"></i> = USh {this.state.ugx}
+                  </Tab>
+                </Tabs>
+                  <p className='text-center font-bold'>{this.state.random.text}</p>
                 </div>
               </div>
               <div className="row my-3">
@@ -227,7 +260,7 @@ export default class Home extends React.Component {
               <div className="col-md-12">
                 <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
                   <Tab eventKey="USD" title="US Dollar" className='blue-border border-top px-2 amaano-secondary'>
-                    <i class="fa-brands fa-bitcoin orange"></i> = ${this.state.usd}
+                    <i class="fa-brands fa-bitcoin orange"></i> = ${this.state.usd.data.last} {this.state.usd.data.last_change}
                   </Tab>
                   <Tab eventKey="KES" title="Kenyan Shilling" className='blue-border border-top px-2'>
                     <i class="fa-brands fa-bitcoin orange"></i> = KSh {this.state.kes}

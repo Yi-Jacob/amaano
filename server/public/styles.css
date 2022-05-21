@@ -297,7 +297,7 @@ li.nav-item {
 }
 
 section {
-  height: 100vh;
+  height: 90vh;
 }
 
 .scrolldown {
@@ -321,4 +321,10 @@ section {
 
 .black {
   color: black;
+}
+
+.banner {
+  background-image: url("banner.png");
+  background-repeat: no-repeat;
+  height: 225px;
 }
