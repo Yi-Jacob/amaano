@@ -133,7 +133,7 @@ export default class Results extends React.Component {
                 </div>
               </div>
               <div className="row my-0 margin-left-1 margin-right-1">
-                <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
+                <Card className='mb-2 my-2 px-4 py-4 grey-background blue-border'>
                   <div className="row no-gutters">
                     <div className="col-md-3 col-sm-10 px-1 justify-content-center margin-left-14" style={{ minWidth: '275px' }}>
                       <img className='blue-border' src={`https://www.bitcoinqrcodemaker.com/api/?style=bitcoin&address=${this.state.address}`} alt="bitcoin QR code generator" height="250" width="275" />

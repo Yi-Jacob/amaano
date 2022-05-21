@@ -8,6 +8,7 @@ import Nav from '../components/navbar';
 import moment from 'moment';
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
+import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 
@@ -44,7 +45,8 @@ export default class Home extends React.Component {
       usd: {
         data: {
           last: null,
-          last_change: null
+          last_change: null,
+          open: null
         }
       },
       kes: null,
@@ -52,7 +54,8 @@ export default class Home extends React.Component {
       ugx: null,
       random: {
         speaker: null,
-        text: null
+        text: null,
+        date: null
       },
       hash: null,
       marketCap: null,
@@ -62,6 +65,10 @@ export default class Home extends React.Component {
         count: null,
         total_fee: null,
         vsize: null
+      },
+      change: {
+        open: null,
+        last: null
       }
     });
     this.handleClick = this.handleClick.bind(this);
@@ -101,13 +108,14 @@ export default class Home extends React.Component {
       fetch('https://mempool.space/api/mempool/recent'),
       fetch('https://bitpay.com/api/rates'),
       fetch('https://bitcoinexplorer.org/api/quotes/random'),
-      fetch('https://api.bitaps.com/market/v1//ticker/btcusd'),
+      fetch('https://api.bitaps.com/market/v1/ticker/btcusd'),
       fetch('https://bitcoinexplorer.org/api/mining/hashrate'),
       fetch('https://bitcoinexplorer.org/api/price/usd/marketcap'),
       fetch('https://bitcoinexplorer.org/api/blockchain/coins'),
       fetch('https://api.bitaps.com/btc/v1/nodes/list'),
-      fetch('https://mempool.space/api/mempool')
-    ]).then(async ([a, b, c, d, e, f, g, h, i, j, k, l]) => {
+      fetch('https://mempool.space/api/mempool'),
+      fetch('https://api.pro.coinbase.com/products/BTC-USD/stats')
+    ]).then(async ([a, b, c, d, e, f, g, h, i, j, k, l, m]) => {
       const difficulty = await a.json();
       const fees = await b.json();
       const blocks = await c.json();
@@ -120,7 +128,8 @@ export default class Home extends React.Component {
       const coins = await j.json();
       const nodes = await k.json();
       const nextBlock = await l.json();
-      return [difficulty, fees, blocks, mempool, prices, quote, usd, hash, marketCap, coins, nodes, nextBlock]
+      const test = await m.json();
+      return [difficulty, fees, blocks, mempool, prices, quote, usd, hash, marketCap, coins, nodes, nextBlock, test]
     })
       .then((data) => {
         console.log(data);
@@ -139,7 +148,8 @@ export default class Home extends React.Component {
           marketCap: data[8],
           coins: data[9],
           nodes: data[10].data.length,
-          nextBlock: data[11]
+          nextBlock: data[11],
+          change : data[12]
         })
 
       }).catch((err) => {
@@ -167,25 +177,27 @@ export default class Home extends React.Component {
               <div className="row amaano-blue my-3">
                 <div className="col-md-12">
                 <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
-                  <Tab eventKey="USD" title="USD" className='blue-border border-top px-4 py-4 amaano-secondary'>
+                  <Tab eventKey="USD" title="USD" className='blue-border border-top px-3 py-3 amaano-secondary'>
                     <div className="row">
                       <div className="col-md-3 text-left">
-                        <p>Price</p>
-                        <p>${this.state.usd.data.last}</p>
-                        <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
-                            {this.state.usd.data.last_change}%
+                        <p className='font-underline'>Price</p>
+                        <p>${(this.state.usd.data.last)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p>24hr change:
+                          <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
+                            {((this.state.change.last - this.state.change.open) / this.state.change.open*100).toFixed(2)}%
+
                           </span>
                         </p>
                       </div>
                       <div className="col-md-3 text-left">
-                        <p>Supply</p>
+                        <p className='font-underline'>Supply</p>
                         <p>
                           Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
                         </p>
                         <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
                       </div>
                       <div className="col-md-3 text-left">
-                        <p>Network</p>
+                        <p className='font-underline'>Network</p>
                         <p>
                           Network Hashrate: {this.state.hash} EH 7 Day Moving Average
                         </p>
@@ -194,7 +206,7 @@ export default class Home extends React.Component {
                         </p>
                       </div>
                       <div className="col-md-3 text-left">
-                        <p>
+                        <p className='font-underline'>
                           Mempool
                         </p>
                         <p>
@@ -206,73 +218,154 @@ export default class Home extends React.Component {
                       </div>
                     </div>
                   </Tab>
-                  <Tab eventKey="KES" title="KES" className='blue-border border-top px-2'>
-                    <i class="fa-brands fa-bitcoin orange"></i> = KSh {this.state.kes}
+                  <Tab eventKey="KES" title="KES" className='blue-border border-top px-3 py-3'>
+                    <div className="row">
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Price</p>
+                        <p>${(this.state.kes)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
+                          {this.state.usd.data.last_change}%
+                        </span>
+                        </p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Supply</p>
+                        <p>
+                          Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
+                        </p>
+                        <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Network</p>
+                        <p>
+                          Network Hashrate: {this.state.hash} EH 7 Day Moving Average
+                        </p>
+                        <p>
+                          Nodes Detected: {this.state.nodes}
+                        </p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>
+                          Mempool
+                        </p>
+                        <p>
+                          Unconfirmed Transactions: {this.state.nextBlock.count}
+                        </p>
+                        <p>
+                          Average Fees: {(this.state.nextBlock.total_fee / this.state.nextBlock.vsize).toFixed(2)} sat/vB
+                        </p>
+                      </div>
+                    </div>
                   </Tab>
-                  <Tab eventKey="NGN" title="NGN" className='blue-border border-top px-2'>
-                    <i class="fa-brands fa-bitcoin orange"></i> = ₦ {this.state.ngn}
+                  <Tab eventKey="NGN" title="NGN" className='blue-border border-top px-3 py-3'>
+                    <div className="row">
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Price</p>
+                        <p>${(this.state.ngn)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
+                          {this.state.usd.data.last_change}%
+                        </span>
+                        </p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Supply</p>
+                        <p>
+                          Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
+                        </p>
+                        <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Network</p>
+                        <p>
+                          Network Hashrate: {this.state.hash} EH 7 Day Moving Average
+                        </p>
+                        <p>
+                          Nodes Detected: {this.state.nodes}
+                        </p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>
+                          Mempool
+                        </p>
+                        <p>
+                          Unconfirmed Transactions: {this.state.nextBlock.count}
+                        </p>
+                        <p>
+                          Average Fees: {(this.state.nextBlock.total_fee / this.state.nextBlock.vsize).toFixed(2)} sat/vB
+                        </p>
+                      </div>
+                    </div>
                   </Tab>
-                  <Tab eventKey="UGX" title="UGX" className='blue-border border-top px-2'>
-                    <i class="fa-brands fa-bitcoin orange"></i> = USh {this.state.ugx}
+                  <Tab eventKey="UGX" title="UGX" className='blue-border border-top px-3 py-3'>
+                    <div className="row">
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Price</p>
+                        <p>${(this.state.ugx)}</p>
+                        <p>24hr change: <span className={this.state.usd.data.last_change > 0 ? 'green' : 'red'}>
+                          {this.state.usd.data.last_change}%
+                        </span>
+                        </p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Supply</p>
+                        <p>
+                          Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
+                        </p>
+                        <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>Network</p>
+                        <p>
+                          Network Hashrate: {this.state.hash} EH 7 Day Moving Average
+                        </p>
+                        <p>
+                          Nodes Detected: {this.state.nodes}
+                        </p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p className='font-underline'>
+                          Mempool
+                        </p>
+                        <p>
+                          Unconfirmed Transactions: {this.state.nextBlock.count}
+                        </p>
+                        <p>
+                          Average Fees: {(this.state.nextBlock.total_fee / this.state.nextBlock.vsize).toFixed(2)} sat/vB
+                        </p>
+                      </div>
+                    </div>
                   </Tab>
                 </Tabs>
-                  <p className='text-center font-bold'>{this.state.random.text}</p>
-                </div>
+
+              </div>
               </div>
               <div className="row my-3">
                 <div className="col-sm-12">
-                  <h2 className='text-center font-bold amaano-blue'>Access the Bitcoin Blockchain with amaano</h2>
+                <Card className='px-2 py-2 grey-background blue-border'>
+                    <p>{this.state.random.text} - {this.state.random.speaker}, {this.state.random.date}
+                    </p>
+                  </Card>
                 </div>
               </div>
 
-              <div className="row justify-content-center mb-4" >
-                <Form onSubmit={this.handleSubmit} className='my-3 px-2 "col-sm-11'>
-                <InputGroup className="mb-2" >
-                <FormControl
-                  placeholder="Search for your Wallet Address    i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
-                  className='blue-border'
-                  onChange={this.handleChange}
-                  value={this.state.input}
-                  type='search'
-                />
-                <Button className="search-button" type='submit'>
-                  Search
-                </Button>
-                </InputGroup>
+              <div className="row justify-content-center my-3" >
+                <div className="col-md-12">
+                <Form onSubmit={this.handleSubmit} className=''>
+                  <InputGroup className="mb-2" >
+                    <FormControl
+                      placeholder="Search for your Wallet Address    i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
+                      className='blue-border'
+                      onChange={this.handleChange}
+                      value={this.state.input}
+                      type='search'
+                    />
+                    <Button className="search-button" type='submit'>
+                      Search
+                    </Button>
+                  </InputGroup>
                 </Form>
-              </div>
-            <div className="row mx-2 my-2">
-              <div className="col-md-6">
-                <div class="mx-auto text-center">
-                  <img src='iPhone.gif' width={175}></img>
                 </div>
               </div>
-              <div className="col-md-6 mt-4">
-                <div class="mx-auto text-center">
-                  <h2>Download Today!</h2>
-                </div>
-                <div class="mx-auto text-center mb-3">
-                  <a href='https://apps.apple.com/us/app/amaano/id1334610525'>
-                    <img src='appstore.png' width={250}></img>
-                  </a>
-                </div>
-                <div class="mx-auto text-center">
-                  <a href='https://play.google.com/store/apps/details?id=com.creadigol.amaano'>
-                    <img src='playstore.png' width={250} ></img>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <div className="text-center">
-                  <button onClick={this.handleClick} className='scrolldown downBtn'>
-                    <i class="fa-solid fa-3x fa-caret-down"></i>
-                  </button>
-                </div>
-
-              </div>
-            </div>
           </div>
         </section>
 
@@ -283,24 +376,7 @@ export default class Home extends React.Component {
                 <i class="fa-solid fa-3x fa-caret-up"></i>
               </button>
             </div>
-            <div className="row mb-4 justify-content-center">
-              <div className="col-md-12">
-                <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
-                  <Tab eventKey="USD" title="US Dollar" className='blue-border border-top px-2 amaano-secondary'>
-                    <i class="fa-brands fa-bitcoin orange"></i> = ${this.state.usd.data.last} {this.state.usd.data.last_change}
-                  </Tab>
-                  <Tab eventKey="KES" title="Kenyan Shilling" className='blue-border border-top px-2'>
-                    <i class="fa-brands fa-bitcoin orange"></i> = KSh {this.state.kes}
-                  </Tab>
-                  <Tab eventKey="NGN" title="Nigerian Naira" className='blue-border border-top px-2'>
-                    <i class="fa-brands fa-bitcoin orange"></i> = ₦ {this.state.ngn}
-                  </Tab>
-                  <Tab eventKey="UGX" title="Ugandan Shilling" className='blue-border border-top px-2'>
-                    <i class="fa-brands fa-bitcoin orange"></i> = USh {this.state.ugx}
-                  </Tab>
-                </Tabs>
-              </div>
-            </div>
+
             <div className="row mb-3 justify-content-center">
                 <div className="col-md-6">
                   <Table className='blue-border'>
