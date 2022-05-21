@@ -56,7 +56,11 @@ export default class Home extends React.Component {
       },
       hash: null,
       marketCap: null,
-      coins: null
+      coins: null,
+      nodes: null,
+      nextBlock: {
+        txCount: null
+      }
     });
     this.handleClick = this.handleClick.bind(this);
     this.handleClickUp = this.handleClickUp.bind(this);
@@ -98,8 +102,10 @@ export default class Home extends React.Component {
       fetch('https://api.bitaps.com/market/v1//ticker/btcusd'),
       fetch('https://bitcoinexplorer.org/api/mining/hashrate'),
       fetch('https://bitcoinexplorer.org/api/price/usd/marketcap'),
-      fetch('https://bitcoinexplorer.org/api/blockchain/coins')
-    ]).then(async ([a, b, c, d, e, f, g, h, i, j]) => {
+      fetch('https://bitcoinexplorer.org/api/blockchain/coins'),
+      fetch('https://api.bitaps.com/btc/v1/nodes/list'),
+      fetch('https://bitcoinexplorer.org/api/mining/next-block')
+    ]).then(async ([a, b, c, d, e, f, g, h, i, j, k, l]) => {
       const difficulty = await a.json();
       const fees = await b.json();
       const blocks = await c.json();
@@ -110,7 +116,9 @@ export default class Home extends React.Component {
       const hash = await h.json();
       const marketCap = await i.json();
       const coins = await j.json();
-      return [difficulty, fees, blocks, mempool, prices, quote, usd, hash, marketCap, coins]
+      const nodes = await k.json();
+      const nextBlock = await l.json();
+      return [difficulty, fees, blocks, mempool, prices, quote, usd, hash, marketCap, coins, nodes, nextBlock]
     })
       .then((data) => {
         console.log(data);
@@ -126,7 +134,9 @@ export default class Home extends React.Component {
           random: data[5],
           hash: data[7]['7Day'].val,
           marketCap: data[8],
-          coins: data[9]
+          coins: data[9],
+          nodes: data[10].data.length,
+          nextBlock: data[10]
         })
 
       }).catch((err) => {
@@ -163,18 +173,24 @@ export default class Home extends React.Component {
                           </span>
                         </p>
                       </div>
-                      <div className="col-md-3">
+                      <div className="col-md-3 text-left">
                         <p>
-                          Total Circulating Supply: {this.state.coins?.toFixed(2)}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
+                          Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
                         </p>
-
-                      </div>
-                      <div className="col-md-3">
                         <p>Total Bitcoin Market Cap: ${(this.state.marketCap) / 1000000000} Billion</p>
                       </div>
-                      <div className="col-md-3">
-                        <p className='text-center font-bold'>
+                      <div className="col-md-3 text-left">
+                        <p>
                           Network Hashrate: {this.state.hash} EH 7 Day Moving Average
+                        </p>
+                        <p>
+                          Nodes Detected: {this.state.nodes}
+                        </p>
+                      </div>
+                      <div className="col-md-3 text-left">
+                        <p>
+                          test
+                          {this.state.nextBlock.txCount}
                         </p>
                       </div>
                     </div>
