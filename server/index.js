@@ -8,20 +8,23 @@ const expressJson = express.json();
 const path = require('path');
 const request = require('request');
 const proxy = require('express-http-proxy');
+var cors = require('cors')
 
 app.use(expressJson);
 app.use(staticMiddleware);
 app.use(errorMiddleware);
 app.use(cors());
 
-const cors = require("cors");
-const corsOptions = {
-  origin: '*',
-  credentials: true,            //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-}
-
-app.use(cors(corsOptions))
+const { createProxyMiddleware } = require('http-proxy-middleware');
+app.use('/api', createProxyMiddleware({
+  target: 'http://localhost:8080/', //original url
+  changeOrigin: true,
+  //secure: false,
+  onProxyRes: function (proxyRes, req, res) {
+    proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+  }
+}));
+app.listen(5000);
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,

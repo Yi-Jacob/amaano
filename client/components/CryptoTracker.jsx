@@ -29,14 +29,14 @@ const formatPlusMinus = (priceChange) => {
   const isPositive = Math.sign(priceChange) >= 0;
 
   return (
-    <span className={`${isPositive ? "positive" : "negative"}`}>
-      {`${isPositive ? "+" : ""}${priceChange.toFixed(2)}%`}
-    </span>
+    <p className={`${isPositive ? "green-text small-text mt-2" : "red small-text  mt-2"}`}>
+      24 hour change: {`${isPositive ? "+" : ""}${priceChange.toFixed(2)}%`}
+    </p>
   );
 };
 
 const CryptoTracker = ({ cryptoName }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const { data, isLoading } = useGetCardData(cryptoName, {
     refetchInterval: 60000,
@@ -44,9 +44,7 @@ const CryptoTracker = ({ cryptoName }) => {
   });
 
   const onCardClick = () => {
-    if (!isExpanded) {
       setIsExpanded(true);
-    }
   };
 
   if (isLoading) return null;
@@ -54,20 +52,23 @@ const CryptoTracker = ({ cryptoName }) => {
   const { image, name, market_data: marketData } = data;
 
    return (
-    <div className={`card1 ${isExpanded ? "expanded" : "collapsed"}`}>
+     <div className='card1 expanded'>
+
       {!isExpanded && <button onClick={onCardClick} className="hitzone" />}
       <div className="card1-inner">
-        {isExpanded && (
-          <button className="close" onClick={() => setIsExpanded(false)}>
+        {/* {isExpanded && (
+          <button className="close" onClick={() => setIsExpanded(true)}>
             Close
           </button>
-        )}
+        )} */}
         <div className="top-data">
           <img src={image?.large} alt={`${name} logo`} />
           <h3 className="crypto-name">{name}</h3>
-          <h4 className="crypto-price">
-            {formatPrice(marketData?.current_price?.usd)}
-            {formatPlusMinus(marketData?.price_change_percentage_24h)}
+          <h4 className="crypto-price text-center">
+
+                 {formatPrice(marketData?.current_price?.usd)}
+                 {formatPlusMinus(marketData?.price_change_percentage_24h)}
+
           </h4>
         </div>
         <ChartData isExpanded={isExpanded} cryptoName={cryptoName} />

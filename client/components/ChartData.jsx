@@ -60,6 +60,7 @@ const ChartData = ({ cryptoName, isExpanded }) => {
       <div className="chart-actions">
         {intervals.map((interval) => (
           <button
+
             key={interval.value}
             className={dataInterval === interval.value ? "active" : "inactive"}
             onClick={() => setDataInterval(interval.value)}
@@ -81,18 +82,18 @@ const ChartData = ({ cryptoName, isExpanded }) => {
             }
           }}
           width={300}
-          height={150}
+          height={100}
           data={data}
         />
       ) : (
         <VictoryChart
-          width={1000}
-          height={500}
+          width={800}
+          height={250}
           domainPadding={3}
           containerComponent={
             <VictoryVoronoiContainer
               labels={({ datum }) => formatPrice(datum.y)} // Format the price
-              title={`${cryptoName} price data chart`} // For screen readers
+              title={`${cryptoName} Price Chart`} // For screen readers
               labelComponent={
                 <VictoryTooltip
                   style={{

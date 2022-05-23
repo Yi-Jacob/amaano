@@ -12,7 +12,7 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import App from '../components/app';
-
+import axios from 'axios';
 
 export default class Home extends React.Component {
 
@@ -114,50 +114,36 @@ export default class Home extends React.Component {
       fetch('https://mempool.space/api/v1/blocks-extras/'),
       fetch('https://mempool.space/api/mempool/recent'),
       fetch('https://bitpay.com/api/rates'),
-      fetch('https://thingproxy.freeboard.io/fetch/https://bitcoinexplorer.org/api/quotes/random'),
       fetch('https://api.bitaps.com/market/v1/ticker/btcusd'),
-      fetch('https://thingproxy.freeboard.io/fetch/https://bitcoinexplorer.org/api/mining/hashrate'),
-      fetch('https://thingproxy.freeboard.io/fetch/https://bitcoinexplorer.org/api/price/usd/marketcap'),
-      fetch('https://thingproxy.freeboard.io/fetch/https://bitcoinexplorer.org/api/blockchain/coins'),
       fetch('https://api.bitaps.com/btc/v1/nodes/list'),
-      fetch('https://mempool.space/api/mempool'),
-      fetch('https://api.pro.coinbase.com/products/BTC-USD/stats')
-    ]).then(async ([a, b, c, d, e, f, g, h, i, j, k, l, m]) => {
+      fetch('https://mempool.space/api/v1/fees/mempool-blocks'),
+      fetch('https://mempool.space/api/v1/mining/hashrate/1d')
+    ]).then(async ([a, b]) => {
       const difficulty = await a.json();
       const fees = await b.json();
-      const blocks = await c.json();
-      const mempool = await d.json();
-      const prices = await e.json();
-      const quote = await f.json();
-      const usd = await g.json();
-      const hash = await h.json();
-      const marketCap = await i.json();
-      const coins = await j.json();
-      const nodes = await k.json();
-      const nextBlock = await l.json();
-      const test = await m.json();
-      return [difficulty, fees, blocks, mempool, prices, quote, usd, hash, marketCap, coins, nodes, nextBlock, test]
+
+      return [difficulty, fees]
     })
       .then((data) => {
         console.log(data);
 
-       this.setState({
-          difficulty: data[0],
-          fees: data[1],
-          blocks: data[2],
-          transactions: data[3],
-          usd: data[6],
-          kes: data[4][81].rate,
-          ngn: data[4][110].rate,
-          ugx: data[4][151].rate,
-          random: data[5],
-          hash: data[7]['7Day'].val,
-          marketCap: data[8],
-          coins: data[9],
-          nodes: data[10].data.length,
-          nextBlock: data[11],
-          change : data[12]
-        })
+      //  this.setState({
+      //     difficulty: data[0],
+      //     fees: data[1],
+      //     blocks: data[2],
+      //     transactions: data[3],
+      //     usd: data[6],
+      //     kes: data[4][81].rate,
+      //     ngn: data[4][110].rate,
+      //     ugx: data[4][151].rate,
+      //     random: data[5],
+      //     hash: data[7]['7Day'].val,
+      //     marketCap: data[8],
+      //     coins: data[9],
+      //     nodes: data[10].data.length,
+      //     nextBlock: data[11],
+      //     change : data[12]
+      //   })
       }).catch((err) => {
         console.log(err);
       });
@@ -168,34 +154,54 @@ export default class Home extends React.Component {
   render() {
     return (
       <>
-          <Nav history={this.props.history} />
-
+        <Nav history={this.props.history} />
 
         <section className='banner pt-4 pb-4'>
           <div className="container work-sans">
               <div className="row pt-3">
                 <div className="col-md-12">
                   <div className="text-center">
-                  <div id="root"></div>
-                    <h1 className='pt-4' style={{color: 'white'}}> Explorer</h1>
+                  <h1 className='py-5 explorer-header'> Access the Bitcoin Blockchain with amaano</h1>
                   </div>
                 </div>
               </div>
             </div>
           </section>
-          <section>
-          <div className="container work-sans">
-            <div className="row pt-3">
+          <section className='section1'>
+            <div className="container work-sans ">
+            <div className="row mt-3">
               <div className="col-md-12">
-                <div className="text-center">
+                <Card className='px-3 py-3 rounded blue-border text-left'>
+                  <h2>Explorer</h2>
+                  <Card.Text className='px-0 py-2'>
+                    A blockchain is a distributed ledger that records the transactions for a cryptocurrency network. Miners amend the blockchain ledger by mining new blocks.
+                    A blockchain explorer is a tool that enables you to explore real-time and historical information about the blockchain of a cryptocurrency. This includes data related to your personal wallet's address, mining and transactions.
+                  </Card.Text>
+                  <Card.Body>
+                    <h3>Start by searching for your wallet's address...</h3>
+                    <Form onSubmit={this.handleSubmit} className=''>
+                      <InputGroup className="mb-2" >
+                        <FormControl
+                          placeholder="Search for your Wallet Address    i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
+                          className='blue-border'
+                          onChange={this.handleChange}
+                          value={this.state.input}
+                          type='search'
+                        />
+                        <Button className="search-button" type='submit'>
+                          Search
+                        </Button>
+                      </InputGroup>
+                    </Form>
+                  </Card.Body>
+                </Card>
+              </div>
+            </div>
+              <div className="row mt-3">
+                <div className="col-md-12">
                   <App />
                 </div>
               </div>
-            </div>
-          </div>
-          </section>
-          <section className='section1'>
-            <div className="container work-sans ">
               <div className="row amaano-blue my-3">
                 <div className="col-md-12">
                 <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
