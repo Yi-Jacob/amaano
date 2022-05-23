@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Nav from '../components/navbar';
+import Navbar1 from '../components/navbar';
 import moment from 'moment';
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
@@ -12,7 +12,7 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import App from '../components/app';
-import axios from 'axios';
+import Nav from 'react-bootstrap/Nav'
 
 export default class Home extends React.Component {
 
@@ -49,13 +49,7 @@ export default class Home extends React.Component {
           fee: null
         }
       ],
-      usd: {
-        data: {
-          last: null,
-          last_change: null,
-          open: null
-        }
-      },
+      usd: null,
       kes: null,
       ngn: null,
       ugx: null,
@@ -68,15 +62,10 @@ export default class Home extends React.Component {
       marketCap: null,
       coins: null,
       nodes: null,
-      nextBlock: {
-        count: null,
-        total_fee: null,
-        vsize: null
-      },
-      change: {
-        open: null,
-        last: null
-      }
+      nextBlock: [{
+        nTx: null,
+        medianFee: null
+      }]
     });
     this.handleClick = this.handleClick.bind(this);
     this.handleClickUp = this.handleClickUp.bind(this);
@@ -117,33 +106,36 @@ export default class Home extends React.Component {
       fetch('https://api.bitaps.com/market/v1/ticker/btcusd'),
       fetch('https://api.bitaps.com/btc/v1/nodes/list'),
       fetch('https://mempool.space/api/v1/fees/mempool-blocks'),
-      fetch('https://mempool.space/api/v1/mining/hashrate/1d')
-    ]).then(async ([a, b]) => {
+      fetch('https://mempool.space/api/v1/mining/hashrate/1d'),
+    ]).then(async ([a, b, c, d, e, f, g, h, i]) => {
       const difficulty = await a.json();
       const fees = await b.json();
+      const mining = await c.json();
+      const transactions = await d.json();
+      const rates = await e.json();
+      const btcusd = await f.json();
+      const nodes = await g.json();
+      const nextBlock = await h.json();
+      const hashrate = await i.json();
 
-      return [difficulty, fees]
+
+      return [difficulty, fees, mining, transactions, rates, btcusd, nodes, nextBlock, hashrate]
     })
       .then((data) => {
         console.log(data);
-
-      //  this.setState({
-      //     difficulty: data[0],
-      //     fees: data[1],
-      //     blocks: data[2],
-      //     transactions: data[3],
-      //     usd: data[6],
-      //     kes: data[4][81].rate,
-      //     ngn: data[4][110].rate,
-      //     ugx: data[4][151].rate,
-      //     random: data[5],
-      //     hash: data[7]['7Day'].val,
-      //     marketCap: data[8],
-      //     coins: data[9],
-      //     nodes: data[10].data.length,
-      //     nextBlock: data[11],
-      //     change : data[12]
-      //   })
+        this.setState({
+          difficulty: data[0],
+          fees: data[1],
+          blocks: data[2],
+          transactions: data[3],
+          kes: data[4][81].rate,
+          ngn: data[4][110].rate,
+          ugx: data[4][151].rate,
+          usd: data[5].data.last,
+          nodes: data[6].data.length,
+          nextBlock: data[7][0],
+          hash: data[8].currentHashrate
+        })
       }).catch((err) => {
         console.log(err);
       });
@@ -154,7 +146,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <>
-        <Nav history={this.props.history} />
+        <Navbar1 history={this.props.history} />
 
         <section className='banner pt-4 pb-4'>
           <div className="container work-sans">
@@ -198,61 +190,62 @@ export default class Home extends React.Component {
               </div>
             </div>
               <div className="row mt-3">
-                <div className="col-md-12">
+                <div className="col-md-3">
+                <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary rounded">
+                  <Tab eventKey="USD" title="USD" className='blue-border border-top px-3 py-3 amaano-secondary'>
+
+
+                        <p className='font-underline'>Price</p>
+                        <p>${(this.state.usd)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+
+
+                        <p className='font-underline'>Network</p>
+                        <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
+                        <p>{this.state.nodes} Nodes</p>
+
+
+                        <p className='font-underline'>Next Block</p>
+                        <p>{this.state.nextBlock.nTx} transactions</p>
+                        <p>Fees {Number(this.state.nextBlock.medianFee).toFixed(2)} sat/vB</p>
+
+
+                  </Tab>
+                </Tabs>
+                </div>
+                <div className="col-md-9">
                   <App />
                 </div>
               </div>
               <div className="row amaano-blue my-3">
                 <div className="col-md-12">
-                <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary">
-                  <Tab eventKey="USD" title="USD" className='blue-border border-top px-3 py-3 amaano-secondary'>
-                    <div className="row">
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Price</p>
-                        <p>${(this.state.usd.data.last)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p>24hr change: <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
-                            {((this.state.change.last - this.state.change.open) / this.state.change.open*100).toFixed(2)}%
-                          </span>
-                        </p>
-                      </div>
-                      <div className="col-lg-3 text-left">
-                        <p className='font-underline'>Supply</p>
-                        <p>
-                          Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
-                        </p>
-                        <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Network</p>
-                        <p>
-                          Network Hashrate: {this.state.hash} EH 7 Day Moving Average
-                        </p>
-                        <p>
-                          Nodes Detected: {this.state.nodes}
-                        </p>
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>
-                          Mempool
-                        </p>
-                        <p>
-                          Unconfirmed Transactions: {this.state.nextBlock.count}
-                        </p>
-                        <p>
-                          Average Fees: {(this.state.nextBlock.total_fee / this.state.nextBlock.vsize).toFixed(2)} sat/vB
-                        </p>
-                      </div>
-                    </div>
-                  </Tab>
-                  <Tab eventKey="KES" title="KES" className='blue-border border-top px-3 py-3'>
+                <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                  <div className="row">
+                    <Nav variant="pills" className="flex-column">
+                      <Nav.Item>
+                        <Nav.Link eventKey="first">Tatestb 1</Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link eventKey="second">Tab 2</Nav.Link>
+                      </Nav.Item>
+                    </Nav>
+                    <Tab.Content>
+                      <Tab.Pane eventKey="first">
+                        test
+                      </Tab.Pane>
+                      <Tab.Pane eventKey="second">
+                        test22
+                      </Tab.Pane>
+                    </Tab.Content>
+                  </div>
+
+
+                </Tab.Container>
+                  {/* <Tab eventKey="KES" title="KES" className='blue-border border-top px-3 py-3'>
                     <div className="row">
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Price</p>
                         <p>Ksh {(this.state.kes)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p>24hr change: <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
-                          {((this.state.change.last - this.state.change.open) / this.state.change.open * 100).toFixed(2)}%
-                        </span>
-                        </p>
+
                       </div>
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Supply</p>
@@ -288,10 +281,7 @@ export default class Home extends React.Component {
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Price</p>
                         <p>₦ {(this.state.ngn)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p>24hr change: <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
-                          {((this.state.change.last - this.state.change.open) / this.state.change.open * 100).toFixed(2)}%
-                        </span>
-                        </p>
+
                       </div>
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Supply</p>
@@ -326,11 +316,7 @@ export default class Home extends React.Component {
                     <div className="row">
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Price</p>
-                        <p>USh {(this.state.ugx)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p>24hr change: <span className={(this.state.change.last - this.state.change.open) / this.state.change.open * 100 > 0 ? 'green' : 'red'}>
-                          {((this.state.change.last - this.state.change.open) / this.state.change.open * 100).toFixed(2)}%
-                        </span>
-                        </p>
+
                       </div>
                       <div className="col-md-3 text-left">
                         <p className='font-underline'>Supply</p>
@@ -360,19 +346,11 @@ export default class Home extends React.Component {
                         </p>
                       </div>
                     </div>
-                  </Tab>
-                </Tabs>
+                  </Tab> */}
 
               </div>
               </div>
-              <div className="row my-3">
-                <div className="col-sm-12">
-                <Card className='px-2 py-3 grey-background blue-border'>
-                    <p>{this.state.random.text} - {this.state.random.speaker}, {this.state.random.date}
-                    </p>
-                  </Card>
-                </div>
-              </div>
+
 
               <div className="row justify-content-center my-3" >
                 <div className="col-md-12">
