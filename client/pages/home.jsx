@@ -182,7 +182,7 @@ export default class Home extends React.Component {
                     <Form onSubmit={this.handleSubmit} className=''>
                       <InputGroup className="mb-2" >
                         <FormControl
-                          placeholder="Search for your Wallet Address    i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
+                          placeholder="Search for your Wallet Address   i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
                           className='blue-border'
                           onChange={this.handleChange}
                           value={this.state.input}
