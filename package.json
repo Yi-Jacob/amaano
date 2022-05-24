@@ -1,14 +1,13 @@
 {
   "name": "amaano-explorer",
+  "homepage": "https://Yi-Jacob.github.io/amaano",
   "version": "1.0.0",
-  "engines": {
-    "node": "16.15.0"
-  },
   "private": true,
   "description": "A full stack JavaScript solo project.",
   "main": "server/index.js",
-
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "webpack --mode=production",
     "start": "node server/index.js",
     "dev": "npm-run-all --silent --parallel dev:*",
