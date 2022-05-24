@@ -6,10 +6,25 @@ const staticMiddleware = require('./static-middleware');
 const pg = require('pg');
 const expressJson = express.json();
 const path = require('path');
+const request = require('request');
+const proxy = require('express-http-proxy');
+var cors = require('cors')
 
 app.use(expressJson);
 app.use(staticMiddleware);
 app.use(errorMiddleware);
+app.use(cors());
+
+const { createProxyMiddleware } = require('http-proxy-middleware');
+app.use('/api', createProxyMiddleware({
+  target: 'http://localhost:8080/', //original url
+  changeOrigin: true,
+  //secure: false,
+  onProxyRes: function (proxyRes, req, res) {
+    proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+  }
+}));
+app.listen(5000);
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -17,6 +32,33 @@ const db = new pg.Pool({
     rejectUnauthorized: false
   }
 });
+
+var staticFilesPath = path.resolve(__dirname, '..', 'build');
+
+app.use(express.static(staticFilesPath));
+
+app.use('/api/api-server', proxy('www.api-server.com'));
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
+// Listen on a specific host via the HOST environment variable
+var host = process.env.HOST || '0.0.0.0';
+// Listen on a specific port via the PORT environment variable
+var port = process.env.PORT || 8080;
+
+var cors_proxy = require('cors-anywhere');
+cors_proxy.createServer({
+  originWhitelist: [], // Allow all origins
+  requireHeader: ['origin', 'x-requested-with'],
+  removeHeaders: ['cookie', 'cookie2']
+}).listen(port, host, function () {
+  console.log('Running CORS Anywhere on ' + host + ':' + port);
+});
+
+
 
 app.get('/api/bookmarks', (req, res) => {
   const sql = `
