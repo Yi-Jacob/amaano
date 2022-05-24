@@ -15,7 +15,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$|jsx/,
+        test: /\.jsx?$/,
         include: clientPath,
         use: {
           loader: 'babel-loader',
