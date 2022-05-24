@@ -39,7 +39,7 @@ export default class Navbar1 extends React.Component {
         <Navbar className='navbar-custom d-flex work-sans' expand="lg" sticky="top">
           <div className="container-fluid align-content-center">
             <Navbar.Brand href="/" className='nav-font nav-brand navlink'>
-              <img src='faviconlogo.png' className='mb-1' width={200}></img>
+              <img src='faviconlogo.png' className='mb-1' width={190}></img>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll"/>
             <Navbar.Collapse id="navbarScroll">
