@@ -55,6 +55,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-react": "^7.29.4",
+    "gh-pages": "^4.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.7",
     "markuplint": "^2.5.0",
