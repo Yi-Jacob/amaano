@@ -65,7 +65,11 @@ export default class Home extends React.Component {
       nextBlock: [{
         nTx: null,
         medianFee: null
-      }]
+      }],
+      cap: {
+        market_cap: null,
+        circulating_supply: null
+      }
     });
     this.handleClick = this.handleClick.bind(this);
     this.handleClickUp = this.handleClickUp.bind(this);
@@ -107,7 +111,8 @@ export default class Home extends React.Component {
       fetch('https://api.bitaps.com/btc/v1/nodes/list'),
       fetch('https://mempool.space/api/v1/fees/mempool-blocks'),
       fetch('https://mempool.space/api/v1/mining/hashrate/1d'),
-    ]).then(async ([a, b, c, d, e, f, g, h, i]) => {
+      fetch('https://api.nomics.com/v1/currencies/ticker?key=37bf9aa5d1f2d983144790c6538e7142fbfbe91f&ids=BTC')
+    ]).then(async ([a, b, c, d, e, f, g, h, i, j]) => {
       const difficulty = await a.json();
       const fees = await b.json();
       const mining = await c.json();
@@ -117,11 +122,12 @@ export default class Home extends React.Component {
       const nodes = await g.json();
       const nextBlock = await h.json();
       const hashrate = await i.json();
+      const cap = await j.json();
 
-
-      return [difficulty, fees, mining, transactions, rates, btcusd, nodes, nextBlock, hashrate]
+      return [difficulty, fees, mining, transactions, rates, btcusd, nodes, nextBlock, hashrate, cap]
     })
       .then((data) => {
+        console.log(data[9][0])
         console.log(data);
         this.setState({
           difficulty: data[0],
@@ -134,7 +140,8 @@ export default class Home extends React.Component {
           usd: data[5].data.last,
           nodes: data[6].data.length,
           nextBlock: data[7][0],
-          hash: data[8].currentHashrate
+          hash: data[8].currentHashrate,
+          cap: data[9][0]
         })
       }).catch((err) => {
         console.log(err);
@@ -189,26 +196,57 @@ export default class Home extends React.Component {
                 </Card>
               </div>
             </div>
-              <div className="row mt-3">
+              <div className="row mt-3 pb-2">
                 <div className="col-md-3">
                 <Tabs defaultActiveKey="USD" className=" blue-border amaano-secondary rounded">
                   <Tab eventKey="USD" title="USD" className='blue-border border-top px-3 py-3 amaano-secondary'>
+                    <p className='font-underline'>Price</p>
+                    <p>${(this.state.usd)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p>{(Number(this.state.cap.circulating_supply) / 1000000).toFixed(3)} / 21 million coins in circulation</p>
+                    <p>Market Cap: ${((Number(this.state.cap.market_cap)) / 1000000000).toFixed(2)} billion</p>
+                    <p className='font-underline'>Network</p>
+                    <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
+                    <p>{this.state.nodes} Nodes</p>
+                    <p className='font-underline'>Next Block</p>
+                    <p>{this.state.nextBlock.nTx} transactions</p>
+                    <p>Fees {Number(this.state.nextBlock.medianFee).toFixed(2)} sat/vB || <span className='green'>${(Number(this.state.nextBlock.medianFee) * .0425).toFixed(2)}</span></p>
 
-
-                        <p className='font-underline'>Price</p>
-                        <p>${(this.state.usd)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-
-
-                        <p className='font-underline'>Network</p>
-                        <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
-                        <p>{this.state.nodes} Nodes</p>
-
-
-                        <p className='font-underline'>Next Block</p>
-                        <p>{this.state.nextBlock.nTx} transactions</p>
-                        <p>Fees {Number(this.state.nextBlock.medianFee).toFixed(2)} sat/vB</p>
-
-
+                  </Tab>
+                  <Tab eventKey="KES" title="KES" className='blue-border border-top px-3 py-3 amaano-secondary'>
+                    <p className='font-underline'>Price</p>
+                    <p>Ksh {(this.state.kes)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p>{(Number(this.state.cap.circulating_supply) / 1000000).toFixed(3)} / 21 million coins in circulation</p>
+                    <p>Market Cap: ${((Number(this.state.cap.market_cap)) / 1000000000).toFixed(2)} billion</p>
+                    <p className='font-underline'>Network</p>
+                    <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
+                    <p>{this.state.nodes} Nodes</p>
+                    <p className='font-underline'>Next Block</p>
+                    <p>{this.state.nextBlock.nTx} transactions</p>
+                    <p>Fees {Number(this.state.nextBlock.medianFee).toFixed(2)} sat/vB || <span className='green'>${(Number(this.state.nextBlock.medianFee) * .0425).toFixed(2)}</span></p>
+                  </Tab>
+                  <Tab eventKey="NGN" title="NGN" className='blue-border border-top px-3 py-3 amaano-secondary'>
+                    <p className='font-underline'>Price</p>
+                    <p>₦ {(this.state.ngn)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p>{(Number(this.state.cap.circulating_supply) / 1000000).toFixed(3)} / 21 million coins in circulation</p>
+                    <p>Market Cap: ${((Number(this.state.cap.market_cap)) / 1000000000).toFixed(2)} billion</p>
+                    <p className='font-underline'>Network</p>
+                    <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
+                    <p>{this.state.nodes} Nodes</p>
+                    <p className='font-underline'>Next Block</p>
+                    <p>{this.state.nextBlock.nTx} transactions</p>
+                    <p>Fees {Number(this.state.nextBlock.medianFee).toFixed(2)} sat/vB || <span className='green'>${(Number(this.state.nextBlock.medianFee) * .0425).toFixed(2)}</span></p>
+                  </Tab>
+                  <Tab eventKey="UGX" title="UGX" className='blue-border border-top px-3 py-3 amaano-secondary'>
+                    <p className='font-underline'>Price</p>
+                    <p>USh {(this.state.ugx)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p>{(Number(this.state.cap.circulating_supply) / 1000000).toFixed(3)} / 21 million coins in circulation</p>
+                    <p>Market Cap: ${((Number(this.state.cap.market_cap)) / 1000000000).toFixed(2)} billion</p>
+                    <p className='font-underline'>Network</p>
+                    <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
+                    <p>{this.state.nodes} Nodes</p>
+                    <p className='font-underline'>Next Block</p>
+                    <p>{this.state.nextBlock.nTx} transactions</p>
+                    <p>Fees {Number(this.state.nextBlock.medianFee).toFixed(2)} sat/vB || <span className='green'>${(Number(this.state.nextBlock.medianFee) * .0425).toFixed(2)}</span> </p>
                   </Tab>
                 </Tabs>
                 </div>
@@ -216,161 +254,7 @@ export default class Home extends React.Component {
                   <App />
                 </div>
               </div>
-              <div className="row amaano-blue my-3">
-                <div className="col-md-12">
-                <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-                  <div className="row">
-                    <Nav variant="pills" className="flex-column">
-                      <Nav.Item>
-                        <Nav.Link eventKey="first">Tatestb 1</Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item>
-                        <Nav.Link eventKey="second">Tab 2</Nav.Link>
-                      </Nav.Item>
-                    </Nav>
-                    <Tab.Content>
-                      <Tab.Pane eventKey="first">
-                        test
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="second">
-                        test22
-                      </Tab.Pane>
-                    </Tab.Content>
-                  </div>
-
-
-                </Tab.Container>
-                  {/* <Tab eventKey="KES" title="KES" className='blue-border border-top px-3 py-3'>
-                    <div className="row">
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Price</p>
-                        <p>Ksh {(this.state.kes)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Supply</p>
-                        <p>
-                          Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
-                        </p>
-                        <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Network</p>
-                        <p>
-                          Network Hashrate: {this.state.hash} EH 7 Day Moving Average
-                        </p>
-                        <p>
-                          Nodes Detected: {this.state.nodes}
-                        </p>
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>
-                          Mempool
-                        </p>
-                        <p>
-                          Unconfirmed Transactions: {this.state.nextBlock.count}
-                        </p>
-                        <p>
-                          Average Fees: {(this.state.nextBlock.total_fee / this.state.nextBlock.vsize).toFixed(2)} sat/vB
-                        </p>
-                      </div>
-                    </div>
-                  </Tab>
-                  <Tab eventKey="NGN" title="NGN" className='blue-border border-top px-3 py-3'>
-                    <div className="row">
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Price</p>
-                        <p>₦ {(this.state.ngn)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Supply</p>
-                        <p>
-                          Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
-                        </p>
-                        <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Network</p>
-                        <p>
-                          Network Hashrate: {this.state.hash} EH 7 Day Moving Average
-                        </p>
-                        <p>
-                          Nodes Detected: {this.state.nodes}
-                        </p>
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>
-                          Mempool
-                        </p>
-                        <p>
-                          Unconfirmed Transactions: {this.state.nextBlock.count}
-                        </p>
-                        <p>
-                          Average Fees: {(this.state.nextBlock.total_fee / this.state.nextBlock.vsize).toFixed(2)} sat/vB
-                        </p>
-                      </div>
-                    </div>
-                  </Tab>
-                  <Tab eventKey="UGX" title="UGX" className='blue-border border-top px-3 py-3'>
-                    <div className="row">
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Price</p>
-
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Supply</p>
-                        <p>
-                          Total Circulating Supply: {this.state.coins?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/21,000,000 <i class="fa-brands fa-bitcoin orange"></i>
-                        </p>
-                        <p>Total Bitcoin Market Cap: ${((this.state.marketCap) / 1000000000).toFixed(2)} Billion</p>
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>Network</p>
-                        <p>
-                          Network Hashrate: {this.state.hash} EH 7 Day Moving Average
-                        </p>
-                        <p>
-                          Nodes Detected: {this.state.nodes}
-                        </p>
-                      </div>
-                      <div className="col-md-3 text-left">
-                        <p className='font-underline'>
-                          Mempool
-                        </p>
-                        <p>
-                          Unconfirmed Transactions: {this.state.nextBlock.count}
-                        </p>
-                        <p>
-                          Average Fees: {(this.state.nextBlock.total_fee / this.state.nextBlock.vsize).toFixed(2)} sat/vB
-                        </p>
-                      </div>
-                    </div>
-                  </Tab> */}
-
-              </div>
-              </div>
-
-
-              <div className="row justify-content-center my-3" >
-                <div className="col-md-12">
-                <Form onSubmit={this.handleSubmit} className=''>
-                  <InputGroup className="mb-2" >
-                    <FormControl
-                      placeholder="Search for your Wallet Address    i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
-                      className='blue-border'
-                      onChange={this.handleChange}
-                      value={this.state.input}
-                      type='search'
-                    />
-                    <Button className="search-button" type='submit'>
-                      Search
-                    </Button>
-                  </InputGroup>
-                </Form>
-                </div>
-              </div>
-            <div className="row mb-3 justify-content-center">
+            <div className="row mb-3 mt-3 justify-content-center">
               <div className="col-md-6">
                 <Table className='blue-border'>
                   <tbody className='blue-border'>
@@ -379,15 +263,15 @@ export default class Home extends React.Component {
                     </tr>
                     <tr>
                       <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
-                      <td>{this.state.fees.fastestFee} sat/vB</td>
+                      <td>{this.state.fees.fastestFee} sat/vB || <span className='green'>${((this.state.fees.fastestFee) * .0425).toFixed(2)}</span></td>
                     </tr>
                     <tr>
                       <td>Medium Priority<span className='small-text py-3 my-4'> ~ 30 minutes</span></td>
-                      <td>{this.state.fees.halfHourFee} sat/vB</td>
+                      <td>{this.state.fees.halfHourFee} sat/vB || <span className='green'>${((this.state.fees.halfHourFee) * .0425).toFixed(2)}</span></td>
                     </tr>
                     <tr>
                       <td>Low Priority<span className='small-text py-3 my-4'> ~ 60 minutes</span></td>
-                      <td>{this.state.fees.hourFee} sat/vB</td>
+                      <td>{this.state.fees.hourFee} sat/vB || <span className='green'>${((this.state.fees.hourFee) * .0425).toFixed(2)}</span></td>
                     </tr>
                   </tbody>
                 </Table>
@@ -463,6 +347,7 @@ export default class Home extends React.Component {
                     <tr className='font-bold'>
                       <td>Transaction ID</td>
                       <td>Value</td>
+                      <td>Amount</td>
                       <td>Fees</td>
                     </tr>
                     {this.state.transactions.slice(0, 5).map((transaction, i) => {
@@ -470,6 +355,7 @@ export default class Home extends React.Component {
                         <>
                           <tr key={i}>
                             <td className='grey-text'>{this.state.transactions[i].txid}</td>
+                            <td className='grey-text'>${(((this.state.transactions[i].value) / 100000000) * (this.state.usd))?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                             <td className='grey-text'>{(this.state.transactions[i].value) / 100000000} BTC</td>
                             <td className='grey-text'>{(this.state.transactions[i].fee) / 100} sat/vB</td>
                           </tr>
