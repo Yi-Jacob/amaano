@@ -17,7 +17,12 @@ export default class Mining extends React.Component {
         {
           height: null,
           tx_count: 0,
-          timestamp: null
+          timestamp: null,
+          extras: {
+            pool: {
+              name: null
+            }
+          }
         }
       ]
     });
@@ -37,18 +42,22 @@ export default class Mining extends React.Component {
 
   componentDidMount() {
     Promise.all([
-      fetch('https://mempool.space/api/v1/difficulty-adjustment')
-        .then(res => res.json())
-        .then(data => {
-          this.setState({ difficulty: data });
-        }),
-    fetch('https://mempool.space/api/blocks/')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ blocks: data });
-      })
+      fetch('https://mempool.space/api/v1/difficulty-adjustment'),
+      fetch('https://mempool.space/api/v1/blocks-extras/')
     ])
+      .then(async ([a, b]) => {
+        const difficulty = await a.json();
+        const blocks = await b.json();
 
+        return [difficulty, blocks]
+      })
+      .then(data => {
+        console.log(data)
+        this.setState({
+          difficulty: data[0],
+          blocks: data[1]
+        })
+      })
   }
 
   render() {
@@ -56,7 +65,7 @@ export default class Mining extends React.Component {
       <>
         <Nav history={this.props.history} />
         <div className="row mx-4 my-3 work-sans ">
-          <h1 className='amaano-blue ml-2'>Mining</h1>
+          <h2 className='amaano-blue ml-2'>Mining</h2>
           <div className="col-md-12">
             <Card className='mb-2 my-1 px-4 py-4 blue-border'>
               <Card.Title className='card-text amaano-secondary'>
@@ -92,15 +101,6 @@ export default class Mining extends React.Component {
             </Table>
           </div>
         </div>
-        <div className="row mx-4 my-3 work-sans">
-          <div className="col-md-12">
-            <Card className='mb-2 my-1 px-4 py-4 blue-border'>
-              <Card.Title className='card-text amaano-secondary'>
-                Here are the last 10 blocks to have been mined.
-              </Card.Title>
-            </Card>
-          </div>
-        </div>
         <div className="row mx-4 my-4 justify-content-center work-sans">
           <div className="col-md-12">
             <Table className='blue-border '>
@@ -111,6 +111,7 @@ export default class Mining extends React.Component {
                 <tr className='font-bold'>
                   <td>Block Height</td>
                   <td>Number of Transactions</td>
+                  <td>Mining Pool</td>
                   <td>TimeStamp</td>
                 </tr>
                 {this.state.blocks.map((block, i) => {
@@ -119,6 +120,7 @@ export default class Mining extends React.Component {
                       <tr key={i}>
                         <td>{this.state.blocks[i].height}</td>
                         <td>{this.state.blocks[i].tx_count}</td>
+                        <td>{this.state.blocks[i].extras.pool.name}</td>
                         <td>{(moment.unix(this.state.blocks[i].timestamp).format('MMMM Do YYYY, h:mm:ss a').toString())}</td>
                       </tr>
                     </>
