@@ -40,19 +40,22 @@ export default class Navbar1 extends React.Component {
           <div className="container-fluid align-content-center">
 
             <Navbar.Brand href="/" className='nav-font nav-brand navlink'>
-              <img src='faviconlogo.png' className='mb-1' width={190}></img>
+              <img src='faviconlogo.png' className='mb-1' width={200}></img>
 
             </Navbar.Brand>
-            <Navbar.Toggle aria-controls="navbarScroll"/>
+            <Navbar.Toggle aria-controls="navbarScroll" />
             <Navbar.Collapse id="navbarScroll">
               <Nav className="me-auto my-2 my-lg-0 align-items-end justify-content-end">
-                <NavLink to='/transactions' className='nav-font white mx-2 navlink'>
+                <NavLink to='/' className='nav-font black mx-2 navlink'>
+                  Home
+                </NavLink>
+                <NavLink to='/transactions' className='nav-font black mx-2 navlink'>
                   Transactions
                 </NavLink>
-                <NavLink to='/mining' className='nav-font white mx-2 navlink'>
+                <NavLink to='/mining' className='nav-font black mx-2 navlink'>
                   Mining
                 </NavLink>
-                <a href='https://amaano.com/index.html' className='nav-font white mx-2 navlink'>
+                <a href='https://amaano.com/index.html' className='nav-font black mx-2 navlink'>
                   amaano.com
                 </a>
               </Nav>

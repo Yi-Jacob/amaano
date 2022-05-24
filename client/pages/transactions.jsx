@@ -18,7 +18,8 @@ export default class Transactions extends React.Component {
           value: null,
           fee: null
         }
-      ]
+      ],
+      price: null
     });
   }
 
@@ -36,22 +37,31 @@ export default class Transactions extends React.Component {
 
   componentDidMount() {
     Promise.all([
-      fetch('https://mempool.space/api/v1/fees/recommended')
-        .then(res => res.json())
-        .then(data => {
-          this.setState({ fees: data });
-        }),
-      fetch('https://mempool.space/api/mempool/recent')
-        .then(res => res.json())
-        .then(data => {
-        this.setState({ transactions: data });
-      })
+      fetch('https://mempool.space/api/v1/fees/recommended'),
+      fetch('https://mempool.space/api/mempool/recent'),
+      fetch('https://api.bitaps.com/market/v1/ticker/btcusd')
     ])
+      .then(async ([a, b, c]) => {
+        const fees = await a.json();
+        const transactions = await b.json();
+        const price = await c.json();
+
+        return [fees, transactions, price]
+      })
+      .then(data => {
+        console.log(data[2].data.last)
+        console.log(data)
+        this.setState({
+          fees: data[0],
+          transactions: data[1],
+          price: data[2].data.last,
+        })
+      })
   }
 
   render() {
     return (
-        <>
+      <>
         <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
         <div className="row mx-4 my-4 work-sans ">
           <h2 className='amaano-blue ml-2 work-sans '>Transactions</h2>
@@ -74,27 +84,18 @@ export default class Transactions extends React.Component {
                 </tr>
                 <tr>
                   <td>High Priority<span className='small-text py-3 my-4'> ~ 10 minutes</span></td>
-                  <td>{this.state.fees.fastestFee} sat/vB</td>
+                  <td>{this.state.fees.fastestFee} sat/vB || <span className='green'>${((this.state.fees.fastestFee) * .0425).toFixed(2)}</span></td>
                 </tr>
                 <tr>
                   <td>Medium Priority<span className='small-text py-3 my-4'> ~ 30 minutes</span></td>
-                  <td>{this.state.fees.halfHourFee} sat/vB</td>
+                  <td>{this.state.fees.halfHourFee} sat/vB || <span className='green'>${((this.state.fees.halfHourFee) * .0425).toFixed(2)}</span></td>
                 </tr>
                 <tr>
                   <td>Low Priority<span className='small-text py-3 my-4'> ~ 60 minutes</span></td>
-                  <td>{this.state.fees.hourFee} sat/vB</td>
+                  <td>{this.state.fees.hourFee} sat/vB || <span className='green'>${((this.state.fees.hourFee) * .0425).toFixed(2)}</span></td>
                 </tr>
               </tbody>
             </Table>
-          </div>
-        </div>
-        <div className="row mx-4 my-3">
-          <div className="col-md-12">
-            <Card className='mb-2 my-1 px-4 py-4 orange-border work-sans  grey-background blue-border'>
-              <Card.Title className='card-text amaano-secondary'>
-                Here are the last 10 transactions to occur.
-              </Card.Title>
-            </Card>
           </div>
         </div>
         <div className="row justify-content-center mx-4 my-4">
@@ -107,6 +108,7 @@ export default class Transactions extends React.Component {
                 <tr className='font-bold'>
                   <td>Transaction Id</td>
                   <td>Value</td>
+                  <td>Amount</td>
                   <td>Fees</td>
                 </tr>
                 {this.state.transactions.map((transaction, i) => {
@@ -114,6 +116,7 @@ export default class Transactions extends React.Component {
                     <>
                       <tr key={i}>
                         <td>{this.state.transactions[i].txid}</td>
+                        <td>${(((this.state.transactions[i].value) / 100000000) * (this.state.price))?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                         <td>{(this.state.transactions[i].value) / 100000000} BTC</td>
                         <td>{(this.state.transactions[i].fee) / 100} sat/vB</td>
                       </tr>
