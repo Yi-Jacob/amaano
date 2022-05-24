@@ -1,6 +1,5 @@
 {
   "name": "amaano-explorer",
-  "homepage": ".",
   "version": "1.0.0",
   "engines": {
     "node": "16.15.0"
