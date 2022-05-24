@@ -11,6 +11,7 @@ import Tab from 'react-bootstrap/Tab'
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
+import App from '../components/app';
 
 import Nav from 'react-bootstrap/Nav'
 
