@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
@@ -12,7 +12,7 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import App from '../components/app';
-
+import Navbar2 from '../components/miniNav';
 import Nav from 'react-bootstrap/Nav'
 
 export default class Home extends React.Component {
@@ -21,6 +21,7 @@ export default class Home extends React.Component {
     super(props);
     this.state = ({
       input: '',
+      intervalId: null,
       difficulty: {
         difficultyChange: 0,
         remainingBlocks: null,
@@ -76,6 +77,7 @@ export default class Home extends React.Component {
     this.handleClickUp = this.handleClickUp.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.fetchData - this.fetchData.bind(this)
   }
 
   handleClickUp(event) {
@@ -101,7 +103,7 @@ export default class Home extends React.Component {
     });
   }
 
-  componentDidMount() {
+  fetchData() {
     Promise.all([
       fetch('https://mempool.space/api/v1/difficulty-adjustment'),
       fetch('https://mempool.space/api/v1/fees/recommended'),
@@ -111,8 +113,7 @@ export default class Home extends React.Component {
       fetch('https://api.bitaps.com/market/v1/ticker/btcusd'),
       fetch('https://api.bitaps.com/btc/v1/nodes/list'),
       fetch('https://mempool.space/api/v1/fees/mempool-blocks'),
-      fetch('https://mempool.space/api/v1/mining/hashrate/1d'),
-      fetch('https://api.nomics.com/v1/currencies/ticker?key=37bf9aa5d1f2d983144790c6538e7142fbfbe91f&ids=BTC')
+      fetch('https://mempool.space/api/v1/mining/hashrate/1d')
     ]).then(async ([a, b, c, d, e, f, g, h, i, j]) => {
       const difficulty = await a.json();
       const fees = await b.json();
@@ -123,13 +124,9 @@ export default class Home extends React.Component {
       const nodes = await g.json();
       const nextBlock = await h.json();
       const hashrate = await i.json();
-      const cap = await j.json();
-
-      return [difficulty, fees, mining, transactions, rates, btcusd, nodes, nextBlock, hashrate, cap]
+      return [difficulty, fees, mining, transactions, rates, btcusd, nodes, nextBlock, hashrate]
     })
       .then((data) => {
-        console.log(data[9][0])
-        console.log(data);
         this.setState({
           difficulty: data[0],
           fees: data[1],
@@ -142,33 +139,31 @@ export default class Home extends React.Component {
           nodes: data[6].data.length,
           nextBlock: data[7][0],
           hash: data[8].currentHashrate,
-          cap: data[9][0]
         })
       }).catch((err) => {
         console.log(err);
       });
   }
 
+  componentDidMount() {
+    this.fetchData()
+    this.intervalId = setInterval(() => {
+      this.fetchData();
+    }, 1000)
+  }
 
+  componentWillUnmount() {
+
+  }
 
   render() {
     return (
       <>
-        <Navbar1 history={this.props.history} />
-
-        <section className='banner pt-4 pb-4'>
-          <div className="container work-sans">
-            <div className="row pt-3">
-              <div className="col-md-12">
-                <div className="text-center">
-                  <h1 className='py-5 explorer-header'> Access the Bitcoin Blockchain with amaano</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* <Navbar1 history={this.props.history} /> */}
+        {/* <Navbar2 history={this.props.history}/> */}
         <section className='section1'>
           <div className="container work-sans ">
+            <Navbar2 history={this.props.history} />
             <div className="row mt-3">
               <div className="col-md-12">
                 <Card className='px-3 py-3 rounded blue-border text-left'>
@@ -178,21 +173,21 @@ export default class Home extends React.Component {
                     A blockchain explorer is a tool that enables you to explore real-time and historical information about the blockchain of a cryptocurrency. This includes data related to your personal wallet's address, mining and transactions.
                   </Card.Text>
                   <Card.Body>
-                    <h3>Start by searching for your wallet's address...</h3>
-                    <Form onSubmit={this.handleSubmit} className=''>
+                    <h3>Search for your Wallet Address or Transaction Id</h3>
+                    <form onSubmit={this.handleSubmit} className=''>
                       <InputGroup className="mb-2" >
                         <FormControl
-                          placeholder="Search for your Wallet Address   i.e. 3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B "
+                          placeholder="Search for your Wallet Address or Transaction Id"
                           className='blue-border'
                           onChange={this.handleChange}
                           value={this.state.input}
                           type='search'
                         />
-                        <Button className="search-button" type='submit'>
+                        <button className="search-button" type='submit'>
                           Search
-                        </Button>
+                        </button>
                       </InputGroup>
-                    </Form>
+                    </form>
                   </Card.Body>
                 </Card>
               </div>
@@ -203,8 +198,6 @@ export default class Home extends React.Component {
                   <Tab eventKey="USD" title="USD" className='blue-border border-top px-3 py-3 amaano-secondary'>
                     <p className='font-underline'>Price</p>
                     <p>${(this.state.usd)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p>{(Number(this.state.cap.circulating_supply) / 1000000).toFixed(3)} / 21 million coins in circulation</p>
-                    <p>Market Cap: ${((Number(this.state.cap.market_cap)) / 1000000000).toFixed(2)} billion</p>
                     <p className='font-underline'>Network</p>
                     <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
                     <p>{this.state.nodes} Nodes</p>
@@ -216,8 +209,6 @@ export default class Home extends React.Component {
                   <Tab eventKey="KES" title="KES" className='blue-border border-top px-3 py-3 amaano-secondary'>
                     <p className='font-underline'>Price</p>
                     <p>Ksh {(this.state.kes)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p>{(Number(this.state.cap.circulating_supply) / 1000000).toFixed(3)} / 21 million coins in circulation</p>
-                    <p>Market Cap: ${((Number(this.state.cap.market_cap)) / 1000000000).toFixed(2)} billion</p>
                     <p className='font-underline'>Network</p>
                     <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
                     <p>{this.state.nodes} Nodes</p>
@@ -228,8 +219,6 @@ export default class Home extends React.Component {
                   <Tab eventKey="NGN" title="NGN" className='blue-border border-top px-3 py-3 amaano-secondary'>
                     <p className='font-underline'>Price</p>
                     <p>₦ {(this.state.ngn)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p>{(Number(this.state.cap.circulating_supply) / 1000000).toFixed(3)} / 21 million coins in circulation</p>
-                    <p>Market Cap: ${((Number(this.state.cap.market_cap)) / 1000000000).toFixed(2)} billion</p>
                     <p className='font-underline'>Network</p>
                     <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
                     <p>{this.state.nodes} Nodes</p>
@@ -240,8 +229,6 @@ export default class Home extends React.Component {
                   <Tab eventKey="UGX" title="UGX" className='blue-border border-top px-3 py-3 amaano-secondary'>
                     <p className='font-underline'>Price</p>
                     <p>USh {(this.state.ugx)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p>{(Number(this.state.cap.circulating_supply) / 1000000).toFixed(3)} / 21 million coins in circulation</p>
-                    <p>Market Cap: ${((Number(this.state.cap.market_cap)) / 1000000000).toFixed(2)} billion</p>
                     <p className='font-underline'>Network</p>
                     <p>{((this.state.hash) / 1000000000000000000).toFixed(2)} EH/s</p>
                     <p>{this.state.nodes} Nodes</p>
@@ -257,7 +244,7 @@ export default class Home extends React.Component {
             </div>
             <div className="row mb-3 mt-3 justify-content-center">
               <div className="col-md-6">
-                <Table className='blue-border'>
+                <table className='blue-border navbar-custom rounded'>
                   <tbody className='blue-border'>
                     <tr >
                       <td colSpan={2} className='blue-border font-bold '>Current Transaction Fees</td>
@@ -275,10 +262,10 @@ export default class Home extends React.Component {
                       <td>{this.state.fees.hourFee} sat/vB || <span className='green'>${((this.state.fees.hourFee) * .0425).toFixed(2)}</span></td>
                     </tr>
                   </tbody>
-                </Table>
+                </table>
               </div>
               <div className="col-md-6">
-                <Table className='orange-border'>
+                <table className='blue-border navbar-custom rounded'>
                   <tbody>
                     <tr>
                       <td colSpan={4} className='font-bold'>Estimated Difficulty Adjustment</td>
@@ -298,12 +285,12 @@ export default class Home extends React.Component {
                       <td>{this.state.difficulty.remainingBlocks} <span className='small-text py-3 my-4'>~{Number(this.state.difficulty.remainingBlocks / 144).toFixed(1)} days</span></td>
                     </tr>
                   </tbody>
-                </Table>
+                </table>
               </div>
             </div>
             <div className="row mb-3 justify-content-center">
               <div className="col-md-12">
-                <Table className='blue-border'>
+                <table className='blue-border navbar-custom rounded'>
                   <tbody>
                     <tr>
                       <td colSpan={4} className='font-bold'>Latest Blocks</td>
@@ -335,12 +322,12 @@ export default class Home extends React.Component {
                       </td>
                     </tr>
                   </tbody>
-                </Table>
+                </table>
               </div>
             </div>
             <div className="row mb-3 justify-content-center">
               <div className="col-md-12">
-                <Table className='blue-border' responsive='sm'>
+                <table className='blue-border navbar-custom rounded' responsive='sm'>
                   <tbody>
                     <tr>
                       <td colSpan={4} className='orange-border font-bold'>Latest Transactions</td>
@@ -372,7 +359,7 @@ export default class Home extends React.Component {
                       </td>
                     </tr>
                   </tbody>
-                </Table>
+                </table>
               </div>
             </div>
 

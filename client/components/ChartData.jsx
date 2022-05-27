@@ -26,6 +26,10 @@ const intervals = [
   {
     label: "3M",
     value: 90
+  },
+  {
+    label: "1Y",
+    value: 365
   }
 ];
 

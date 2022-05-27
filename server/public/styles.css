@@ -14,7 +14,7 @@
 }
 
 .font-bold {
-  font-weight: 850;
+  font-weight: 800;
 }
 
 .font-italic {
@@ -196,10 +196,12 @@ a {
 td {
   color: rgba(5, 3, 64, 1);
   border: rgba(59, 55, 222, 1) 1px solid;
+  padding: 8px;
 }
 
 table {
   background-color: white;
+  width: 100%;
 }
 
 th:not(:first-child) {
@@ -328,7 +330,7 @@ section {
   text-align: center;
   color: #fff;
   max-width: 300px;
-  background: linear-gradient(135deg, #2bb1ff 0%, #1855ff 100%);
+  background: rgba(59, 55, 222, 1);
   border-radius: 8px;
   position: relative;
   transition: transform 0.5s ease, box-shadow 0.5s ease;

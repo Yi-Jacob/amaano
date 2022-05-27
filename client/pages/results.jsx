@@ -6,13 +6,13 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
 import Popover from 'react-bootstrap/Popover'
 import Table from 'react-bootstrap/Table';
-
+import Navbar2 from '../components/miniNav';
 
 export default class Results extends React.Component {
   constructor(props) {
     super(props);
     this.state = ({
-      results: true,
+      transaction: false,
       address: queryString.parse(this.props.location.search).address,
       price: null,
       input: null,
@@ -37,6 +37,26 @@ export default class Results extends React.Component {
             vSize: null
           }]
         }
+      },
+      transactionData: {
+        txid: null,
+        vin: [{
+          prevout: {
+            scriptpubkey_address: null,
+            value: null
+          }
+        }],
+        vout: [{
+          scriptpubkey_address: null,
+          value: null
+        }],
+        fee: null,
+        size: null,
+        status: {
+          confirmed: null,
+          block_height: null,
+          block_time: null
+        }
       }
 
     });
@@ -60,32 +80,52 @@ export default class Results extends React.Component {
   }
 
   fetchData(address) {
-    Promise.all([
-      fetch(`https://mempool.space/api/address/${address}`)
-        .then(res => res.json())
-        .then(data => {
-          this.setState({ walletData: data });
-        })
-        .catch(err => {
-          alert('No Results Found', err)
-          this.setState({ results: false })
+    fetch(`https://mempool.space/api/tx/${address}`)
+    .then(data => data.json())
+    .then((data) => {
+      this.setState({
+        transaction: true,
+        transactionData: data
+      })
+      console.log(data)
+    })
+    if(this.state.transaction === false) {
+      fetch((`https://mempool.space/api/address/${address}`))
+        .then(data => data.json())
+        .then((data) => {
+          this.setState({
+            walletData: data
+          })
+          console.log(data)
         }),
-      fetch('https://bitpay.com/api/rates')
-        .then(res => res.json())
-        .then(data => {
-          this.setState({ price: (data[2].rate) });
-        }),
-      fetch(`https://api.bitaps.com/btc/v1/blockchain/address/transactions/${address}`)
-        .then(res => res.json())
-        .then(data => {
-          this.setState({ transactionHistory: data });
-        })
-    ])
+        fetch(`https://api.bitaps.com/btc/v1/blockchain/address/transactions/${address}`)
+          .then(data => data.json())
+          .then((data) => {
+            this.setState({
+              transactionHistory: data
+            })
+            console.log(data)
+          }),
+        fetch('https://bitpay.com/api/rates')
+          .then(data => data.json())
+          .then((data) => {
+            this.setState({
+              price: data[2].rate
+            })
+          })
+    }
+  }
+
+  handleClickUp(event) {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.history.push('/search-results?address=' + this.state.input);
+    this.props.history.push('/search-results?=' + this.state.input);
   }
 
   handleChange(event) {
@@ -97,16 +137,125 @@ export default class Results extends React.Component {
   }
 
   hidePopover(event) {
-    setTimeout(function () { closePopPver() }, 5000);
+    setTimeout(function () { closePopPver() }, 500);
   }
 
 
   render() {
     return (
       <>
-        <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} />
-        {this.state.results ?
-          (<div className="container-fluid" style={{ maxWidth: '1200px' }}>
+        {/* <Nav history={this.props.history} /> */}
+        {/* <Navbar2 history={this.props.history} /> */}
+      {this.state.transaction ? (
+      <div className="container-fluid" style={{ maxWidth: '1200px' }}>
+            <Navbar2 history={this.props.history} />
+        <div className="row">
+          <div className="col-md-12">
+            <p className='address-header font-titillium-web amaano-blue pt-3 pb-0 mb-0'>
+                  Transaction Id: {this.state.transactionData.txid}
+                  <OverlayTrigger
+                    delay
+                    rootClose
+                    trigger='click'
+                    placement='right'
+                    overlay={
+                      <Popover className='blue-border'>
+                        <Popover.Body>
+                          Copied!
+                        </Popover.Body>
+                      </Popover>
+                    }
+                  >
+                    <button className='scrolldown amaano-blue' onClick={() => { navigator.clipboard.writeText(this.state.address) }}>
+                      <i class="fa-solid fa-copy"></i>
+                    </button>
+                  </OverlayTrigger>
+              </p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Confirmed</td>
+                      <td>{(moment.unix(this.state.transactionData.status.block_time).format('MMMM Do YYYY, h:mm:ss a').toString())}</td>
+                    </tr>
+                    <tr>
+                      <td>Block</td>
+                      <td>{this.state.transactionData.status.block_height}</td>
+                    </tr>
+                    <tr>
+                      <td>Fees</td>
+                      <td>
+                        {(this.state.transactionData.fee) / 100000000} BTC ||
+                        ${((this.state.transactionData.fee) / 100000000) * this.state.price}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Size ~ {this.state.transactionData.size}</td>
+                      <td>Fee Rate {((this.state.transactionData.fee) / (this.state.transactionData.size)).toFixed(2)} sat/vB</td>
+                    </tr>
+                  </tbody>
+                </table>
+          </div>
+        </div>
+        <div className="row mt-4">
+
+          <div className="col-md-6">
+            <table>
+                  <tbody>
+                    <tr>
+                      <td colSpan={2}>Inputs</td>
+                    </tr>
+                    <tr>
+                      <td>Address</td>
+                      <td>Amount</td>
+                    </tr>
+                    {this.state.transactionData.vin.map((input, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>{input.prevout.scriptpubkey_address}</td>
+                          <td>{(input.prevout.value) / 100000000} BTC</td>
+                        </tr>
+                      )
+                    })}
+              </tbody>
+            </table>
+          </div>
+          <div className="col-md-6">
+               <table>
+                 <tbody>
+                    <tr>
+                      <td colSpan={2}>Outputs</td>
+                    </tr>
+                    <tr>
+                      <td>Address</td>
+                      <td>Amount</td>
+                    </tr>
+                    {this.state.transactionData.vout.map((input, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>{input.scriptpubkey_address}</td>
+                          <td>{(input.value) / 100000000} BTC</td>
+                        </tr>
+                      )
+                    })}
+                 </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="row">
+          <button onClick={this.handleClickUp} className='scrolldown'>
+            <i class="fa-solid fa-3x fa-caret-up"></i>
+          </button>
+          </div>
+      </div>
+      ) : (
+
+
+        <div className="container-fluid" style={{ maxWidth: '1200px' }}>
+              <Navbar2 history={this.props.history} />
             <div className="row margin-right-10 margin-left-6">
               <div className='col-sm-9 col-md-11'>
                 <p className='address-header font-titillium-web amaano-blue pt-3 pb-0 mb-0'>
@@ -157,87 +306,51 @@ export default class Results extends React.Component {
             </div>
 
             <div className="row margin-left-1 margin-right-1 mb-3">
-              <Card className='mb-2 font-titillium-web px-3 py-2  blue-border'>
+
                 {this.state.transactionHistory.data.list.slice(0, 10).map((transaction, i) => {
                   return (
-                    <div className="" key={i}>
+                      <>
                       <div className="row" key={i}>
                         <div className="col-md-12">
-                          <Card.Title className='amaano-secondary' style={{ fontWeight: '700' }}>
-                            Transaction ID: {transaction.txId}
-                          </Card.Title>
+                          <table>
+                            <tbody>
+                              <tr className='font-bold'>
+                                <td>Transaction ID:</td>
+                                <td>{transaction.txId}</td>
+                              </tr>
+                              <tr>
+                                <td>{(transaction.amount) > 0 ?
+                                  (<span>Received: </span>) :
+                                  (<span>Sent:  </span>)
+                                }</td>
+                                <td><span className={(transaction.amount) > 0 ? 'green' : 'red'}>{(transaction.amount) / 100000000} BTC || ${((transaction.amount) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></td>
+                              </tr>
+                              <tr>
+                                <td>Confirmed:</td>
+                                <td>{(moment.unix(transaction.blockTime).format('MMMM Do YYYY, h:mm:ss a').toString())} || Block: {transaction.blockHeight}</td>
+                              </tr>
+                              <tr>
+                                <td>Fees</td>
+                                <td><span className='red'>{(transaction.fee) / 100000000} BTC || ${((transaction.fee) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> <span className='small-text py-3 my-4'> ~ {((transaction.fee) / transaction.vSize).toFixed(2)} sat/vB - {transaction.confirmations} Confirmations</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+
                         </div>
                       </div>
-                      <div className="row">
-                        <div className="col-md-3 px-0">
-                          <ul>
-                            <li>
-                              {(transaction.amount) > 0 ?
-                                (<span>Received: </span>) :
-                                (<span>Sent:  </span>)
-                              }
-                              <span className={(transaction.amount) > 0 ? 'green' : 'red'}>{(transaction.amount) / 100000000} BTC</span>
-                              <ul className={(transaction.amount) > 0 ? 'green' : 'red'}>
-                                <li>
-                                  ${((transaction.amount) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </li>
-                              </ul>
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="col-md-4 px-0">
-                          <ul>
-                            <li>
-                              <li>
-                                <span>Fees: </span>
-                                <span className='red'>{(transaction.fee) / 100000000} BTC</span>
-                                <ul>
-                                  <li>
-                                    <span className='red'> ${((transaction.fee) / 100000000 * (this.state.price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                                    <span className='small-text py-3 my-4'> ~ {((transaction.fee) / transaction.vSize).toFixed(2)} sat/vB</span>
-                                  </li>
-                                </ul>
-                              </li>
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="col-md-5 px-0 my-0">
-                          <ul>
-                            <li>
-                              <span className='green'>Confirmed:</span> {(moment.unix(transaction.blockTime).format('MMMM Do YYYY, h:mm:ss a').toString())}
-                            </li>
-                            <ul>
-                              <li>
-                                Block Height {transaction.blockHeight}
-                              </li>
-                              <li>
-                                Confirmations: <span className='green'>{transaction.confirmations}</span>
-                              </li>
-                            </ul>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
+
+
+                      </>
                   )
                 }
                 )}
-
-              </Card>
             </div>
-          </div>) :
-          (
-            <div className="row my-2 margin-left-1 margin-right-1">
-              <Card className='mb-2 my-2 font-titillium-web px-4 py-4 grey-background blue-border'>
-                <div className="row no-gutters">
-                  <div className="col-md-12 px-1 justify-content-center text-center">
-                    <h2 className='amaano-blue'>
-                      No Results Found
-                    </h2>
-                  </div>
-                </div>
-              </Card>
+            <div className="row">
+              <button onClick={this.handleClickUp} className='scrolldown'>
+                <i class="fa-solid fa-3x fa-caret-up"></i>
+              </button>
             </div>
-          )}
+          </div>)}
       </>
     );
   }
