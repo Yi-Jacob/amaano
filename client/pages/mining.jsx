@@ -81,7 +81,7 @@ export default class Mining extends React.Component {
         {/* <Nav history={this.props.history} /> */}
         <div className="container">
           <Navbar2 history={this.props.history} />
-          <div className="row mx-4 my-3 work-sans ">
+          <div className="row  my-3 work-sans ">
             <h2 className='amaano-blue ml-2'>Mining</h2>
             <div className="col-md-12">
               <Card className='mb-2 my-1 px-4 py-4 blue-border'>
@@ -93,7 +93,7 @@ export default class Mining extends React.Component {
               </Card>
             </div>
           </div>
-          <div className="row mx-4 my-4 work-sans">
+          <div className="row my-4 work-sans">
             <div className="col-md-12">
               <table className='blue-border navbar-custom rounded'>
                 <tbody>
@@ -118,7 +118,7 @@ export default class Mining extends React.Component {
               </table>
             </div>
           </div>
-          <div className="row mx-4 my-4 justify-content-center work-sans">
+          <div className="row  my-4 justify-content-center work-sans">
             <div className="col-md-12">
               <table className='blue-border navbar-custom rounded'>
                 <tbody>

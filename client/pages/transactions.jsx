@@ -79,7 +79,7 @@ export default class Transactions extends React.Component {
       <div className="container">
           <Navbar2 history={this.props.history} />
           {/* <Nav history={this.props.history} onSubmit={this.handleSubmit} onChange={this.handleChange} value={this.state.input} /> */}
-          <div className="row mx-4 my-3 work-sans ">
+          <div className="row  my-3 work-sans ">
             <h2 className='amaano-blue ml-2'>Transactions</h2>
             <div className="col-md-12">
               <Card className='mb-2 my-1 px-4 py-4 blue-border'>
@@ -91,7 +91,7 @@ export default class Transactions extends React.Component {
               </Card>
             </div>
           </div>
-          <div className="row mx-4 my-3">
+          <div className="row  my-3">
             <div className="col-md-12">
               <table className='blue-border navbar-custom rounded'>
                 <tbody className='blue-border'>
@@ -114,7 +114,7 @@ export default class Transactions extends React.Component {
               </table>
             </div>
           </div>
-          <div className="row justify-content-center mx-4 my-4">
+          <div className="row justify-content-center  my-4">
             <div className="col-md-12">
               <table className='blue-border navbar-custom rounded' responsive='sm'>
                 <tbody>

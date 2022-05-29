@@ -42,7 +42,7 @@
 }
 
 .nav-input {
-  width: 275px;
+  width: 450px;
 }
 
 .padding-zero {
@@ -475,6 +475,6 @@ button.inactive:hover {
   font-size: 36px;
 }
 
-.test {
-  background-image: url("banner.png");
+.results-table {
+  height: 200px;
 }

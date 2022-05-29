@@ -171,24 +171,9 @@ export default class Home extends React.Component {
                   <Card.Text className='px-0 py-2'>
                     A blockchain is a distributed ledger that records the transactions for a cryptocurrency network. Miners amend the blockchain ledger by mining new blocks.
                     A blockchain explorer is a tool that enables you to explore real-time and historical information about the blockchain of a cryptocurrency. This includes data related to your personal wallet's address, mining and transactions.
+                    Search for your personal wallet's address or transactions in the search bar above.
                   </Card.Text>
-                  <Card.Body>
-                    <h3>Search for your Wallet Address or Transaction Id</h3>
-                    <form onSubmit={this.handleSubmit} className=''>
-                      <InputGroup className="mb-2" >
-                        <FormControl
-                          placeholder="Search for your Wallet Address or Transaction Id"
-                          className='blue-border'
-                          onChange={this.handleChange}
-                          value={this.state.input}
-                          type='search'
-                        />
-                        <button className="search-button" type='submit'>
-                          Search
-                        </button>
-                      </InputGroup>
-                    </form>
-                  </Card.Body>
+
                 </Card>
               </div>
             </div>
@@ -345,7 +330,7 @@ export default class Home extends React.Component {
                             <td className='grey-text'>{this.state.transactions[i].txid}</td>
                             <td className='grey-text'>${(((this.state.transactions[i].value) / 100000000) * (this.state.usd))?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                             <td className='grey-text'>{(this.state.transactions[i].value) / 100000000} BTC</td>
-                            <td className='grey-text'>{(this.state.transactions[i].fee) / 100} sat/vB</td>
+                            <td className='grey-text'>{(this.state.transactions[i].fee) / 100} sat/vB || ${(((this.state.transactions[i].fee) / 100) * (.0425)).toFixed(2)}</td>
                           </tr>
                         </>
                       );
